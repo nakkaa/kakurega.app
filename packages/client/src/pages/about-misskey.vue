@@ -21,7 +21,12 @@
 					<div class="_formLinks">
 						<FormLink to="https://github.com/misskey-dev/misskey" external>
 							<template #icon><i class="fas fa-code"></i></template>
-							{{ i18n.ts._aboutMisskey.source }}
+							{{ i18n.ts._aboutMisskey.originalSource }}
+							<template #suffix>GitHub</template>
+						</FormLink>
+						<FormLink to="https://github.com/hideki0403/misskey" external>
+							<template #icon><i class="fas fa-code"></i></template>
+							{{ i18n.ts._aboutMisskey.customizedSource }}
 							<template #suffix>GitHub</template>
 						</FormLink>
 						<FormLink to="https://crowdin.com/project/misskey" external>
