@@ -277,6 +277,7 @@ export class ColdDeviceStorage {
 		lightTheme,
 		darkTheme,
 		syncDeviceDarkMode: true,
+		syncTimeDarkMode: false,
 		plugins: [] as Plugin[],
 		mediaVolume: 0.5,
 		sound_masterVolume: 0.3,

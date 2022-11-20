@@ -23,6 +23,7 @@ import components from '@/components';
 import { version, ui, lang, host } from '@/config';
 import { applyTheme } from '@/scripts/theme';
 import { isDeviceDarkmode } from '@/scripts/is-device-darkmode';
+import { isTimeDarkmode, initializeTimeBasedDarkmode } from '@/scripts/is-time-darkmode';
 import { i18n } from '@/i18n';
 import { confirm, alert, post, popup, toast } from '@/os';
 import { stream } from '@/stream';
@@ -269,12 +270,17 @@ import { getAccountFromId } from '@/scripts/get-account-from-id';
 	});
 
 	//#region Sync dark mode
-	if (ColdDeviceStorage.get('syncDeviceDarkMode')) {
+	if (ColdDeviceStorage.get('syncDeviceDarkMode') && !ColdDeviceStorage.get('syncTimeDarkMode')) {
 		defaultStore.set('darkMode', isDeviceDarkmode());
 	}
 
+	if (ColdDeviceStorage.get('syncTimeDarkMode')) {
+		defaultStore.set('darkMode', isTimeDarkmode());
+		initializeTimeBasedDarkmode();
+	}
+
 	window.matchMedia('(prefers-color-scheme: dark)').addListener(mql => {
-		if (ColdDeviceStorage.get('syncDeviceDarkMode')) {
+		if (ColdDeviceStorage.get('syncDeviceDarkMode') && !ColdDeviceStorage.get('syncTimeDarkMode')) {
 			defaultStore.set('darkMode', mql.matches);
 		}
 	});

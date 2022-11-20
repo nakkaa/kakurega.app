@@ -23,6 +23,10 @@
 		</div>
 		<div class="sync">
 			<FormSwitch v-model="syncDeviceDarkMode">{{ i18n.ts.syncDeviceDarkMode }}</FormSwitch>
+			<FormSwitch v-model="syncTimeDarkMode">
+				{{ i18n.ts.syncTimeDarkMode }}
+				<template #caption>{{ i18n.ts.disableSyncDeviceDarkMode }}</template>
+			</FormSwitch>
 		</div>
 	</div>
 
@@ -76,12 +80,25 @@ import FormButton from '@/components/MkButton.vue';
 import { getBuiltinThemesRef } from '@/scripts/theme';
 import { selectFile } from '@/scripts/select-file';
 import { isDeviceDarkmode } from '@/scripts/is-device-darkmode';
+import { isTimeDarkmode } from '@/scripts/is-time-darkmode';
 import { ColdDeviceStorage , defaultStore } from '@/store';
 import { i18n } from '@/i18n';
 import { instance } from '@/instance';
 import { uniqueBy } from '@/scripts/array';
 import { fetchThemes, getThemes } from '@/theme-store';
 import { definePageMetadata } from '@/scripts/page-metadata';
+import * as os from '@/os';
+import { unisonReload } from '@/scripts/unison-reload';
+
+async function reloadAsk() {
+	const { canceled } = await os.confirm({
+		type: 'info',
+		text: i18n.ts.reloadToApplySetting,
+	});
+	if (canceled) return;
+
+	unisonReload();
+}
 
 const installedThemes = ref(getThemes());
 const builtinThemes = getBuiltinThemesRef();
@@ -120,6 +137,7 @@ const lightThemeId = computed({
 });
 const darkMode = computed(defaultStore.makeGetterSetter('darkMode'));
 const syncDeviceDarkMode = computed(ColdDeviceStorage.makeGetterSetter('syncDeviceDarkMode'));
+const syncTimeDarkMode = computed(ColdDeviceStorage.makeGetterSetter('syncTimeDarkMode'));
 const wallpaper = ref(localStorage.getItem('wallpaper'));
 const themesCount = installedThemes.value.length;
 
@@ -127,6 +145,14 @@ watch(syncDeviceDarkMode, () => {
 	if (syncDeviceDarkMode.value) {
 		defaultStore.set('darkMode', isDeviceDarkmode());
 	}
+});
+
+watch(syncTimeDarkMode, async () => {
+	if (syncTimeDarkMode.value) {
+		defaultStore.set('darkMode', isTimeDarkmode());
+	}
+
+	await reloadAsk();
 });
 
 watch(wallpaper, () => {
@@ -391,6 +417,10 @@ definePageMetadata({
 	> .sync {
 		padding: 14px 16px;
 		border-top: solid 0.5px var(--divider);
+
+		> * {
+			margin: 1.5em 0;
+		}
 	}
 }
 
