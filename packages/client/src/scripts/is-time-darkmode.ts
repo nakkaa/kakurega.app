@@ -77,9 +77,11 @@ function getSunset(latitude = defaultLatitude, longitude = defaultLongitude, dat
 }
 
 export function isTimeDarkmode(): boolean {
-	const now = new Date();
-	const sunset = getSunset();
-	return now > sunset;
+	const now = Date.now();
+	const sunset = getSunset().getTime();
+	const sunrise = getSunrise().getTime();
+
+	return now >= sunset || now <= sunrise;
 }
 
 export function initializeTimeBasedDarkmode(): void {
