@@ -12,6 +12,7 @@ import { getStaticImageUrl } from '@/scripts/get-static-image-url';
 import { char2filePath } from '@/scripts/twemoji-base';
 import { defaultStore } from '@/store';
 import { instance } from '@/instance';
+import { proxyImg } from '@/scripts/mobile-proxy';
 
 const props = defineProps<{
 	emoji: string;
@@ -30,9 +31,9 @@ const url = computed(() => {
 	if (char.value) {
 		return char2filePath(char.value);
 	} else {
-		return defaultStore.state.disableShowingAnimatedImages
+		return proxyImg(defaultStore.state.disableShowingAnimatedImages
 			? getStaticImageUrl(customEmoji.value.url)
-			: customEmoji.value.url;
+			: customEmoji.value.url);
 	}
 });
 const alt = computed(() => customEmoji.value ? `:${customEmoji.value.name}:` : char.value);

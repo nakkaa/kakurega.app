@@ -127,6 +127,7 @@ import * as os from '@/os';
 import { useRouter } from '@/router';
 import { i18n } from '@/i18n';
 import { $i } from '@/account';
+import { proxyImg } from '@/scripts/mobile-proxy';
 
 const XPhotos = defineAsyncComponent(() => import('./index.photos.vue'));
 const XActivity = defineAsyncComponent(() => import('./index.activity.vue'));
@@ -146,7 +147,7 @@ let bannerEl = $ref<null | HTMLElement>(null);
 const style = $computed(() => {
 	if (props.user.bannerUrl == null) return {};
 	return {
-		backgroundImage: `url(${ props.user.bannerUrl })`,
+		backgroundImage: `url(${proxyImg(props.user.bannerUrl)})`,
 	};
 });
 

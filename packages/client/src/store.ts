@@ -251,6 +251,14 @@ export const defaultStore = markRaw(new Storage('base', {
 		where: 'device',
 		default: false,
 	},
+	useCompressedImage: {
+		where: 'device',
+		default: false,
+	},
+	betaTestKey: {
+		where: 'device',
+		default: '',
+	},
 }));
 
 // TODO: 他のタブと永続化されたstateを同期
@@ -278,6 +286,7 @@ export class ColdDeviceStorage {
 		darkTheme,
 		syncDeviceDarkMode: true,
 		syncTimeDarkMode: false,
+		compressedImageBehavior: 'none' as 'none' | 'mobile' | 'always',
 		plugins: [] as Plugin[],
 		mediaVolume: 0.5,
 		sound_masterVolume: 0.3,

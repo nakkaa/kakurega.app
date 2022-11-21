@@ -895,6 +895,13 @@ navbar: "ナビゲーションバー"
 shuffle: "シャッフル"
 account: "アカウント"
 move: "移動"
+dataSaver: "データセーバー"
+useCompressedImage: "画像を低画質で表示"
+compressedImageBrowserUnsupportedWarning: "「モバイルデータ使用時に低画質で表示」はブラウザによっては非対応です (Safariなど)"
+betaTest: "ベータテスト"
+betaTestKey: "ベータテストキー"
+betaTestKeyDesc: "インスタンスの管理者から配布されたベータテストキーを入力してください。"
+betaTestWarning: "この機能はベータ版です (使用するためにはベータテストキーが必要です)"
 
 _sensitiveMediaDetection:
   description: "機械学習を使って自動でセンシティブなメディアを検出し、モデレーションに役立てることができます。サーバーの負荷が少し増えます。"
@@ -1075,6 +1082,11 @@ _serverDisconnectedBehavior:
   reload: "自動でリロード"
   dialog: "ダイアログで警告"
   quiet: "控えめに警告"
+
+_compressedImageBehavior:
+  always: "常に低画質で表示"
+  mobile: "モバイルデータ使用時に低画質で表示"
+  none: "低画質で表示しない (常にオリジナルの画像を表示)"
 
 _channel:
   create: "チャンネルを作成"

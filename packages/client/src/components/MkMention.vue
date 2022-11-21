@@ -1,6 +1,6 @@
 <template>
 <MkA v-if="url.startsWith('/')" v-user-preview="canonical" class="akbvjaqn" :class="{ isMe }" :to="url" :style="{ background: bgCss }">
-	<img class="icon" :src="`/avatar/@${username}@${host}`" alt="">
+	<img class="icon" :src="proxyImg(`${localUrl}/avatar/@${username}@${host}`)" alt="">
 	<span class="main">
 		<span class="username">@{{ username }}</span>
 		<span v-if="(host != localHost) || $store.state.showFullAcct" class="host">@{{ toUnicode(host) }}</span>
@@ -18,8 +18,9 @@
 import { toUnicode } from 'punycode';
 import { } from 'vue';
 import tinycolor from 'tinycolor2';
-import { host as localHost } from '@/config';
+import { host as localHost, url as localUrl } from '@/config';
 import { $i } from '@/account';
+import { proxyImg } from '@/scripts/mobile-proxy';
 
 const props = defineProps<{
 	username: string;

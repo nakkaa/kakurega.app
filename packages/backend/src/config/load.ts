@@ -45,6 +45,7 @@ export default function load() {
 	mixin.apiUrl = `${mixin.scheme}://${mixin.host}/api`;
 	mixin.authUrl = `${mixin.scheme}://${mixin.host}/auth`;
 	mixin.driveUrl = `${mixin.scheme}://${mixin.host}/files`;
+	mixin.mobileProxyUrl = `${mixin.scheme}://${mixin.host}/mobile-proxy`;
 	mixin.userAgent = `Misskey/${meta.version} (${config.url})`;
 	mixin.clientEntry = clientManifest['src/init.ts'];
 
