@@ -68,7 +68,7 @@ function calc(latitude: number, longitude: number, isSunrise: boolean, zenith: n
 	return new Date(utcMidnight + (time * msecInHour));
 }
 
-function getSunrise(date = new Date(), latitude = defaultLatitude, longitude = defaultLongitude, ): Date {
+function getSunrise(date = new Date(), latitude = defaultLatitude, longitude = defaultLongitude): Date {
 	return calc(latitude, longitude, true, defaultZenith, date);
 }
 
@@ -78,8 +78,11 @@ function getSunset(date = new Date(), latitude = defaultLatitude, longitude = de
 
 export function isTimeDarkmode(): boolean {
 	const now = new Date();
-	const sunset = getSunset(now);
-	const sunrise = getSunrise(now);
+	const target = new Date();
+	target.setDate(target.getDate() - 1);
+
+	const sunset = getSunset(target);
+	const sunrise = getSunrise(target);
 
 	return (sunset <= now && now.getDate() === sunset.getDate()) || (now <= sunrise && now.getDate() === sunrise.getDate());
 }
@@ -89,6 +92,7 @@ export function initializeTimeBasedDarkmode(): void {
 	defaultStore.set('darkMode', isDarkmode);
 
 	const nextTargetTime = (isDarkmode ? getSunrise() : getSunset()).getTime() - Date.now();
+	console.log(`next target time: ${nextTargetTime}`);
 
 	setTimeout(() => {
 		initializeTimeBasedDarkmode();
