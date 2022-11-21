@@ -62,7 +62,10 @@ if (config.url.startsWith('https') && !config.disableHsts) {
 app.use(mount('/api', apiServer));
 app.use(mount('/files', fileServer));
 app.use(mount('/proxy', proxyServer));
-app.use(mount('/mobile-proxy', mobileProxyServer));
+
+if (config.mobileMediaProxy) {
+	app.use(mount('/mobile-proxy', mobileProxyServer));
+}
 
 // Init router
 const router = new Router();
