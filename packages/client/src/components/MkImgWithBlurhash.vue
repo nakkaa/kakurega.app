@@ -1,13 +1,14 @@
 <template>
 <div class="xubzgfgb" :class="{ cover }" :title="title">
 	<canvas v-if="!loaded" ref="canvas" :width="size" :height="size" :title="title"/>
-	<img v-if="src" :src="src" :title="title" :alt="alt" @load="onLoad"/>
+	<img v-if="src" :src="proxyImg(src)" :title="title" :alt="alt" @load="onLoad"/>
 </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted } from 'vue';
 import { decode } from 'blurhash';
+import { proxyImg } from '@/scripts/mobile-proxy';
 
 const props = withDefaults(defineProps<{
 	src?: string | null;

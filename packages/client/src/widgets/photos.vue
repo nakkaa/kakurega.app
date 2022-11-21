@@ -8,7 +8,7 @@
 			<div
 				v-for="(image, i) in images" :key="i"
 				:class="$style.img"
-				:style="`background-image: url(${thumbnail(image)})`"
+				:style="`background-image: url(${proxyImg(thumbnail(image))})`"
 			></div>
 		</div>
 	</div>
@@ -25,6 +25,7 @@ import * as os from '@/os';
 import MkContainer from '@/components/MkContainer.vue';
 import { defaultStore } from '@/store';
 import { i18n } from '@/i18n';
+import { proxyImg } from '@/scripts/mobile-proxy';
 
 const name = 'photos';
 

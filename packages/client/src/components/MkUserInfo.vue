@@ -1,6 +1,6 @@
 <template>
 <div class="_panel vjnjpkug">
-	<div class="banner" :style="user.bannerUrl ? `background-image: url(${user.bannerUrl})` : ''"></div>
+	<div class="banner" :style="user.bannerUrl ? `background-image: url(${proxyImg(user.bannerUrl)})` : ''"></div>
 	<MkAvatar class="avatar" :user="user" :disable-preview="true" :show-indicator="true"/>
 	<div class="title">
 		<MkA class="name" :to="userPage(user)"><MkUserName :user="user" :nowrap="false"/></MkA>
@@ -32,6 +32,7 @@ import * as misskey from 'misskey-js';
 import MkFollowButton from '@/components/MkFollowButton.vue';
 import { userPage } from '@/filters/user';
 import { i18n } from '@/i18n';
+import { proxyImg } from '@/scripts/mobile-proxy';
 
 defineProps<{
 	user: misskey.entities.UserDetailed;

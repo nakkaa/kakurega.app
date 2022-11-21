@@ -26,6 +26,7 @@ import wellKnown from './well-known.js';
 import apiServer from './api/index.js';
 import fileServer from './file/index.js';
 import proxyServer from './proxy/index.js';
+import mobileProxyServer from './mobile-proxy/index.js';
 import webServer from './web/index.js';
 import { initializeStreamingServer } from './api/streaming.js';
 
@@ -61,6 +62,7 @@ if (config.url.startsWith('https') && !config.disableHsts) {
 app.use(mount('/api', apiServer));
 app.use(mount('/files', fileServer));
 app.use(mount('/proxy', proxyServer));
+app.use(mount('/mobile-proxy', mobileProxyServer));
 
 // Init router
 const router = new Router();

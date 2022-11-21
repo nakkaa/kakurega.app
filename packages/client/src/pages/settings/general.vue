@@ -38,6 +38,26 @@
 	</FormSection>
 
 	<FormSection>
+		<template #label>{{ i18n.ts.dataSaver }}</template>
+		<span>{{ i18n.ts.betaTestWarning }}</span>
+		<FormSelect v-model="compressedImageBehavior" class="_formBlock">
+			<template #label>{{ i18n.ts.useCompressedImage }}</template>
+			<option value="none">{{ i18n.ts._compressedImageBehavior.none }}</option>
+			<option value="mobile">{{ i18n.ts._compressedImageBehavior.mobile }}</option>
+			<option value="always">{{ i18n.ts._compressedImageBehavior.always }}</option>
+			<template #caption>{{ i18n.ts.compressedImageBrowserUnsupportedWarning }}</template>
+		</FormSelect>
+	</FormSection>
+
+	<FormSection>
+		<template #label>{{ i18n.ts.betaTest }}</template>
+		<FormInput v-model="betaTestKey">
+			<template #label>{{ i18n.ts.betaTestKey }}</template>
+			<template #caption>{{ i18n.ts.betaTestKeyDesc }}</template>
+		</FormInput>
+	</FormSection>
+
+	<FormSection>
 		<template #label>{{ i18n.ts.appearance }}</template>
 		<FormSwitch v-model="disableAnimatedMfm" class="_formBlock">{{ i18n.ts.disableAnimatedMfm }}</FormSwitch>
 		<FormSwitch v-model="reduceAnimation" class="_formBlock">{{ i18n.ts.reduceUiAnimation }}</FormSwitch>
@@ -100,9 +120,10 @@ import FormRadios from '@/components/form/radios.vue';
 import FormRange from '@/components/form/range.vue';
 import FormSection from '@/components/form/section.vue';
 import FormLink from '@/components/form/link.vue';
+import FormInput from '@/components/form/input.vue';
 import MkLink from '@/components/MkLink.vue';
 import { langs } from '@/config';
-import { defaultStore } from '@/store';
+import { defaultStore, ColdDeviceStorage } from '@/store';
 import * as os from '@/os';
 import { unisonReload } from '@/scripts/unison-reload';
 import { i18n } from '@/i18n';
@@ -143,6 +164,8 @@ const enableInfiniteScroll = computed(defaultStore.makeGetterSetter('enableInfin
 const useReactionPickerForContextMenu = computed(defaultStore.makeGetterSetter('useReactionPickerForContextMenu'));
 const squareAvatars = computed(defaultStore.makeGetterSetter('squareAvatars'));
 const aiChanMode = computed(defaultStore.makeGetterSetter('aiChanMode'));
+const compressedImageBehavior = computed(ColdDeviceStorage.makeGetterSetter('compressedImageBehavior'));
+const betaTestKey = computed(defaultStore.makeGetterSetter('betaTestKey'));
 
 watch(lang, () => {
 	localStorage.setItem('lang', lang.value as string);
@@ -175,6 +198,7 @@ watch([
 	showGapBetweenNotesInTimeline,
 	instanceTicker,
 	overridedDeviceKind,
+	compressedImageBehavior,
 ], async () => {
 	await reloadAsk();
 });

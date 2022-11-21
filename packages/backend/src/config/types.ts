@@ -62,7 +62,10 @@ export type Source = {
 	};
 
 	mediaProxy?: string;
+	mobileMediaProxy?: boolean;
 	proxyRemoteFiles?: boolean;
+
+	betaTestKey?: string;
 
 	signToActivityPubGet?: boolean;
 };
@@ -80,6 +83,7 @@ export type Mixin = {
 	wsUrl: string;
 	authUrl: string;
 	driveUrl: string;
+	mobileProxyUrl: string;
 	userAgent: string;
 	clientEntry: string;
 };

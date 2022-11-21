@@ -1,6 +1,6 @@
 <template>
 <MkA :to="`/@${page.user.username}/pages/${page.name}`" class="vhpxefrj _block" tabindex="-1">
-	<div v-if="page.eyeCatchingImage" class="thumbnail" :style="`background-image: url('${page.eyeCatchingImage.thumbnailUrl}')`"></div>
+	<div v-if="page.eyeCatchingImage" class="thumbnail" :style="`background-image: url('${proxyImg(page.eyeCatchingImage.thumbnailUrl)}')`"></div>
 	<article>
 		<header>
 			<h1 :title="page.title">{{ page.title }}</h1>
@@ -18,6 +18,7 @@
 import { defineComponent } from 'vue';
 import { userName } from '@/filters/user';
 import * as os from '@/os';
+import { proxyImg } from '@/scripts/mobile-proxy';
 
 export default defineComponent({
 	props: {
@@ -28,6 +29,7 @@ export default defineComponent({
 	},
 	methods: {
 		userName,
+		proxyImg,
 	},
 });
 </script>
