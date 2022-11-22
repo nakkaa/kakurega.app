@@ -78,21 +78,21 @@ function getSunset(date = new Date(), latitude = defaultLatitude, longitude = de
 
 export function isTimeDarkmode(): boolean {
 	const now = new Date();
-	const target = new Date();
-	target.setDate(target.getDate() - 1);
+	const yesterday = new Date();
+	yesterday.setDate(now.getDate() - 1);
 
-	const sunset = getSunset(target);
-	const sunrise = getSunrise(target);
+	const sunrise = getSunrise(yesterday);
+	const sunset = getSunset();
 
-	return (sunset <= now && now.getDate() === sunset.getDate()) || (now <= sunrise && now.getDate() === sunrise.getDate());
+	return sunset <= now || now <= sunrise;
 }
 
 export function initializeTimeBasedDarkmode(): void {
 	const isDarkmode = isTimeDarkmode();
 	defaultStore.set('darkMode', isDarkmode);
 
-	const nextTargetTime = (isDarkmode ? getSunrise() : getSunset()).getTime() - Date.now();
-	console.log(`next target time: ${nextTargetTime}`);
+	const nextTargetTime = (isDarkmode ? getSunrise() : getSunset()).getTime() - Date.now() + 1000;
+	console.log(`nextThemeChange: ${new Date(Date.now() + nextTargetTime)}`);
 
 	setTimeout(() => {
 		initializeTimeBasedDarkmode();
