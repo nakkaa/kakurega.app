@@ -1,6 +1,6 @@
 {
 	"name": "misskey",
-	"version": "12.119.0-kakurega.1.1",
+	"version": "12.119.0-kakurega.1.1.1",
 	"codename": "indigo",
 	"repository": {
 		"type": "git",
