@@ -43,9 +43,9 @@ export default defineComponent({
 	},
 
 	created() {
-		os.api('notes/featured').then(notes => {
-			this.notes = notes;
-		});
+		// os.api('notes/featured').then(notes => {
+		// 	this.notes = notes;
+		// });
 	},
 
 	updated() {
