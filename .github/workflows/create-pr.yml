@@ -1,0 +1,39 @@
+name: create pr
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'dev-kakurega'
+    paths:
+      - 'package.json'
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+            fetch-depth: 0
+
+      - name: get package version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@master
+
+      - name: check tag exists
+        uses: mukunku/tag-exists-action@v1.0.0
+        id: check-tag
+        with:
+          tag: v${{ steps.package-version.outputs.current-version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: create pull request
+        uses: peter-evans/create-pull-request@v4
+          with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+            commit-message: 'release: v${{ steps.package-version.outputs.current-version }}'
+            committer: GitHub <noreply@github.com>
+            author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+            branch: dev-kakurega
+            base: master-kakurega
+            title: 'release: v${{ steps.package-version.outputs.current-version }}'
