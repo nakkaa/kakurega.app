@@ -29,6 +29,7 @@ jobs:
       
       - name: create pull request
         uses: peter-evans/create-pull-request@v4
+        if: steps.check-tag.outputs.exists == 'false'
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: 'release: v${{ steps.package-version.outputs.current-version }}'
