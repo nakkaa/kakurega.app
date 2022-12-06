@@ -31,7 +31,7 @@ export async function proxyMedia(ctx: Koa.Context) {
 	try {
 		await new Promise((res, rej) => {
 			FFmpeg(url)
-			.videoFilter('scale=1280x720:force_original_aspect_ratio=decrease')
+			.videoFilter('scale=720x480:force_original_aspect_ratio=decrease')
 			.on('end', res)
 			.on('error', rej)
 			.save(path);

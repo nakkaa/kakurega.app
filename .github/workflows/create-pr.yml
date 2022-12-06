@@ -1,0 +1,39 @@
+name: create pr
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'dev-kakurega'
+    paths:
+      - 'package.json'
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+            fetch-depth: 0
+
+      - name: get package version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@master
+
+      - name: check tag exists
+        uses: mukunku/tag-exists-action@v1.0.0
+        id: check-tag
+        with:
+          tag: v${{ steps.package-version.outputs.current-version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: check pr exists
+        id: check-pr
+        run: |
+          echo "::set-output name=count::$(gh pr list -S 'release in:title' --json title --jq '.[].title' | grep 'v${{ steps.package-version.outputs.current-version }}' | wc -l)"
+      
+      - name: create pull request
+        if: steps.check-tag.outputs.exists == 'false' && steps.check-pr.outputs.count == '0'
+        run: 'gh pr create -B "master-kakurega" -H "dev-kakurega" -t "release: v${{ steps.package-version.outputs.current-version }}" -b "Automated pr by github actions"'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
