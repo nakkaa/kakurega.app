@@ -26,15 +26,14 @@ jobs:
           tag: v${{ steps.package-version.outputs.current-version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: check pr exists
+        id: check-pr
+        run: |
+          echo "::set-output name=count::$(gh pr list -S 'release in:title' --json title --jq '.[].title' | grep 'v${{ steps.package-version.outputs.current-version }}' | wc -l)"
       
       - name: create pull request
-        uses: peter-evans/create-pull-request@v4
-        if: steps.check-tag.outputs.exists == 'false'
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'release: v${{ steps.package-version.outputs.current-version }}'
-          committer: GitHub <noreply@github.com>
-          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-          branch: dev-kakurega
-          base: master-kakurega
-          title: 'release: v${{ steps.package-version.outputs.current-version }}'
+        if: steps.check-tag.outputs.exists == 'false' && steps.check-pr.outputs.count == '0'
+        run: 'gh pr create -B "master-kakurega" -H "dev-kakurega" -t "release: v${{ steps.package-version.outputs.current-version }}" -b "Automated pr by github actions"'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
