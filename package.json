@@ -1,7 +1,7 @@
 {
 	"name": "misskey",
 	"version": "13.0.0-kakurega.1.2.0",
-	"codename": "indigo",
+	"codename": "nasubi",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/hideki0403/misskey.git"

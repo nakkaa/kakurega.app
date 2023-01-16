@@ -9,7 +9,7 @@
 You should also include the user name that made the change.
 -->
 
-## 13.0.0 (unreleased)
+## 13.0.0 (2023/01/16)
 
 ### TL;DR
 - New features (Role system, Misskey Play, New widgets, New charts, 🍪👈, etc)
@@ -20,7 +20,7 @@ You should also include the user name that made the change.
 
 ### Notable features
 - ロール機能
-	- 従来より柔軟にユーザーの権限を管理できます。例えば、「インスタンスのパトロンはアンテナを30個まで作れる」「基本的にLTLは見れないが、許可した人だけ見れる」「招待制インスタンスだけどユーザーなら誰でも他者を招待できる」のような運用はもちろん、「ローカルユーザーかつアカウント作成から1日未満のユーザーはパブリックな投稿を行えない」のように複数条件を組み合わせて、自動でロールを付与する設定も可能です。
+	- 従来より柔軟にユーザーのポリシーを管理できます。例えば、「インスタンスのパトロンはアンテナを30個まで作れる」「基本的にLTLは見れないが、許可した人だけ見れる」「招待制インスタンスだけどユーザーなら誰でも他者を招待できる」のような運用はもちろん、「ローカルユーザーかつアカウント作成から1日未満のユーザーはパブリックな投稿を行えない」のように複数条件を組み合わせて、自動でロールを付与する設定も可能です。
 - Misskey Play
 	- 従来の動的なPagesに代わる、新しいプラットフォームです。動的なコンテンツ(アプリケーション)に特化していて、Pagesに比べてはるかに柔軟なアプリケーションを作成可能です。
 
@@ -123,6 +123,7 @@ You should also include the user name that made the change.
 - Client: add new mfm function (position, fg, bg) @syuilo
 - Client: show fireworks when visit user who today is birthday @syuilo
 - Client: show bot warning on screen when logged in as bot account @syuilo
+- Client: AiScriptからカスタム絵文字一覧を参照できるように @syuilo
 - Client: improve overall performance of client @syuilo
 - Client: ui tweaks @syuilo
 - Client: clicker game @syuilo
@@ -159,10 +160,6 @@ You should also include the user name that made the change.
 - All contributors
 - All who have created instances for the beta test
 - All who participated in the beta test
-
-## 12.119.2 (2022/12/04)
-### Bugfixes
-- Server: Backported versions mitigate isn't working @mei23
 
 ## 12.119.1 (2022/12/03)
 ### Bugfixes
