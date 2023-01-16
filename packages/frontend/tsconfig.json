@@ -29,10 +29,7 @@
 			"node_modules/@types",
 			"@types",
 		],
-		"types": [
-			"vite/client",
-			"./node_modules/network-information-types"
-		],
+		"types": ["vite/client"],
 		"lib": [
 			"esnext",
 			"dom"
