@@ -152,7 +152,7 @@ let bannerEl = $ref<null | HTMLElement>(null);
 const style = $computed(() => {
 	if (props.user.bannerUrl == null) return {};
 	return {
-		backgroundImage: `url(${proxyImg(props.user.bannerUrl)})`,
+		backgroundImage: `url(${props.user.bannerUrl})`,
 	};
 });
 
