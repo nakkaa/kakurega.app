@@ -50,6 +50,7 @@
 			<span v-if="passwordRetypeState == 'not-match'" style="color: var(--error)"><i class="ti ti-alert-triangle ti-fw"></i> {{ i18n.ts.passwordNotMatched }}</span>
 		</template>
 	</MkInput>
+	<MkSwitch v-model="ageLimitAgreement">{{ i18n.ts.imOverSixteen }}</MkSwitch>
 	<MkSwitch v-if="instance.tosUrl" v-model="ToSAgreement" class="tou">
 		<I18n :src="i18n.ts.agreeTo">
 			<template #0>
@@ -105,6 +106,7 @@ let emailState: null | 'wait' | 'ok' | 'unavailable:used' | 'unavailable:format'
 let passwordStrength: '' | 'low' | 'medium' | 'high' = $ref('');
 let passwordRetypeState: null | 'match' | 'not-match' = $ref(null);
 let submitting: boolean = $ref(false);
+let ageLimitAgreement: boolean = $ref(false);
 let ToSAgreement: boolean = $ref(false);
 let hCaptchaResponse = $ref(null);
 let reCaptchaResponse = $ref(null);
@@ -192,6 +194,14 @@ function onChangePasswordRetype(): void {
 }
 
 function onSubmit(): void {
+	if (!ageLimitAgreement) {
+		os.alert({
+			type: 'error',
+			text: i18n.ts.ageLimitError,
+		});
+		return;
+	}
+
 	if (submitting) return;
 	submitting = true;
 
