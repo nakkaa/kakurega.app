@@ -137,10 +137,6 @@ proxyBypassHosts:
 # Media Proxy
 #mediaProxy: https://example.com/proxy
 
-# Mobile Media Proxy (default: false)
-# Compress the medias for mobile network user
-#mobileMediaProxy: false
-
 # Proxy remote files (default: false)
 #proxyRemoteFiles: true
 
@@ -153,6 +149,3 @@ signToActivityPubGet: true
 
 # Upload or download file size limits (bytes)
 #maxFileSize: 262144000
-
-# Beta test key
-#betaTestKey:

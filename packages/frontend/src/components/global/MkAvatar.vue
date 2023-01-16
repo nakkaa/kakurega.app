@@ -17,7 +17,6 @@ import { extractAvgColorFromBlurhash } from '@/scripts/extract-avg-color-from-bl
 import { acct, userPage } from '@/filters/user';
 import MkUserOnlineIndicator from '@/components/MkUserOnlineIndicator.vue';
 import { defaultStore } from '@/store';
-import { proxyImg } from '@/scripts/mobile-proxy';
 
 const props = withDefaults(defineProps<{
 	user: misskey.entities.User;
@@ -36,11 +35,9 @@ const emit = defineEmits<{
 	(ev: 'click', v: MouseEvent): void;
 }>();
 
-const imgUrl = defaultStore.state.disableShowingAnimatedImages
+const url = $computed(() => defaultStore.state.disableShowingAnimatedImages
 	? getStaticImageUrl(props.user.avatarUrl)
-	: props.user.avatarUrl;
-
-const url = $computed(() => proxyImg(imgUrl));
+	: props.user.avatarUrl);
 
 function onClick(ev: MouseEvent) {
 	emit('click', ev);

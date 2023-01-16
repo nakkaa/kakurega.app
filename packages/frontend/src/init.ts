@@ -29,7 +29,6 @@ import { version, ui, lang, host } from '@/config';
 import { applyTheme } from '@/scripts/theme';
 import { isDeviceDarkmode } from '@/scripts/is-device-darkmode';
 import { isTimeDarkmode, initializeTimeBasedDarkmode } from '@/scripts/is-time-darkmode';
-import { isMobileData, initializeDetectNetworkChange } from '@/scripts/data-saver';
 import { i18n } from '@/i18n';
 import { confirm, alert, post, popup, toast } from '@/os';
 import { stream } from '@/stream';
@@ -282,21 +281,6 @@ import { miLocalStorage } from './local-storage';
 			defaultStore.set('darkMode', mql.matches);
 		}
 	});
-	//#endregion
-
-	//# region Data saver
-	if (ColdDeviceStorage.get('compressedImageBehavior') === 'always') {
-		defaultStore.set('useCompressedImage', true);
-	}
-
-	if (ColdDeviceStorage.get('compressedImageBehavior') === 'none') {
-		defaultStore.set('useCompressedImage', false);
-	}
-
-	if (ColdDeviceStorage.get('compressedImageBehavior') === 'mobile') {
-		defaultStore.set('useCompressedImage', isMobileData());
-		initializeDetectNetworkChange();
-	}
 	//#endregion
 
 	fetchInstanceMetaPromise.then(() => {
