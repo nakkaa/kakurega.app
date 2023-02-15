@@ -138,6 +138,10 @@ export const meta = {
 				type: 'boolean',
 				optional: false, nullable: false,
 			},
+			enablePatreonIntegration: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
 			enableServiceWorker: {
 				type: 'boolean',
 				optional: false, nullable: false,
@@ -210,6 +214,22 @@ export const meta = {
 				type: 'string',
 				optional: true, nullable: true,
 				format: 'id',
+			},
+			patreonClientId: {
+				type: 'string',
+				optional: true, nullable: true,
+			},
+			patreonClientSecret: {
+				type: 'string',
+				optional: true, nullable: true,
+			},
+			patreonAccessToken: {
+				type: 'string',
+				optional: true, nullable: true,
+			},
+			patreonRefreshToken: {
+				type: 'string',
+				optional: true, nullable: true,
 			},
 			summaryProxy: {
 				type: 'string',
@@ -353,6 +373,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				defaultLightTheme: instance.defaultLightTheme,
 				defaultDarkTheme: instance.defaultDarkTheme,
 				enableEmail: instance.enableEmail,
+				enablePatreonIntegration: instance.enablePatreonIntegration,
 				enableServiceWorker: instance.enableServiceWorker,
 				translatorAvailable: instance.deeplAuthKey != null,
 				pinnedPages: instance.pinnedPages,
@@ -370,6 +391,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				setSensitiveFlagAutomatically: instance.setSensitiveFlagAutomatically,
 				enableSensitiveMediaDetectionForVideos: instance.enableSensitiveMediaDetectionForVideos,
 				proxyAccountId: instance.proxyAccountId,
+				patreonClientId: instance.patreonClientId,
+				patreonClientSecret: instance.patreonClientSecret,
+				patreonAccessToken: instance.patreonAccessToken,
+				patreonRefreshToken: instance.patreonRefreshToken,
 				summalyProxy: instance.summalyProxy,
 				email: instance.email,
 				smtpSecure: instance.smtpSecure,

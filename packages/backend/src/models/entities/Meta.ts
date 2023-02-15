@@ -279,6 +279,35 @@ export class Meta {
 	})
 	public swPrivateKey: string | null;
 
+	@Column('boolean', {
+		default: false,
+	})
+	public enablePatreonIntegration: boolean;
+
+	@Column('varchar', {
+		length: 128,
+		nullable: true,
+	})
+	public patreonClientId: string | null;
+
+	@Column('varchar', {
+		length: 128,
+		nullable: true,
+	})
+	public patreonClientSecret: string | null;
+
+	@Column('varchar', {
+		length: 128,
+		nullable: true,
+	})
+	public patreonAccessToken: string | null;
+
+	@Column('varchar', {
+		length: 128,
+		nullable: true,
+	})
+	public patreonRefreshToken: string | null;
+
 	@Column('varchar', {
 		length: 128,
 		nullable: true,

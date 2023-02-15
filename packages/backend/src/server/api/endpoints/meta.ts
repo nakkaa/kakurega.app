@@ -169,6 +169,10 @@ export const meta = {
 				type: 'boolean',
 				optional: false, nullable: false,
 			},
+			enablePatreonIntegration: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
 			enableServiceWorker: {
 				type: 'boolean',
 				optional: false, nullable: false,
@@ -214,6 +218,10 @@ export const meta = {
 						optional: false, nullable: false,
 					},
 					objectStorage: {
+						type: 'boolean',
+						optional: false, nullable: false,
+					},
+					patreon: {
 						type: 'boolean',
 						optional: false, nullable: false,
 					},
@@ -305,6 +313,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					imageUrl: ad.imageUrl,
 				})),
 				enableEmail: instance.enableEmail,
+
+				enablePatreonIntegration: instance.enablePatreonIntegration,
+
 				enableServiceWorker: instance.enableServiceWorker,
 
 				translatorAvailable: instance.deeplAuthKey != null,
@@ -335,6 +346,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					recaptcha: instance.enableRecaptcha,
 					turnstile: instance.enableTurnstile,
 					objectStorage: instance.useObjectStorage,
+					patreon: instance.enablePatreonIntegration,
 					serviceWorker: instance.enableServiceWorker,
 					miauth: true,
 				};

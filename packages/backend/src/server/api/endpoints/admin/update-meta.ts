@@ -68,6 +68,11 @@ export const paramDef = {
 		summalyProxy: { type: 'string', nullable: true },
 		deeplAuthKey: { type: 'string', nullable: true },
 		deeplIsPro: { type: 'boolean' },
+		enablePatreonIntegration: { type: 'boolean' },
+		patreonClientId: { type: 'string', nullable: true },
+		patreonClientSecret: { type: 'string', nullable: true },
+		patreonAccessToken: { type: 'string', nullable: true },
+		patreonRefreshToken: { type: 'string', nullable: true },
 		enableEmail: { type: 'boolean' },
 		email: { type: 'string', nullable: true },
 		smtpSecure: { type: 'boolean' },
@@ -259,6 +264,26 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 			if (ps.summalyProxy !== undefined) {
 				set.summalyProxy = ps.summalyProxy;
+			}
+
+			if (ps.enablePatreonIntegration !== undefined) {
+				set.enablePatreonIntegration = ps.enablePatreonIntegration;
+			}
+
+			if (ps.patreonClientId !== undefined) {
+				set.patreonClientId = ps.patreonClientId;
+			}
+
+			if (ps.patreonClientSecret !== undefined) {
+				set.patreonClientSecret = ps.patreonClientSecret;
+			}
+
+			if (ps.patreonAccessToken !== undefined) {
+				set.patreonAccessToken = ps.patreonAccessToken;
+			}
+
+			if (ps.patreonRefreshToken !== undefined) {
+				set.patreonRefreshToken = ps.patreonRefreshToken;
 			}
 
 			if (ps.enableEmail !== undefined) {

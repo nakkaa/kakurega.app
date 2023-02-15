@@ -217,6 +217,7 @@ import * as ep___i_webhooks_show from './endpoints/i/webhooks/show.js';
 import * as ep___i_webhooks_list from './endpoints/i/webhooks/list.js';
 import * as ep___i_webhooks_update from './endpoints/i/webhooks/update.js';
 import * as ep___i_webhooks_delete from './endpoints/i/webhooks/delete.js';
+import * as ep___integrations_patreon_requestRefresh from './endpoints/integrations/patreon/request-refresh.js';
 import * as ep___messaging_history from './endpoints/messaging/history.js';
 import * as ep___messaging_messages from './endpoints/messaging/messages.js';
 import * as ep___messaging_messages_create from './endpoints/messaging/messages/create.js';
@@ -550,6 +551,7 @@ const eps = [
 	['i/webhooks/show', ep___i_webhooks_show],
 	['i/webhooks/update', ep___i_webhooks_update],
 	['i/webhooks/delete', ep___i_webhooks_delete],
+	['integrations/patreon/request-refresh', ep___integrations_patreon_requestRefresh],
 	['messaging/history', ep___messaging_history],
 	['messaging/messages', ep___messaging_messages],
 	['messaging/messages/create', ep___messaging_messages_create],

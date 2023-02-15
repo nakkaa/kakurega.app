@@ -10,6 +10,7 @@ import { MetaService } from '@/core/MetaService.js';
 import { UserCacheService } from '@/core/UserCacheService.js';
 import type { RoleCondFormulaValue } from '@/models/entities/Role.js';
 import { UserEntityService } from '@/core/entities/UserEntityService.js';
+import { PatreonManagementService } from '@/core/integrations/PatreonManagementService.js';
 import { StreamMessages } from '@/server/api/stream/types.js';
 import type { OnApplicationShutdown } from '@nestjs/common';
 
@@ -72,6 +73,7 @@ export class RoleService implements OnApplicationShutdown {
 		private metaService: MetaService,
 		private userCacheService: UserCacheService,
 		private userEntityService: UserEntityService,
+		private patreonManagementService: PatreonManagementService,
 	) {
 		//this.onMessage = this.onMessage.bind(this);
 
@@ -181,6 +183,14 @@ export class RoleService implements OnApplicationShutdown {
 				}
 				case 'followingMoreThanOrEq': {
 					return user.followingCount >= value.value;
+				}
+				case 'patreonAmountsLessThanOrEq': {
+					const amounts = this.patreonManagementService.amountsValue(user);
+					return amounts !== 0 && amounts <= value.value;
+				}
+				case 'patreonAmountsMoreThanOrEq': {
+					const amounts = this.patreonManagementService.amountsValue(user);
+					return amounts !== 0 && amounts >= value.value;
 				}
 				default:
 					return false;
