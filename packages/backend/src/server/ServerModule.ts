@@ -7,6 +7,7 @@ import { NodeinfoServerService } from './NodeinfoServerService.js';
 import { ServerService } from './ServerService.js';
 import { WellKnownServerService } from './WellKnownServerService.js';
 import { GetterService } from './api/GetterService.js';
+import { PatreonServerService } from './api/integrations/PatreonServerService.js';
 import { ChannelsService } from './api/stream/ChannelsService.js';
 import { ActivityPubServerService } from './ActivityPubServerService.js';
 import { ApiLoggerService } from './api/ApiLoggerService.js';
@@ -51,6 +52,7 @@ import { UserListChannelService } from './api/stream/channels/user-list.js';
 		ServerService,
 		WellKnownServerService,
 		GetterService,
+		PatreonServerService,
 		ChannelsService,
 		ApiCallService,
 		ApiLoggerService,

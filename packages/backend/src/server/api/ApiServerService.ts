@@ -12,6 +12,7 @@ import endpoints, { IEndpoint } from './endpoints.js';
 import { ApiCallService } from './ApiCallService.js';
 import { SignupApiService } from './SignupApiService.js';
 import { SigninApiService } from './SigninApiService.js';
+import { PatreonServerService } from './integrations/PatreonServerService.js';
 import type { FastifyInstance, FastifyPluginOptions } from 'fastify';
 
 @Injectable()
@@ -35,6 +36,7 @@ export class ApiServerService {
 		private apiCallService: ApiCallService,
 		private signupApiService: SignupApiService,
 		private signinApiService: SigninApiService,
+		private patreonServerService: PatreonServerService,
 	) {
 		//this.createServer = this.createServer.bind(this);
 	}
@@ -126,6 +128,8 @@ export class ApiServerService {
 		}>('/signin', (request, reply) => this.signinApiService.signin(request, reply));
 
 		fastify.post<{ Body: { code: string; } }>('/signup-pending', (request, reply) => this.signupApiService.signupPending(request, reply));
+
+		fastify.register(this.patreonServerService.create);
 
 		fastify.get('/v1/instance/peers', async (request, reply) => {
 			const instances = await this.instancesRepository.find({
