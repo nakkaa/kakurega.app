@@ -101,7 +101,7 @@ export class PatreonServerService {
 
 			const params = {
 				redirect_uri: `${this.config.url}/api/pr/cb`,
-				scope: ['identity'],
+				scope: ['identity identity[email]'],
 				state: uuid(),
 				response_type: 'code',
 			};
