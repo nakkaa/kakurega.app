@@ -25,7 +25,7 @@ import JSON5 from 'json5';
 import widgets from '@/widgets';
 import directives from '@/directives';
 import components from '@/components';
-import { version, ui, lang, host, updateLocale } from '@/config';
+import { version, ui, lang, updateLocale } from '@/config';
 import { applyTheme } from '@/scripts/theme';
 import { isDeviceDarkmode } from '@/scripts/is-device-darkmode';
 import { isTimeDarkmode, initializeTimeBasedDarkmode } from '@/scripts/is-time-darkmode';
@@ -509,15 +509,6 @@ if ($i) {
 
 	main.on('readAllUnreadSpecifiedNotes', () => {
 		updateAccount({ hasUnreadSpecifiedNotes: false });
-	});
-
-	main.on('readAllMessagingMessages', () => {
-		updateAccount({ hasUnreadMessagingMessage: false });
-	});
-
-	main.on('unreadMessagingMessage', () => {
-		updateAccount({ hasUnreadMessagingMessage: true });
-		sound.play('chatBg');
 	});
 
 	main.on('readAllAntennas', () => {
