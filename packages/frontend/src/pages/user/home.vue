@@ -55,9 +55,9 @@
 							<dt class="name"><i class="ti ti-map-pin ti-fw"></i> {{ i18n.ts.location }}</dt>
 							<dd class="value">{{ user.location }}</dd>
 						</dl>
-						<dl v-if="user.birthday" class="field">
+						<dl v-if="birthday" class="field">
 							<dt class="name"><i class="ti ti-cake ti-fw"></i> {{ i18n.ts.birthday }}</dt>
-							<dd class="value">{{ user.birthday.replace('-', '/').replace('-', '/') }} ({{ $t('yearsOld', { age }) }})</dd>
+							<dd class="value">{{ birthday }}</dd>
 						</dl>
 						<dl class="field">
 							<dt class="name"><i class="ti ti-calendar ti-fw"></i> {{ i18n.ts.registeredDate }}</dt>
@@ -162,8 +162,13 @@ const style = $computed(() => {
 	};
 });
 
-const age = $computed(() => {
-	return calcAge(props.user.birthday);
+const birthday = $computed(() => {
+	if (!props.user.birthday) return null;
+
+	const parsedBirthday = props.user.birthday.split('-');
+	const isHideAge = parsedBirthday[0] === '9999' || parsedBirthday[0] === '0001';
+
+	return isHideAge ? `${parsedBirthday[1]}/${parsedBirthday[2]}` : `${props.user.birthday.replaceAll('-', '/')} (${i18n.t('yearsOld', { age: calcAge(props.user.birthday) })})`;
 });
 
 function menu(ev) {
