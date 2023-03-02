@@ -1,59 +1,70 @@
 <template>
-<MkModal ref="modal" :z-priority="'middle'" @click="$refs.modal.close()" @closed="$emit('closed')">
-	<div :class="$style.root">
-		<div :class="$style.title"><MkSparkle>{{ i18n.ts.misskeyUpdated }}</MkSparkle></div>
-		<div :class="$style.version">✨{{ version }}🚀</div>
-		<MkButton full @click="whatIsNew">{{ i18n.ts.whatIsNew }}</MkButton>
-		<MkButton :class="$style.gotIt" primary full @click="$refs.modal.close()">{{ i18n.ts.gotIt }}</MkButton>
+<div class="_panel _shadow" :class="$style.root">
+	<div :class="$style.main">
+		<div :class="$style.title">✨ {{ i18n.ts.misskeyUpdated }}</div>
+		<div :class="$style.text">{{ version }}</div>
+		<div class="_buttons">
+			<MkButton full @click="whatIsNew">{{ i18n.ts.whatIsNew }}</MkButton>
+			<MkButton full primary @click="close">{{ i18n.ts.gotIt }}</MkButton>
+		</div>
 	</div>
-</MkModal>
+	<button class="_button" :class="$style.close" @click="close"><i class="ti ti-x"></i></button>
+</div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, shallowRef } from 'vue';
-import MkModal from '@/components/MkModal.vue';
 import MkButton from '@/components/MkButton.vue';
-import MkSparkle from '@/components/MkSparkle.vue';
 import { version } from '@/config';
 import { i18n } from '@/i18n';
-import { confetti } from '@/scripts/confetti';
+import * as os from '@/os';
 
-const modal = shallowRef<InstanceType<typeof MkModal>>();
+const emit = defineEmits<{
+	(ev: 'closed'): void;
+}>();
+
+const zIndex = os.claimZIndex('low');
+
+function close() {
+	emit('closed');
+}
 
 const whatIsNew = () => {
-	modal.value.close();
-	window.open(`https://misskey.yukineko.me/@admin/pages/release-note`, '_blank');
+	emit('closed');
+	window.open('https://misskey.yukineko.me/@admin/pages/release-note', '_blank');
 };
-
-onMounted(() => {
-	confetti({
-		duration: 1000 * 3,
-	});
-});
 </script>
 
 <style lang="scss" module>
 .root {
+	position: fixed;
+	z-index: v-bind(zIndex);
+	bottom: var(--margin);
+	left: 0;
+	right: 0;
 	margin: auto;
-	position: relative;
-	padding: 32px;
-	min-width: 320px;
-	max-width: 480px;
 	box-sizing: border-box;
-	text-align: center;
-	background: var(--panel);
-	border-radius: var(--radius);
+	width: calc(100% - (var(--margin) * 2));
+	max-width: 500px;
+	display: flex;
+}
+
+.main {
+	padding: 25px;
+	flex: 1;
+}
+
+.close {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	padding: 8px;
 }
 
 .title {
 	font-weight: bold;
 }
 
-.version {
-	margin: 1em 0;
-}
-
-.gotIt {
-	margin: 8px 0 0 0;
+.text {
+	margin: 0.7em 0 1em 0;
 }
 </style>
