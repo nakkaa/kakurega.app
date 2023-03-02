@@ -101,11 +101,32 @@ export class PatreonManagementService implements OnApplicationShutdown {
 		const campaignId = campaign.data?.[0]?.id;
 		if (!campaignId) return {};
 
-		const response = await this.request(`/campaigns/${campaignId}/members?include=currently_entitled_tiers,user&fields[member]=email,currently_entitled_amount_cents`);
-		if (!response.data) return {};
+		const requestFormat = `/campaigns/${campaignId}/members?include=currently_entitled_tiers,user&fields[member]=email,currently_entitled_amount_cents`;
+		let responseData: any[] = [];
+		let cursor: null | string = null;
+
+		while (true) {
+			const response = await this.request(requestFormat + (cursor ? `&page[cursor]=${cursor}` : ''));
+
+			// レスポンスにdataプロパティが存在しなければ中断
+			if (!response.data) break;
+
+			// レスポンスを結合
+			responseData = responseData.concat(response.data);
+
+			// もしページネーションのカーソルでnextが存在すればcursorとして定義する
+			if (response.meta?.pagination?.cursors?.next) {
+				cursor = response.meta.pagination.cursors.next as string;
+			} else {
+				// カーソルが存在しなければそれ以上はAPIを掘る必要はないので終了
+				break;
+			}
+		}
+
+		if (!Object.keys(responseData).length) return {};
 
 		const membershipUsers = {} as KVPair<number>;
-		for (const user of response.data) {
+		for (const user of responseData) {
 			if (!user.attributes.currently_entitled_amount_cents || !user.attributes.email) continue;
 			membershipUsers[user.attributes.email] = user.attributes.currently_entitled_amount_cents;
 		}

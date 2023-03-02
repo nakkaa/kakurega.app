@@ -7,13 +7,11 @@ import type { Config } from '@/config.js';
 import type { UserProfilesRepository, UsersRepository } from '@/models/index.js';
 import { DI } from '@/di-symbols.js';
 import { HttpRequestService } from '@/core/HttpRequestService.js';
-import type { ILocalUser } from '@/models/entities/User.js';
 import { GlobalEventService } from '@/core/GlobalEventService.js';
 import { MetaService } from '@/core/MetaService.js';
 import { UserEntityService } from '@/core/entities/UserEntityService.js';
 import { FastifyReplyError } from '@/misc/fastify-reply-error.js';
 import { bindThis } from '@/decorators.js';
-import { SigninService } from '../SigninService.js';
 import type { FastifyInstance, FastifyRequest, FastifyPluginOptions } from 'fastify';
 
 @Injectable()
