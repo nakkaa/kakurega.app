@@ -1,0 +1,62 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { DI } from '@/di-symbols.js';
+import { Endpoint } from '@/server/api/endpoint-base.js';
+import type { RoleAssignmentsRepository, RolesRepository, User } from '@/models/index.js';
+import { PatreonManagementService } from '@/core/integrations/PatreonManagementService.js';
+import { UserEntityService } from '@/core/entities/UserEntityService.js';
+import { MetaService } from '@/core/MetaService.js';
+
+export const meta = {
+	requireCredential: false,
+	res: {
+		type: 'array',
+		optional: false, nullable: false,
+		items: {
+			type: 'object',
+			optional: false, nullable: false,
+		},
+	},
+} as const;
+
+export const paramDef = {
+	type: 'object',
+	properties: {},
+	required: [],
+} as const;
+
+type SupporterUser = {
+	name: string,
+	avatarUrl: string,
+	avatarBlurhash: string | null,
+	type: 'name' | 'nameWithIcon'
+}
+
+// eslint-disable-next-line import/no-default-export
+@Injectable()
+export default class extends Endpoint<typeof meta, typeof paramDef> {
+	constructor(
+		private userEntityService: UserEntityService,
+		private patreonManagementService: PatreonManagementService,
+		private metaService: MetaService,
+	) {
+		super(meta, paramDef, async (ps, me) => {
+			const patreons = this.patreonManagementService.getPatreonUsers();
+			const users: SupporterUser[] = [];
+			const meta = await this.metaService.fetch();
+
+			if (!meta.enableSupporterPage || !meta.supporterNameThreshold || !meta.supporterNameWithIconThreshold) return [];
+
+			for (const patreon of Object.values(patreons)) {
+				if (patreon.amounts < meta.supporterNameThreshold) continue;
+				users.push({
+					name: patreon.user.name ?? patreon.user.username,
+					avatarUrl: this.userEntityService.getAvatarUrlSync(patreon.user),
+					avatarBlurhash: patreon.user.avatar?.blurhash ?? null,
+					type: meta.supporterNameWithIconThreshold <= patreon.amounts ? 'nameWithIcon' : 'name',
+				});
+			}
+
+			return users;
+		});
+	}
+}

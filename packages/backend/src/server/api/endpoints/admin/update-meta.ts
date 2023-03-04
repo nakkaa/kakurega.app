@@ -99,6 +99,12 @@ export const paramDef = {
 		objectStorageS3ForcePathStyle: { type: 'boolean' },
 		enableIpLogging: { type: 'boolean' },
 		enableActiveEmailValidation: { type: 'boolean' },
+		enableSupporterPage: { type: 'boolean' },
+		supporterRoles: { type: 'array', nullable: true, items: {
+			type: 'string',
+		} },
+		supporterNameThreshold: { type: 'integer', nullable: true },
+		supporterNameWithIconThreshold: { type: 'integer', nullable: true },
 	},
 	required: [],
 } as const;
@@ -410,6 +416,22 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 			if (ps.enableActiveEmailValidation !== undefined) {
 				set.enableActiveEmailValidation = ps.enableActiveEmailValidation;
+			}
+
+			if (ps.enableSupporterPage !== undefined) {
+				set.enableSupporterPage = ps.enableSupporterPage;
+			}
+
+			if (Array.isArray(ps.supporterRoles)) {
+				set.supporterRoles = ps.supporterRoles.filter(Boolean);
+			}
+
+			if (ps.supporterNameThreshold !== undefined) {
+				set.supporterNameThreshold = ps.supporterNameThreshold;
+			}
+
+			if (ps.supporterNameWithIconThreshold !== undefined) {
+				set.supporterNameWithIconThreshold = ps.supporterNameWithIconThreshold;
 			}
 
 			await this.metaService.update(set);

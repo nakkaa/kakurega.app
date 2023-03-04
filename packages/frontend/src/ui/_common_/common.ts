@@ -77,6 +77,10 @@ export function openInstanceMenu(ev: MouseEvent) {
 		},
 	}, {
 		type: 'link',
+		text: i18n.ts.supporterList,
+		to: '/supporter',
+	}, {
+		type: 'link',
 		text: i18n.ts.aboutMisskey,
 		to: '/about-misskey',
 	}], ev.currentTarget ?? ev.target, {

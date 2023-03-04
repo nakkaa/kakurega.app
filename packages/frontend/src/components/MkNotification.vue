@@ -69,8 +69,9 @@
 			<span v-else-if="notification.type === 'followRequestAccepted'" :class="$style.text" style="opacity: 0.6;">{{ i18n.ts.followRequestAccepted }}</span>
 			<template v-else-if="notification.type === 'receiveFollowRequest'">
 				<span :class="$style.text" style="opacity: 0.6;">{{ i18n.ts.receiveFollowRequest }}</span>
-				<div v-if="full && !followRequestDone">
-					<button class="_textButton" @click="acceptFollowRequest()">{{ i18n.ts.accept }}</button> | <button class="_textButton" @click="rejectFollowRequest()">{{ i18n.ts.reject }}</button>
+				<div v-if="full && !followRequestDone" :class="$style.followRequestButtons">
+					<MkButton inline primary rounded @click="acceptFollowRequest()">{{ i18n.ts.accept }}</MkButton>
+					<MkButton inline rounded @click="rejectFollowRequest()">{{ i18n.ts.reject }}</MkButton>
 				</div>
 			</template>
 			<span v-else-if="notification.type === 'app'" :class="$style.text">
@@ -86,6 +87,7 @@ import { ref, shallowRef, onMounted, onUnmounted, watch } from 'vue';
 import * as misskey from 'misskey-js';
 import MkReactionIcon from '@/components/MkReactionIcon.vue';
 import MkFollowButton from '@/components/MkFollowButton.vue';
+import MkButton from '@/components/MkButton.vue';
 import XReactionTooltip from '@/components/MkReactionTooltip.vue';
 import { getNoteSummary } from '@/scripts/get-note-summary';
 import { notePage } from '@/filters/note';
@@ -292,6 +294,12 @@ useTooltip(reactionRef, (showing) => {
 
 .quote:last-child {
 	margin-left: 4px;
+}
+
+.followRequestButtons {
+	margin-top: 12px;
+	display: flex;
+	gap: 8px;
 }
 
 @container (max-width: 600px) {

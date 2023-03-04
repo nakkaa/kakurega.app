@@ -255,6 +255,26 @@ export const meta = {
 				type: 'object',
 				optional: false, nullable: false,
 			},
+			enableSupporterPage: {
+				type: 'boolean',
+				optional: true, nullable: false,
+			},
+			supporterRoles: {
+				type: 'array',
+				optional: true, nullable: false,
+				items: {
+					type: 'string',
+					optional: false, nullable: false,
+				},
+			},
+			supporterNameThreshold: {
+				type: 'number',
+				optional: true, nullable: true,
+			},
+			supporterNameWithIconThreshold: {
+				type: 'number',
+				optional: true, nullable: true,
+			},
 		},
 	},
 } as const;
@@ -356,6 +376,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				enableIpLogging: instance.enableIpLogging,
 				enableActiveEmailValidation: instance.enableActiveEmailValidation,
 				policies: { ...DEFAULT_POLICIES, ...instance.policies },
+				enableSupporterPage: instance.enableSupporterPage,
+				supporterRoles: instance.supporterRoles,
+				supporterNameThreshold: instance.supporterNameThreshold,
+				supporterNameWithIconThreshold: instance.supporterNameWithIconThreshold,
 			};
 		});
 	}

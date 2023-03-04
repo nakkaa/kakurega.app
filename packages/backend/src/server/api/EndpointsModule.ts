@@ -219,6 +219,7 @@ import * as ep___i_webhooks_list from './endpoints/i/webhooks/list.js';
 import * as ep___i_webhooks_update from './endpoints/i/webhooks/update.js';
 import * as ep___i_webhooks_delete from './endpoints/i/webhooks/delete.js';
 import * as ep___integrations_patreon_requestRefresh from './endpoints/integrations/patreon/request-refresh.js';
+import * as ep___integrations_patreon_list from './endpoints/integrations/patreon/list.js';
 import * as ep___meta from './endpoints/meta.js';
 import * as ep___emojis from './endpoints/emojis.js';
 import * as ep___miauth_genToken from './endpoints/miauth/gen-token.js';
@@ -541,6 +542,7 @@ const $i_webhooks_show: Provider = { provide: 'ep:i/webhooks/show', useClass: ep
 const $i_webhooks_update: Provider = { provide: 'ep:i/webhooks/update', useClass: ep___i_webhooks_update.default };
 const $i_webhooks_delete: Provider = { provide: 'ep:i/webhooks/delete', useClass: ep___i_webhooks_delete.default };
 const $integrations_patreon_requestRefresh: Provider = { provide: 'ep:integrations/patreon/request-refresh', useClass: ep___integrations_patreon_requestRefresh.default };
+const $integrations_patreon_list: Provider = { provide: 'ep:integrations/patreon/list', useClass: ep___integrations_patreon_list.default };
 const $meta: Provider = { provide: 'ep:meta', useClass: ep___meta.default };
 const $emojis: Provider = { provide: 'ep:emojis', useClass: ep___emojis.default };
 const $miauth_genToken: Provider = { provide: 'ep:miauth/gen-token', useClass: ep___miauth_genToken.default };
@@ -867,6 +869,7 @@ const $retention: Provider = { provide: 'ep:retention', useClass: ep___retention
 		$i_webhooks_update,
 		$i_webhooks_delete,
 		$integrations_patreon_requestRefresh,
+		$integrations_patreon_list,
 		$meta,
 		$emojis,
 		$miauth_genToken,
@@ -1187,6 +1190,7 @@ const $retention: Provider = { provide: 'ep:retention', useClass: ep___retention
 		$i_webhooks_update,
 		$i_webhooks_delete,
 		$integrations_patreon_requestRefresh,
+		$integrations_patreon_list,
 		$meta,
 		$emojis,
 		$miauth_genToken,

@@ -437,4 +437,24 @@ export class Meta {
 		default: { },
 	})
 	public policies: Record<string, any>;
+
+	@Column('boolean', {
+		default: false,
+	})
+	public enableSupporterPage: boolean;
+
+	@Column('varchar', {
+		length: 256, array: true, default: '{}',
+	})
+	public supporterRoles: string[];
+
+	@Column('integer', {
+		nullable: true,
+	})
+	public supporterNameThreshold: number | null;
+
+	@Column('integer', {
+		nullable: true,
+	})
+	public supporterNameWithIconThreshold: number | null;
 }
