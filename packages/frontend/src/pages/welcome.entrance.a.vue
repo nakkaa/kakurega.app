@@ -12,35 +12,39 @@
 		<MkEmoji :normal="true" :no-style="true" emoji="🎉"/>
 		<MkEmoji :normal="true" :no-style="true" emoji="🍮"/>
 	</div>
-	<div class="contents">
-		<div class="main">
-			<img :src="$instance.iconUrl || $instance.faviconUrl || '/favicon.ico'" alt="" class="icon"/>
-			<button class="_button _acrylic menu" @click="showMenu"><i class="ti ti-dots"></i></button>
-			<div class="fg">
-				<h1>
-					<!-- 背景色によってはロゴが見えなくなるのでとりあえず無効に -->
-					<!-- <img class="logo" v-if="meta.logoImageUrl" :src="meta.logoImageUrl"><span v-else class="text">{{ instanceName }}</span> -->
-					<span class="text">{{ instanceName }}</span>
-				</h1>
-				<div class="about">
-					<!-- eslint-disable-next-line vue/no-v-html -->
-					<div class="desc" v-html="meta.description || i18n.ts.headlineMisskey"></div>
-				</div>
-				<div v-if="instance.disableRegistration" class="warn">
-					<MkInfo warn>{{ i18n.ts.invitationRequiredToRegister }}</MkInfo>
-				</div>
-				<div class="action _gaps_s">
-					<MkButton full rounded gradate data-cy-signup style="margin-right: 12px;" @click="signup()">{{ i18n.ts.joinThisServer }}</MkButton>
-					<MkButton full rounded @click="exploreOtherServers()">{{ i18n.ts.exploreOtherServers }}</MkButton>
-					<MkButton full rounded data-cy-signin @click="signin()">{{ i18n.ts.login }}</MkButton>
+	<div class="container">
+		<div class="contents">
+			<div class="spacer"/>
+			<div class="main">
+				<img :src="$instance.iconUrl || $instance.faviconUrl || '/favicon.ico'" alt="" class="icon"/>
+				<button class="_button _acrylic menu" @click="showMenu"><i class="ti ti-dots"></i></button>
+				<div class="fg">
+					<h1>
+						<!-- 背景色によってはロゴが見えなくなるのでとりあえず無効に -->
+						<!-- <img class="logo" v-if="meta.logoImageUrl" :src="meta.logoImageUrl"><span v-else class="text">{{ instanceName }}</span> -->
+						<span class="text">{{ instanceName }}</span>
+					</h1>
+					<div class="about">
+						<!-- eslint-disable-next-line vue/no-v-html -->
+						<div class="desc" v-html="meta.description || i18n.ts.headlineMisskey"></div>
+					</div>
+					<div v-if="instance.disableRegistration" class="warn">
+						<MkInfo warn>{{ i18n.ts.invitationRequiredToRegister }}</MkInfo>
+					</div>
+					<div class="action _gaps_s">
+						<MkButton full rounded gradate data-cy-signup style="margin-right: 12px;" @click="signup()">{{ i18n.ts.joinThisServer }}</MkButton>
+						<MkButton full rounded @click="exploreOtherServers()">{{ i18n.ts.exploreOtherServers }}</MkButton>
+						<MkButton full rounded data-cy-signin @click="signin()">{{ i18n.ts.login }}</MkButton>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div v-if="instance.policies.ltlAvailable" class="tl">
-			<div class="title">{{ i18n.ts.letsLookAtTimeline }}</div>
-			<div class="body">
-				<MkTimeline src="local"/>
+			<div v-if="instance.policies.ltlAvailable" class="tl">
+				<div class="title">{{ i18n.ts.letsLookAtTimeline }}</div>
+				<div class="body">
+					<MkTimeline src="local"/>
+				</div>
 			</div>
+			<div class="spacer"/>
 		</div>
 	</div>
 	<div v-if="instances && instances.length > 0" class="federation">
@@ -198,91 +202,102 @@ function exploreOtherServers() {
 		}
 	}
 
-	> .contents {
+	> .container {
 		position: relative;
+		display: table;
+		height: 100vh;
+		margin-left: 300px;
 		width: min(430px, calc(100% - 32px));
-		margin-left: 128px;
-		padding: 150px 0 100px 0;
 
 		@media (max-width: 1200px) {
 			margin: auto;
 		}
 
-		> .main {
-			position: relative;
-			background: var(--panel);
-			border-radius: var(--radius);
-			box-shadow: 0 12px 32px rgb(0 0 0 / 25%);
-			text-align: center;
-		
-			> .icon {
-				width: 85px;
-				margin-top: -47px;
-				border-radius: 100%;
-				vertical-align: bottom;
+		> .contents {
+			vertical-align: middle;
+			display: table-cell;
+
+			> .spacer {
+				width: 100%;
+				height: 125px;
 			}
 
-			> .menu {
-				position: absolute;
-				top: 16px;
-				right: 16px;
-				width: 32px;
-				height: 32px;
-				border-radius: 8px;
-				font-size: 18px;
-			}
-
-			> .fg {
+			> .main {
 				position: relative;
-				z-index: 1;
+				background: var(--panel);
+				border-radius: var(--radius);
+				box-shadow: 0 12px 32px rgb(0 0 0 / 25%);
+				text-align: center;
+			
+				> .icon {
+					width: 85px;
+					margin-top: -47px;
+					border-radius: 100%;
+					vertical-align: bottom;
+				}
 
-				> h1 {
-					display: block;
-					margin: 0;
-					padding: 16px 32px 24px 32px;
-					font-size: 1.4em;
+				> .menu {
+					position: absolute;
+					top: 16px;
+					right: 16px;
+					width: 32px;
+					height: 32px;
+					border-radius: 8px;
+					font-size: 18px;
+				}
 
-					> .logo {
-						vertical-align: bottom;
-						max-height: 120px;
-						max-width: min(100%, 300px);
+				> .fg {
+					position: relative;
+					z-index: 1;
+
+					> h1 {
+						display: block;
+						margin: 0;
+						padding: 16px 32px 24px 32px;
+						font-size: 1.4em;
+
+						> .logo {
+							vertical-align: bottom;
+							max-height: 120px;
+							max-width: min(100%, 300px);
+						}
 					}
-				}
 
-				> .about {
-					padding: 0 32px;
-				}
+					> .about {
+						padding: 0 32px;
+					}
 
-				> .warn {
-					padding: 32px 32px 0 32px;
-				}
+					> .warn {
+						padding: 32px 32px 0 32px;
+					}
 
-				> .action {
-					padding: 32px;
+					> .action {
+						padding: 32px;
 
-					> * {
-						line-height: 28px;
+						> * {
+							line-height: 28px;
+						}
 					}
 				}
 			}
-		}
 
-		> .tl {
-			position: relative;
-			background: var(--panel);
-			border-radius: var(--radius);
-			overflow: clip;
-			box-shadow: 0 12px 32px rgb(0 0 0 / 25%);
-			margin-top: 16px;
+			> .tl {
+				position: relative;
+				background: var(--panel);
+				border-radius: var(--radius);
+				overflow: clip;
+				box-shadow: 0 12px 32px rgb(0 0 0 / 25%);
+				margin-top: 16px;
 
-			> .title {
-				padding: 12px 16px;
-				border-bottom: solid 1px var(--divider);
-			}
+				> .title {
+					padding: 12px 16px;
+					border-bottom: solid 1px var(--divider);
+				}
 
-			> .body {
-				height: 350px;
-				overflow: auto;
+				> .body {
+					height: 350px;
+					overflow: auto;
+				}
 			}
 		}
 	}
