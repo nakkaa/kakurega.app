@@ -198,6 +198,10 @@ export const routes = [{
 	path: '/about-misskey',
 	component: page(() => import('./pages/about-misskey.vue')),
 }, {
+	path: '/supporter',
+	name: 'supporter',
+	component: page(() => import('./pages/supporter.vue')),
+}, {
 	path: '/theme-editor',
 	component: page(() => import('./pages/theme-editor.vue')),
 	loginRequired: true,
@@ -404,6 +408,10 @@ export const routes = [{
 		path: '/integrations',
 		name: 'integrations',
 		component: page(() => import('./pages/admin/integrations.vue')),
+	}, {
+		path: '/supporter',
+		name: 'supporter',
+		component: page(() => import('./pages/admin/supporter.vue')),
 	}, {
 		path: '/instance-block',
 		name: 'instance-block',

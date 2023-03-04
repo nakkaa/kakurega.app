@@ -219,6 +219,7 @@ import * as ep___i_webhooks_list from './endpoints/i/webhooks/list.js';
 import * as ep___i_webhooks_update from './endpoints/i/webhooks/update.js';
 import * as ep___i_webhooks_delete from './endpoints/i/webhooks/delete.js';
 import * as ep___integrations_patreon_requestRefresh from './endpoints/integrations/patreon/request-refresh.js';
+import * as ep___integrations_patreon_list from './endpoints/integrations/patreon/list.js';
 import * as ep___meta from './endpoints/meta.js';
 import * as ep___emojis from './endpoints/emojis.js';
 import * as ep___miauth_genToken from './endpoints/miauth/gen-token.js';
@@ -539,6 +540,7 @@ const eps = [
 	['i/webhooks/update', ep___i_webhooks_update],
 	['i/webhooks/delete', ep___i_webhooks_delete],
 	['integrations/patreon/request-refresh', ep___integrations_patreon_requestRefresh],
+	['integrations/patreon/list', ep___integrations_patreon_list],
 	['meta', ep___meta],
 	['emojis', ep___emojis],
 	['miauth/gen-token', ep___miauth_genToken],

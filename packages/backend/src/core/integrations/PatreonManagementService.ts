@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Not } from 'typeorm';
 import { OAuth2 } from 'oauth';
 import { MetaService } from '@/core/MetaService.js';
-import type { UserProfilesRepository, User } from '@/models/index.js';
+import type { UserProfilesRepository, User, RoleAssignmentsRepository } from '@/models/index.js';
 import { HttpRequestService } from '@/core/HttpRequestService.js';
 import { StatusError } from '@/misc/status-error.js';
 import { DI } from '@/di-symbols.js';
@@ -15,18 +15,27 @@ type KVPair<T = any> = {
 	[key: string]: T;
 }
 
+type PatreonMember = {
+	amounts: number,
+	user: User,
+	isPatreon: boolean
+}
+
 @Injectable()
 export class PatreonManagementService implements OnApplicationShutdown {
 	private intervalId: NodeJS.Timer;
 	private timeoutId: NodeJS.Timer;
 	private logger: Logger;
-	private cache: KVPair<number> | null = null;
+	private cache: KVPair<PatreonMember> = {};
 	private cacheLastUpdate = 0;
 	private isWaitingToUpdate = false;
 
 	constructor(
 		@Inject(DI.userProfilesRepository)
 		private userProfilesRepository: UserProfilesRepository,
+
+		@Inject(DI.roleAssignmentsRepository)
+		private roleAssignmentsRepository: RoleAssignmentsRepository,
 		
 		private metaService: MetaService,
 		private httpRequestService: HttpRequestService,
@@ -46,8 +55,15 @@ export class PatreonManagementService implements OnApplicationShutdown {
 
 	@bindThis
 	public amountsValue(user: User): number {
-		const amountsList = this.cache ?? {};
-		return amountsList[user.id] ?? 0;
+		const target = this.cache[user.id];
+		if (!target) return 0;
+
+		return target.isPatreon ? target.amounts : 0;
+	}
+
+	@bindThis
+	public getPatreonUsers(): KVPair<PatreonMember> {
+		return this.cache;
 	}
 
 	@bindThis
@@ -74,15 +90,46 @@ export class PatreonManagementService implements OnApplicationShutdown {
 			where: {
 				integrations: Not('{}'),
 			},
+			relations: {
+				user: true,
+			},
 		});
 
-		const usersList = {} as KVPair<number>;
+		const usersList = {} as KVPair<PatreonMember>;
 
 		for (const user of users) {
 			const patreonId = user.integrations.patreon?.id;
 			const amounts = patreonId ? members[patreonId] : null;
 			if (!amounts) continue;
-			usersList[user.userId] = amounts;
+			usersList[user.userId] = {
+				amounts,
+				user: user.user as User,
+				isPatreon: true,
+			};
+		}
+
+		this.logger.info(`Found ${Object.keys(usersList).length} patreon(s)`);
+
+		// 支援者ロールに該当するユーザーも追加
+		for (const role of meta.supporterRoles) {
+			const roleId = role.split(',')[0].trim();
+			const roleAmounts = Number(role.split(',')[1]);
+
+			const targets = await this.roleAssignmentsRepository.find({
+				where: { roleId },
+				relations: {
+					user: true,
+				},
+			});
+
+			targets.forEach(assign => {
+				const user = assign.user as User;
+				usersList[user.id] = {
+					user,
+					amounts: isNaN(roleAmounts) ? 500 : roleAmounts,
+					isPatreon: false,
+				};
+			});
 		}
 
 		this.cache = usersList;
@@ -90,7 +137,6 @@ export class PatreonManagementService implements OnApplicationShutdown {
 		this.isWaitingToUpdate = false;
 
 		this.logger.info('Cache updated.');
-		this.logger.info(`Found ${Object.keys(usersList).length} patreon(s)`);
 	}
 
 	@bindThis
