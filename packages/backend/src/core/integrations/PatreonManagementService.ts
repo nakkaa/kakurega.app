@@ -91,7 +91,9 @@ export class PatreonManagementService implements OnApplicationShutdown {
 				integrations: Not('{}'),
 			},
 			relations: {
-				user: true,
+				user: {
+					avatar: true,
+				},
 			},
 		});
 
@@ -118,7 +120,9 @@ export class PatreonManagementService implements OnApplicationShutdown {
 			const targets = await this.roleAssignmentsRepository.find({
 				where: { roleId },
 				relations: {
-					user: true,
+					user: {
+						avatar: true,
+					},
 				},
 			});
 

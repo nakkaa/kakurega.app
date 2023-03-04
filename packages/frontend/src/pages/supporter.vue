@@ -14,11 +14,11 @@
 					<div :class="$style.supportersWithIcon">
 						<div v-for="supporter in supporterNameWithIcon" :class="$style.supporterWithIcon">
 							<ImgWithBlurhash :class="$style.supporterIcon" :hash="supporter.avatarBlurhash ?? undefined" :src="supporter.avatarUrl"/>
-							<span :class="$style.supporterName">{{ supporter.name }}</span>
+							<Mfm :class="$style.supporterName" :text="supporter.name" :plain="true" :nowrap="true"/>
 						</div>
 					</div>
 					<div style="margin-top: 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); grid-gap: 12px;">
-						<div v-for="supporter in supporterName" :key="supporter">{{ supporter }}</div>
+						<div v-for="supporter in supporterName" :key="supporter"><Mfm :class="$style.supporterName" :text="supporter" :plain="true" :nowrap="true"/></div>
 					</div>
 					<p>{{ i18n.ts.moreSupporters }}</p>
 				</FormSection>
