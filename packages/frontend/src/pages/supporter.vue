@@ -13,7 +13,7 @@
 					</template>
 					<div :class="$style.supportersWithIcon">
 						<div v-for="supporter in supporterNameWithIcon" :class="$style.supporterWithIcon">
-							<ImgWithBlurhash :class="$style.supporterIcon" :hash="supporter.avatarBlurhash ?? undefined" :src="supporter.avatarUrl"/>
+							<img :class="$style.supporterIcon" :src="supporter.avatarUrl" decoding="async"/>
 							<Mfm :class="$style.supporterName" :text="supporter.name" :plain="true" :nowrap="true"/>
 						</div>
 					</div>
@@ -30,7 +30,6 @@
 
 <script lang="ts" setup>
 import { onMounted } from 'vue';
-import ImgWithBlurhash from '@/components/MkImgWithBlurhash.vue';
 import FormSection from '@/components/form/section.vue';
 import { i18n } from '@/i18n';
 import { host } from '@/config';
@@ -40,7 +39,6 @@ import { definePageMetadata } from '@/scripts/page-metadata';
  type SupporterUser = {
 	name: string,
 	avatarUrl: string,
-	avatarBlurhash: string | null,
 	type: 'name' | 'nameWithIcon'
 }
 
@@ -84,6 +82,7 @@ definePageMetadata({
 
 .supporterIcon {
 	width: 24px;
+	height: 24px;
 
 	> * {
 		border-radius: 100%;
