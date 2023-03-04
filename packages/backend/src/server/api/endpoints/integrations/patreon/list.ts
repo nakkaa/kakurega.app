@@ -27,7 +27,6 @@ export const paramDef = {
 type SupporterUser = {
 	name: string,
 	avatarUrl: string,
-	avatarBlurhash: string | null,
 	type: 'name' | 'nameWithIcon'
 }
 
@@ -51,7 +50,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				users.push({
 					name: patreon.user.name ?? patreon.user.username,
 					avatarUrl: this.userEntityService.getAvatarUrlSync(patreon.user),
-					avatarBlurhash: patreon.user.avatar?.blurhash ?? null,
 					type: meta.supporterNameWithIconThreshold <= patreon.amounts ? 'nameWithIcon' : 'name',
 				});
 			}
