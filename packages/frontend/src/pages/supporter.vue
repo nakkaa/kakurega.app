@@ -83,10 +83,7 @@ definePageMetadata({
 .supporterIcon {
 	width: 24px;
 	height: 24px;
-
-	> * {
-		border-radius: 100%;
-	}
+	border-radius: 100%;
 }
 
 .supporterName {
