@@ -91,6 +91,13 @@
 		<option value="always">{{ i18n.ts._instanceTicker.always }}</option>
 	</MkSelect>
 
+	<MkSelect v-model="instanceTickerStyle">
+		<template #label>{{ i18n.ts.instanceTickerStyle }}</template>
+		<option value="default">{{ i18n.ts._instanceTickerStyle.default }}</option>
+		<option value="minimal">{{ i18n.ts._instanceTickerStyle.minimal }}</option>
+		<option value="icon">{{ i18n.ts._instanceTickerStyle.icon }}</option>
+	</MkSelect>
+
 	<MkSelect v-model="nsfw">
 		<template #label>{{ i18n.ts.nsfw }}</template>
 		<option value="respect">{{ i18n.ts._nsfw.respect }}</option>
@@ -160,6 +167,7 @@ const showFixedPostForm = computed(defaultStore.makeGetterSetter('showFixedPostF
 const showFixedPostFormInChannel = computed(defaultStore.makeGetterSetter('showFixedPostFormInChannel'));
 const numberOfPageCache = computed(defaultStore.makeGetterSetter('numberOfPageCache'));
 const instanceTicker = computed(defaultStore.makeGetterSetter('instanceTicker'));
+const instanceTickerStyle = computed(defaultStore.makeGetterSetter('instanceTickerStyle'));
 const enableInfiniteScroll = computed(defaultStore.makeGetterSetter('enableInfiniteScroll'));
 const useReactionPickerForContextMenu = computed(defaultStore.makeGetterSetter('useReactionPickerForContextMenu'));
 const squareAvatars = computed(defaultStore.makeGetterSetter('squareAvatars'));
@@ -196,6 +204,7 @@ watch([
 	showNoteActionsOnlyHover,
 	showGapBetweenNotesInTimeline,
 	instanceTicker,
+	instanceTickerStyle,
 	overridedDeviceKind,
 ], async () => {
 	await reloadAsk();

@@ -12,6 +12,7 @@
 		<MkA :to="notePage(note)">
 			<MkTime :time="note.createdAt"/>
 		</MkA>
+		<MkInstanceTickerIcon v-if="showInstance" style="margin-left: 0.5em;" :instance="note.user.instance"/>
 		<span v-if="note.visibility !== 'public'" style="margin-left: 0.5em;" :title="i18n.ts._visibility[note.visibility]">
 			<i v-if="note.visibility === 'home'" class="ti ti-home"></i>
 			<i v-else-if="note.visibility === 'followers'" class="ti ti-lock"></i>
@@ -26,6 +27,7 @@
 <script lang="ts" setup>
 import { } from 'vue';
 import * as misskey from 'misskey-js';
+import MkInstanceTickerIcon from './MkInstanceTickerIcon.vue';
 import { i18n } from '@/i18n';
 import { notePage } from '@/filters/note';
 import { userPage } from '@/filters/user';
@@ -33,6 +35,7 @@ import { userPage } from '@/filters/user';
 defineProps<{
 	note: misskey.entities.Note;
 	pinned?: boolean;
+	showInstance?: boolean;
 }>();
 </script>
 
