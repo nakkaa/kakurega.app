@@ -25,6 +25,7 @@
 			<MkSwitch v-model="syncDeviceDarkMode">{{ i18n.ts.syncDeviceDarkMode }}</MkSwitch>
 			<MkSwitch v-model="syncTimeDarkMode">
 				{{ i18n.ts.syncTimeDarkMode }}
+				<span class="_beta">{{ i18n.ts.originalFeature }}</span>
 				<template #caption>{{ i18n.ts.disableSyncDeviceDarkMode }}</template>
 			</MkSwitch>
 		</div>

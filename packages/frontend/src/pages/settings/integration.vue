@@ -1,7 +1,11 @@
 <template>
 	<div class="_gaps_m">
 		<FormSection v-if="instance.enablePatreonIntegration" :first="true">
-			<template #label><i class="ti ti-brand-patreon"></i> Patreon</template>
+			<template #label>
+				<i class="ti ti-brand-patreon"></i>
+				Patreon
+				<span class="_beta">{{ i18n.ts.originalFeature }}</span>
+			</template>
 			<p v-if="integrations.patreon">{{ i18n.ts.connectedTo }}: <a href="https://www.patreon.com/home" rel="nofollow noopener" target="_blank">{{ integrations.patreon.id }}</a></p>
 			<div v-if="integrations.patreon" class="_gaps_s">
 				<MkButton danger @click="disconnectPatreon">{{ i18n.ts.disconnectService }}</MkButton>

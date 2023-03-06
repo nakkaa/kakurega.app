@@ -92,7 +92,7 @@
 	</MkSelect>
 
 	<MkSelect v-model="instanceTickerStyle">
-		<template #label>{{ i18n.ts.instanceTickerStyle }}</template>
+		<template #label>{{ i18n.ts.instanceTickerStyle }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></template>
 		<option value="default">{{ i18n.ts._instanceTickerStyle.default }}</option>
 		<option value="minimal">{{ i18n.ts._instanceTickerStyle.minimal }}</option>
 		<option value="icon">{{ i18n.ts._instanceTickerStyle.icon }}</option>
