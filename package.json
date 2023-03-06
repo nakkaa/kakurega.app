@@ -1,6 +1,6 @@
 {
 	"name": "misskey",
-	"version": "13.9.2-kakurega.1.7.3",
+	"version": "13.9.2-kakurega.1.8.0",
 	"codename": "nasubi",
 	"repository": {
 		"type": "git",

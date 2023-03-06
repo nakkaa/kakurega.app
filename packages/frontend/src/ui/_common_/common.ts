@@ -75,11 +75,11 @@ export function openInstanceMenu(ev: MouseEvent) {
 		action: () => {
 			window.open('https://misskey-hub.net/help.html', '_blank');
 		},
-	}, {
+	}, (instance.enableSupporterPage) ? {
 		type: 'link',
 		text: i18n.ts.supporterList,
 		to: '/supporter',
-	}, {
+	} : undefined, {
 		type: 'link',
 		text: i18n.ts.aboutMisskey,
 		to: '/about-misskey',

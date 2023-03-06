@@ -173,6 +173,10 @@ export const meta = {
 				type: 'boolean',
 				optional: false, nullable: false,
 			},
+			enableSupporterPage: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
 			enableServiceWorker: {
 				type: 'boolean',
 				optional: false, nullable: false,
@@ -314,9 +318,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					imageUrl: ad.imageUrl,
 				})),
 				enableEmail: instance.enableEmail,
-
 				enablePatreonIntegration: instance.enablePatreonIntegration,
-
+				enableSupporterPage: instance.enableSupporterPage,
 				enableServiceWorker: instance.enableServiceWorker,
 
 				translatorAvailable: instance.deeplAuthKey != null,
