@@ -246,7 +246,7 @@ export class RoleService implements OnApplicationShutdown {
 	}
 
 	@bindThis
-	public async getUserPolicies(userId: User['id'] | null): Promise<RolePolicies> {
+	public async getUserPolicies(userId: User['id'] | null, overridePolicies?: Partial<RolePolicies>): Promise<RolePolicies> {
 		const meta = await this.metaService.fetch();
 		const basePolicies = { ...DEFAULT_POLICIES, ...meta.policies };
 
@@ -269,7 +269,7 @@ export class RoleService implements OnApplicationShutdown {
 		}
 
 		return {
-			gtlAvailable: calc('gtlAvailable', vs => vs.some(v => v === true)),
+			gtlAvailable: overridePolicies?.gtlAvailable ?? calc('gtlAvailable', vs => vs.some(v => v === true)),
 			ltlAvailable: calc('ltlAvailable', vs => vs.some(v => v === true)),
 			canPublicNote: calc('canPublicNote', vs => vs.some(v => v === true)),
 			canInvite: calc('canInvite', vs => vs.some(v => v === true)),
