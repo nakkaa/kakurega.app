@@ -23,11 +23,11 @@ const faviconUrl = $computed(() => props.instance ? getProxiedImageUrlNullable(p
 .root {
 	display: inline-flex;
 	justify-content: center;
-	vertical-align: text-top;
+	vertical-align: top;
 }
 
 .icon {
-	height: 2ex;
+	height: 1.3em;
 	flex-shrink: 0;
 	border-radius: 25%;
 }

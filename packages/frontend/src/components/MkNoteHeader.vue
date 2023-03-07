@@ -12,7 +12,6 @@
 		<MkA :to="notePage(note)">
 			<MkTime :time="note.createdAt"/>
 		</MkA>
-		<MkInstanceTickerIcon v-if="showInstance" style="margin-left: 0.5em;" :instance="note.user.instance"/>
 		<span v-if="note.visibility !== 'public'" style="margin-left: 0.5em;" :title="i18n.ts._visibility[note.visibility]">
 			<i v-if="note.visibility === 'home'" class="ti ti-home"></i>
 			<i v-else-if="note.visibility === 'followers'" class="ti ti-lock"></i>
@@ -20,6 +19,7 @@
 		</span>
 		<span v-if="note.localOnly" style="margin-left: 0.5em;" :title="i18n.ts._visibility['disableFederation']"><i class="ti ti-world-off"></i></span>
 		<span v-if="note.channel" style="margin-left: 0.5em;" :title="note.channel.name"><i class="ti ti-device-tv"></i></span>
+		<MkInstanceTickerIcon v-if="showInstance" style="margin-left: 0.5em;" :instance="note.user.instance"/>
 	</div>
 </header>
 </template>

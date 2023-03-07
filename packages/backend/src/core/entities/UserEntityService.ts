@@ -412,6 +412,7 @@ export class UserEntityService implements OnModuleInit {
 				pinnedPage: profile!.pinnedPageId ? this.pageEntityService.pack(profile!.pinnedPageId, me) : null,
 				publicReactions: profile!.publicReactions,
 				ffVisibility: profile!.ffVisibility,
+				enableGTL: profile!.enableGTL,
 				twoFactorEnabled: profile!.twoFactorEnabled,
 				usePasswordLessLogin: profile!.usePasswordLessLogin,
 				securityKeys: profile!.twoFactorEnabled
@@ -466,7 +467,7 @@ export class UserEntityService implements OnModuleInit {
 				showTimelineReplies: user.showTimelineReplies ?? falsy,
 				achievements: profile!.achievements,
 				loggedInDays: profile!.loggedInDates.length,
-				policies: this.roleService.getUserPolicies(user.id),
+				policies: this.roleService.getUserPolicies(user.id, { gtlAvailable: profile!.enableGTL ?? undefined }),
 			} : {}),
 
 			...(opts.includeSecrets ? {

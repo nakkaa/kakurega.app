@@ -86,6 +86,11 @@ export class UserProfile {
 	})
 	public ffVisibility: typeof ffVisibility[number];
 
+	@Column('boolean', {
+		default: null, nullable: true,
+	})
+	public enableGTL: boolean | null;
+
 	@Column('varchar', {
 		length: 128, nullable: true,
 	})

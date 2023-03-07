@@ -1,5 +1,12 @@
 <template>
 <div class="_gaps_m">
+	<MkSelect v-model="enableGTL" @update:model-value="save(); reloadAsk()">
+		<template #label>{{ i18n.ts.enableGTL }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></template>
+		<option :value="null">{{ i18n.ts._enableGTL.default }}</option>
+		<option :value="true">{{ i18n.ts._enableGTL._true }}</option>
+		<option :value="false">{{ i18n.ts._enableGTL._false }}</option>
+	</MkSelect>
+
 	<MkSwitch v-model="isLocked" @update:model-value="save()">{{ i18n.ts.makeFollowManuallyApprove }}<template #caption>{{ i18n.ts.lockedAccountInfo }}</template></MkSwitch>
 	<MkSwitch v-if="isLocked" v-model="autoAcceptFollowed" @update:model-value="save()">{{ i18n.ts.autoAcceptFollowed }}</MkSwitch>
 
@@ -57,13 +64,13 @@
 </template>
 
 <script lang="ts" setup>
-import { } from 'vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 import MkSelect from '@/components/MkSelect.vue';
 import FormSection from '@/components/form/section.vue';
 import MkFolder from '@/components/MkFolder.vue';
 import * as os from '@/os';
 import { defaultStore } from '@/store';
+import { unisonReload } from '@/scripts/unison-reload';
 import { i18n } from '@/i18n';
 import { $i } from '@/account';
 import { definePageMetadata } from '@/scripts/page-metadata';
@@ -75,11 +82,22 @@ let isExplorable = $ref($i.isExplorable);
 let hideOnlineStatus = $ref($i.hideOnlineStatus);
 let publicReactions = $ref($i.publicReactions);
 let ffVisibility = $ref($i.ffVisibility);
+let enableGTL = $ref($i.enableGTL);
 
 let defaultNoteVisibility = $computed(defaultStore.makeGetterSetter('defaultNoteVisibility'));
 let defaultNoteLocalOnly = $computed(defaultStore.makeGetterSetter('defaultNoteLocalOnly'));
 let rememberNoteVisibility = $computed(defaultStore.makeGetterSetter('rememberNoteVisibility'));
 let keepCw = $computed(defaultStore.makeGetterSetter('keepCw'));
+
+async function reloadAsk() {
+	const { canceled } = await os.confirm({
+		type: 'info',
+		text: i18n.ts.reloadToApplySetting,
+	});
+	if (canceled) return;
+
+	unisonReload();
+}
 
 function save() {
 	os.api('i/update', {
@@ -90,6 +108,7 @@ function save() {
 		hideOnlineStatus: !!hideOnlineStatus,
 		publicReactions: !!publicReactions,
 		ffVisibility: ffVisibility,
+		enableGTL: enableGTL,
 	});
 }
 

@@ -41,13 +41,13 @@ const bg = {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	height: 3.5ex;
-	width: 3.5ex;
+	height: 2em;
+	width: 2em;
 	border-radius: 0 0 8px 0;
 }
 
 .icon {
-	height: 2ex;
+	height: 1em;
 	flex-shrink: 0;
 	border-radius: 25%;
 	filter: drop-shadow(0 0 1.5px rgba(0, 0, 0, 0.75));
