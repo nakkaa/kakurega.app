@@ -62,10 +62,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		private activeUsersChart: ActiveUsersChart,
 	) {
 		super(meta, paramDef, async (ps, me) => {
-			const policies = await this.roleService.getUserPolicies(me ? me.id : null);
-			if (!policies.gtlAvailable) {
-				throw new ApiError(meta.errors.gtlDisabled);
-			}
+			// const policies = await this.roleService.getUserPolicies(me ? me.id : null);
+			// if (!policies.gtlAvailable) {
+			// 	throw new ApiError(meta.errors.gtlDisabled);
+			// }
 
 			//#region Construct query
 			const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'),
