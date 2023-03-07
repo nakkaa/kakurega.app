@@ -27,6 +27,7 @@ import directives from '@/directives';
 import components from '@/components';
 import { version, ui, lang, updateLocale } from '@/config';
 import { applyTheme } from '@/scripts/theme';
+import { applyFont } from '@/scripts/font';
 import { isDeviceDarkmode } from '@/scripts/is-device-darkmode';
 import { isTimeDarkmode, initializeTimeBasedDarkmode } from '@/scripts/is-time-darkmode';
 import { i18n, updateI18n } from '@/i18n';
@@ -308,6 +309,14 @@ window.matchMedia('(prefers-color-scheme: dark)').addListener(mql => {
 	}
 });
 //#endregion
+
+if (defaultStore.state.customFont) {
+	applyFont(defaultStore.state.customFont);
+}
+
+watch(defaultStore.reactiveState.customFont, (font) => {
+	applyFont(font);
+});
 
 fetchInstanceMetaPromise.then(() => {
 	if (defaultStore.state.themeInitial) {
