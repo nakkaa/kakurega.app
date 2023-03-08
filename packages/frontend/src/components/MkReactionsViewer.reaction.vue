@@ -3,7 +3,7 @@
 	ref="buttonEl"
 	v-ripple="canToggle"
 	class="_button"
-	:class="[$style.root, { [$style.reacted]: note.myReaction == reaction, [$style.canToggle]: canToggle }]"
+	:class="[$style.root, { [$style.reacted]: note.myReaction == reaction, [$style.canToggle]: (canToggle || targetEmoji) }]"
 	@click="toggleReaction()"
 >
 	<MkReactionIcon :class="$style.icon" :reaction="reaction" :emoji-url="note.reactionEmojis[reaction.substr(1, reaction.length - 2)]"/>
@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, shallowRef, watch } from 'vue';
+import { computed, ComputedRef, onMounted, shallowRef, watch } from 'vue';
 import * as misskey from 'misskey-js';
 import XDetails from '@/components/MkReactionsViewer.details.vue';
 import MkReactionIcon from '@/components/MkReactionIcon.vue';
@@ -22,6 +22,7 @@ import { $i } from '@/account';
 import MkReactionEffect from '@/components/MkReactionEffect.vue';
 import { claimAchievement } from '@/scripts/achievements';
 import { defaultStore } from '@/store';
+import { customEmojis } from '@/custom-emojis';
 
 const props = defineProps<{
 	reaction: string;
@@ -34,8 +35,18 @@ const buttonEl = shallowRef<HTMLElement>();
 
 const canToggle = computed(() => !props.reaction.match(/@\w/) && $i);
 
+const reactionName = computed(() => {
+	const r = props.reaction.replace(':', '');
+	return r.slice(0, r.indexOf('@'));
+});
+
+const targetEmoji: ComputedRef<string | null> = computed(() => customEmojis.value.find(it => it.name === reactionName.value)?.name ?? null);
+
 const toggleReaction = () => {
-	if (!canToggle.value) return;
+	if (!canToggle.value) {
+		chooseSelfInstance();
+		return;
+	}
 
 	const oldReaction = props.note.myReaction;
 	if (oldReaction) {
@@ -58,6 +69,14 @@ const toggleReaction = () => {
 			claimAchievement('reactWithoutRead');
 		}
 	}
+};
+
+const chooseSelfInstance = () => {
+	if (!targetEmoji.value) return;
+	os.api('notes/reactions/create', {
+		noteId: props.note.id,
+		reaction: `:${targetEmoji.value}:`,
+	});
 };
 
 const anime = () => {

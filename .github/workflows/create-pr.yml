@@ -30,10 +30,10 @@ jobs:
       - name: check pr exists
         id: check-pr
         run: |
-          echo "::set-output name=count::$(gh pr list -S 'release in:title' --json title --jq '.[].title' | grep 'v${{ steps.package-version.outputs.current-version }}' | wc -l)"
+          echo "count=$(gh pr list -S 'release in:title' --json title --jq '.[].title' | grep 'v${{ steps.package-version.outputs.current-version }}' | wc -l)" >> $GITHUB_OUTPUT
       
       - name: create pull request
         if: steps.check-tag.outputs.exists == 'false' && steps.check-pr.outputs.count == '0'
-        run: 'gh pr create -B "master-kakurega" -H "dev-kakurega" -t "release: v${{ steps.package-version.outputs.current-version }}" -b "Automated pr by github actions"'
+        run: 'gh pr create -a @hideki0403 -B "master-kakurega" -H "dev-kakurega" -t "release: v${{ steps.package-version.outputs.current-version }}" -b "Automated pr by github actions"'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
