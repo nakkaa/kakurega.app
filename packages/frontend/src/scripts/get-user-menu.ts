@@ -63,6 +63,49 @@ export function getUserMenu(user: misskey.entities.UserDetailed, router: Router 
 		});
 	}
 
+	async function muteAndBlock() {
+		if (user.isMuted) return toggleBlock();
+		if (user.isBlocking) return toggleMute();
+
+		const { canceled, result: period } = await os.select({
+			title: i18n.ts.muteAndBlockConfirm,
+			text: i18n.ts.mutePeriod,
+			items: [{
+				value: 'indefinitely', text: i18n.ts.indefinitely,
+			}, {
+				value: 'tenMinutes', text: i18n.ts.tenMinutes,
+			}, {
+				value: 'oneHour', text: i18n.ts.oneHour,
+			}, {
+				value: 'oneDay', text: i18n.ts.oneDay,
+			}, {
+				value: 'oneWeek', text: i18n.ts.oneWeek,
+			}],
+			default: 'indefinitely',
+		});
+		if (canceled) return;
+
+		const expiresAt = period === 'indefinitely' ? null
+			: period === 'tenMinutes' ? Date.now() + (1000 * 60 * 10)
+			: period === 'oneHour' ? Date.now() + (1000 * 60 * 60)
+			: period === 'oneDay' ? Date.now() + (1000 * 60 * 60 * 24)
+			: period === 'oneWeek' ? Date.now() + (1000 * 60 * 60 * 24 * 7)
+			: null;
+			
+		await os.apiWithDialog('mute/create', {
+			userId: user.id,
+			expiresAt,
+		}).then(() => {
+			user.isMuted = true;
+		});
+
+		await os.apiWithDialog('blocking/create', {
+			userId: user.id,
+		}).then(() => {
+			user.isBlocking = true;
+		});
+	}
+
 	function reportAbuse() {
 		os.popup(defineAsyncComponent(() => import('@/components/MkAbuseReportWindow.vue')), {
 			user: user,
@@ -184,6 +227,14 @@ export function getUserMenu(user: misskey.entities.UserDetailed, router: Router 
 			text: user.isBlocking ? i18n.ts.unblock : i18n.ts.block,
 			action: toggleBlock,
 		}]);
+
+		if (!user.isBlocking || !user.isMuted) {
+			menu = menu.concat([{
+				icon: 'ti ti-hammer',
+				text: `${i18n.ts.mute}&${i18n.ts.block}`,
+				action: muteAndBlock,
+			}]);
+		}
 
 		if (user.isFollowed) {
 			menu = menu.concat([{
