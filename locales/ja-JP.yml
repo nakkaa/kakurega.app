@@ -972,6 +972,7 @@ thisPostMayBeAnnoyingHome: "ホームに投稿"
 thisPostMayBeAnnoyingCancel: "やめる"
 thisPostMayBeAnnoyingIgnore: "このまま投稿"
 collapseRenotes: "見たことのあるRenoteを省略して表示"
+collapseRenotesTrigger: "Renoteを省略する条件"
 internalServerError: "サーバー内部エラー"
 internalServerErrorDescription: "サーバー内部で予期しないエラーが発生しました。"
 copyErrorInfo: "エラー情報をコピー"
@@ -1309,6 +1310,11 @@ _enableGTL:
   default: "デフォルトの設定に従う"
   _true: "有効にする"
   _false: "無効にする"
+
+_collapseRenotesTrigger:
+  action: "Renoteやリアクションをしたことがある場合 (デフォルト)"
+  see: "一度でもRenoteを見たことがある場合"
+  all: "すべてのRenoteを省略する"
 
 _signup:
   almostThere: "ほとんど完了です"
