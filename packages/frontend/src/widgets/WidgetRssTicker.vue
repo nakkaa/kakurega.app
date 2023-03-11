@@ -1,7 +1,7 @@
 <template>
 <MkContainer :naked="widgetProps.transparent" :show-header="widgetProps.showHeader" class="mkw-rss-ticker">
 	<template #icon><i class="ti ti-rss"></i></template>
-	<template #header>RSS</template>
+	<template #header>{{ widgetProps.name || 'RSS' }}</template>
 	<template #func="{ buttonStyleClass }"><button class="_button" :class="buttonStyleClass" @click="configure"><i class="ti ti-settings"></i></button></template>
 
 	<div :class="$style.feed">
@@ -37,6 +37,10 @@ const widgetPropsDef = {
 	url: {
 		type: 'string' as const,
 		default: 'http://feeds.afpbb.com/rss/afpbb/afpbbnews',
+	},
+	name: {
+		type: 'string' as const,
+		default: '',
 	},
 	shuffle: {
 		type: 'boolean' as const,
