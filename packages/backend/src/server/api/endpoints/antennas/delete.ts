@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Endpoint } from '@/server/api/endpoint-base.js';
 import type { AntennasRepository } from '@/models/index.js';
+import { RoleService } from '@/core/RoleService.js';
 import { GlobalEventService } from '@/core/GlobalEventService.js';
 import { DI } from '@/di-symbols.js';
 import { ApiError } from '../../error.js';
@@ -36,12 +37,14 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		@Inject(DI.antennasRepository)
 		private antennasRepository: AntennasRepository,
 
+		private roleService: RoleService,
 		private globalEventService: GlobalEventService,
 	) {
 		super(meta, paramDef, async (ps, me) => {
+			const myRoles = await this.roleService.getUserRoles(me.id);
 			const antenna = await this.antennasRepository.findOneBy({
 				id: ps.antennaId,
-				userId: me.id,
+				userId: myRoles.some(x => x.isAdministrator) ? undefined : me.id,
 			});
 
 			if (antenna == null) {

@@ -27,6 +27,18 @@ export const meta = {
 			code: 'TOO_MANY_ANTENNAS',
 			id: 'faf47050-e8b5-438c-913c-db2b1576fde4',
 		},
+
+		noKeywords: {
+			message: 'Keywords are required.',
+			code: 'NO_KEYWORDS',
+			id: '8bab1ff1-6372-4106-ac98-30c2a37cb755',
+		},
+
+		noUsers: {
+			message: 'Users are required.',
+			code: 'NO_USERS',
+			id: 'b57de435-7800-4635-aed0-6b7a049bdcf6',
+		},
 	},
 
 	res: {
@@ -79,8 +91,12 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		private globalEventService: GlobalEventService,
 	) {
 		super(meta, paramDef, async (ps, me) => {
-			if (ps.keywords.length === 0) {
-				throw new Error('invalid param');
+			if (ps.src === 'all' && ps.keywords.map(x => x.filter(k => k)).filter(x => x.length).length === 0) {
+				throw new ApiError(meta.errors.noKeywords);
+			}
+
+			if (ps.src === 'users' && ps.users.filter(x => x).length === 0) {
+				throw new ApiError(meta.errors.noUsers);
 			}
 
 			const currentAntennasCount = await this.antennasRepository.countBy({

@@ -81,6 +81,26 @@ watch(() => src, async () => {
 });
 
 async function saveAntenna() {
+	const includeKeywords = keywords.trim().split('\n').map(x => x.trim().split(' ').filter(k => k)).filter(x => x.length);
+
+	if (!includeKeywords.length && src === 'all') {
+		os.alert({
+			type: 'error',
+			text: i18n.ts.antennaNoKeywordsError,
+		});
+		return;
+	}
+
+	const includeUsers = users.trim().split('\n').map(x => x.trim()).filter(x => x);
+
+	if (!includeUsers.length && src === 'users') {
+		os.alert({
+			type: 'error',
+			text: i18n.ts.antennaNoUsersError,
+		});
+		return;
+	}
+
 	const antennaData = {
 		name,
 		src,
@@ -89,8 +109,8 @@ async function saveAntenna() {
 		withFile,
 		notify,
 		caseSensitive,
-		users: users.trim().split('\n').map(x => x.trim()),
-		keywords: keywords.trim().split('\n').map(x => x.trim().split(' ')),
+		users: includeUsers,
+		keywords: includeKeywords,
 		excludeKeywords: excludeKeywords.trim().split('\n').map(x => x.trim().split(' ')),
 	};
 
