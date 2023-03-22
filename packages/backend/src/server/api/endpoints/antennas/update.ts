@@ -25,6 +25,18 @@ export const meta = {
 			code: 'NO_SUCH_USER_LIST',
 			id: '1c6b35c9-943e-48c2-81e4-2844989407f7',
 		},
+
+		noKeywords: {
+			message: 'Keywords are required.',
+			code: 'NO_KEYWORDS',
+			id: '8bab1ff1-6372-4106-ac98-30c2a37cb755',
+		},
+
+		noUsers: {
+			message: 'Users are required.',
+			code: 'NO_USERS',
+			id: 'b57de435-7800-4635-aed0-6b7a049bdcf6',
+		},
 	},
 
 	res: {
@@ -76,6 +88,14 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		private globalEventService: GlobalEventService,
 	) {
 		super(meta, paramDef, async (ps, me) => {
+			if (ps.src === 'all' && ps.keywords.map(x => x.filter(k => k)).filter(x => x.length).length === 0) {
+				throw new ApiError(meta.errors.noKeywords);
+			}
+
+			if (ps.src === 'users' && ps.users.filter(x => x).length === 0) {
+				throw new ApiError(meta.errors.noUsers);
+			}
+
 			// Fetch the antenna
 			const antenna = await this.antennasRepository.findOneBy({
 				id: ps.antennaId,
