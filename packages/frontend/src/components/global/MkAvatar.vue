@@ -1,5 +1,5 @@
 <template>
-<span v-if="!link" v-user-preview="preview ? user.id : undefined" class="_noSelect" :class="[$style.root, { [$style.cat]: user.isCat, [$style.square]: $store.state.squareAvatars }]" :style="{ color }" :title="acct(user)" @click="onClick">
+<span v-if="!link" v-user-preview="preview ? user.id : undefined" class="_noSelect" :class="[$style.root, { [$style.cat]: user.isCat, [$style.square]: squareAvatars }]" :style="{ color }" :title="acct(user)" @click="onClick">
 	<img :class="$style.inner" :src="url" decoding="async"/>
 	<MkUserOnlineIndicator v-if="indicator" :class="$style.indicator" :user="user"/>
 	<template v-if="user.isCat">
@@ -7,7 +7,7 @@
 		<div :class="$style.earRight"/>
 	</template>
 </span>
-<MkA v-else v-user-preview="preview ? user.id : undefined" class="_noSelect" :class="[$style.root, { [$style.cat]: user.isCat, [$style.square]: $store.state.squareAvatars }]" :style="{ color }" :title="acct(user)" :to="userPage(user)" :target="target" :additional-contextmenu-items="contextmenuItem(user)">
+<MkA v-else v-user-preview="preview ? user.id : undefined" class="_noSelect" :class="[$style.root, { [$style.cat]: user.isCat, [$style.square]: squareAvatars }]" :style="{ color }" :title="acct(user)" :to="userPage(user)" :target="target">
 	<img :class="$style.inner" :src="url" decoding="async"/>
 	<MkUserOnlineIndicator v-if="indicator" :class="$style.indicator" :user="user"/>
 	<template v-if="user.isCat">
@@ -25,10 +25,8 @@ import { extractAvgColorFromBlurhash } from '@/scripts/extract-avg-color-from-bl
 import { acct, userPage } from '@/filters/user';
 import MkUserOnlineIndicator from '@/components/MkUserOnlineIndicator.vue';
 import { defaultStore } from '@/store';
-import { MenuItem } from '@/types/menu';
-import * as os from '@/os';
-import { i18n } from '@/i18n';
-import { $i } from '@/account';
+
+const squareAvatars = $ref(defaultStore.state.squareAvatars);
 
 const props = withDefaults(defineProps<{
 	user: misskey.entities.User;
@@ -62,89 +60,6 @@ watch(() => props.user.avatarBlurhash, () => {
 }, {
 	immediate: true,
 });
-
-const contextmenuItem = (user: misskey.entities.User): MenuItem[] => {
-	const meId = $i ? $i.id : null;
-
-	const menu: MenuItem[] = [{
-		type: 'label',
-		text: '@' + user.username + (user.host !== null ? `@${user.host}` : ''),
-	}];
-
-	if ($i && meId !== user.id) {
-		menu.push({
-			icon: 'ti ti-eye-off',
-			text: i18n.ts.mute,
-			action: () => createMute(user),
-		}, {
-			icon: 'ti ti-ban',
-			text: i18n.ts.block,
-			action: () => createBlock(user),
-		});
-	}
-
-	return menu;
-};
-
-async function createMute(user: misskey.entities.User): Promise<void> {
-	const { canceled, result: period } = await os.select({
-		title: i18n.ts.mutePeriod,
-		items: [{
-			value: 'indefinitely', text: i18n.ts.indefinitely,
-		}, {
-			value: 'tenMinutes', text: i18n.ts.tenMinutes,
-		}, {
-			value: 'oneHour', text: i18n.ts.oneHour,
-		}, {
-			value: 'oneDay', text: i18n.ts.oneDay,
-		}, {
-			value: 'oneWeek', text: i18n.ts.oneWeek,
-		}],
-		default: 'indefinitely',
-	});
-	if (canceled) return;
-
-	let expiresAt: null | number = null;
-	switch (period) {
-		case 'tenMinutes': {
-			expiresAt = Date.now() + (1000 * 60 * 10);
-			break;
-		}
-
-		case 'oneHour': {
-			expiresAt = Date.now() + (1000 * 60 * 60);
-			break;
-		}
-
-		case 'oneDay': {
-			expiresAt = Date.now() + (1000 * 60 * 60 * 24);
-			break;
-		}
-
-		case 'oneWeek': {
-			expiresAt = Date.now() + (1000 * 60 * 60 * 24 * 7);
-			break;
-		}
-	}
-
-	os.apiWithDialog('mute/create', {
-		userId: user.id,
-		expiresAt,
-	});
-}
-
-async function createBlock(user: misskey.entities.User): Promise<void> {
-	const confirm = await os.confirm({
-		type: 'warning',
-		title: 'confirm',
-		text: i18n.ts.blockConfirm,
-	});
-	if (confirm.canceled) return;
-
-	os.apiWithDialog('blocking/create', {
-		userId: user.id,
-	});
-}
 </script>
 
 <style lang="scss" module>
