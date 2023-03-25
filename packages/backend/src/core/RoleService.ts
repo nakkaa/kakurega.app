@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import Redis from 'ioredis';
 import { In } from 'typeorm';
 import type { Role, RoleAssignment, RoleAssignmentsRepository, RolesRepository, UsersRepository } from '@/models/index.js';
-import { Cache } from '@/misc/cache.js';
+import { KVCache } from '@/misc/cache.js';
 import type { User } from '@/models/entities/User.js';
 import { DI } from '@/di-symbols.js';
 import { bindThis } from '@/decorators.js';
@@ -58,8 +58,8 @@ export const DEFAULT_POLICIES: RolePolicies = {
 
 @Injectable()
 export class RoleService implements OnApplicationShutdown {
-	private rolesCache: Cache<Role[]>;
-	private roleAssignmentByUserIdCache: Cache<RoleAssignment[]>;
+	private rolesCache: KVCache<Role[]>;
+	private roleAssignmentByUserIdCache: KVCache<RoleAssignment[]>;
 
 	public static AlreadyAssignedError = class extends Error {};
 	public static NotAssignedError = class extends Error {};
@@ -86,8 +86,8 @@ export class RoleService implements OnApplicationShutdown {
 	) {
 		//this.onMessage = this.onMessage.bind(this);
 
-		this.rolesCache = new Cache<Role[]>(Infinity);
-		this.roleAssignmentByUserIdCache = new Cache<RoleAssignment[]>(Infinity);
+		this.rolesCache = new KVCache<Role[]>(Infinity);
+		this.roleAssignmentByUserIdCache = new KVCache<RoleAssignment[]>(Infinity);
 
 		this.redisSubscriber.on('message', this.onMessage);
 	}
@@ -201,6 +201,12 @@ export class RoleService implements OnApplicationShutdown {
 				case 'patreonAmountsMoreThanOrEq': {
 					const amounts = this.patreonManagementService.amountsValue(user);
 					return amounts !== 0 && amounts >= value.value;
+				}
+				case 'notesLessThanOrEq': {
+					return user.notesCount <= value.value;
+				}
+				case 'notesMoreThanOrEq': {
+					return user.notesCount >= value.value;
 				}
 				default:
 					return false;

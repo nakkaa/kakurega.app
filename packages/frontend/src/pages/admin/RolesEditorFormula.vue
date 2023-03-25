@@ -12,6 +12,8 @@
 			<option value="followingMoreThanOrEq">{{ i18n.ts._role._condition.followingMoreThanOrEq }}</option>
 			<option value="patreonAmountsLessThanOrEq">{{ i18n.ts._role._condition.patreonAmountsLessThanOrEq }}</option>
 			<option value="patreonAmountsMoreThanOrEq">{{ i18n.ts._role._condition.patreonAmountsMoreThanOrEq }}</option>
+			<option value="notesLessThanOrEq">{{ i18n.ts._role._condition.notesLessThanOrEq }}</option>
+			<option value="notesMoreThanOrEq">{{ i18n.ts._role._condition.notesMoreThanOrEq }}</option>
 			<option value="and">{{ i18n.ts._role._condition.and }}</option>
 			<option value="or">{{ i18n.ts._role._condition.or }}</option>
 			<option value="not">{{ i18n.ts._role._condition.not }}</option>
@@ -44,7 +46,7 @@
 		<template #suffix>sec</template>
 	</MkInput>
 
-	<MkInput v-else-if="['followersLessThanOrEq', 'followersMoreThanOrEq', 'followingLessThanOrEq', 'followingMoreThanOrEq', 'patreonAmountsMoreThanOrEq', 'patreonAmountsLessThanOrEq'].includes(type)" v-model="v.value" type="number">
+	<MkInput v-else-if="['followersLessThanOrEq', 'followersMoreThanOrEq', 'followingLessThanOrEq', 'followingMoreThanOrEq', 'patreonAmountsMoreThanOrEq', 'patreonAmountsLessThanOrEq', 'notesLessThanOrEq', 'notesMoreThanOrEq'].includes(type)" v-model="v.value" type="number">
 	</MkInput>
 </div>
 </template>
@@ -95,6 +97,8 @@ const type = computed({
 		if (t === 'followingMoreThanOrEq') v.value.value = 10;
 		if (t === 'patreonAmountsLessThanOrEq') v.value.value = 500;
 		if (t === 'patreonAmountsMoreThanOrEq') v.value.value = 500;
+		if (t === 'notesLessThanOrEq') v.value.value = 10;
+		if (t === 'notesMoreThanOrEq') v.value.value = 10;
 		v.value.type = t;
 	},
 });
