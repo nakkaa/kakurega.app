@@ -117,7 +117,7 @@ export const paramDef = {
 		autoSensitive: { type: 'boolean' },
 		ffVisibility: { type: 'string', enum: ['public', 'followers', 'private'] },
 		enableGTL: { type: 'boolean', nullable: true },
-		pinnedPageId: { type: 'string', format: 'misskey:id' },
+		pinnedPageId: { type: 'string', format: 'misskey:id', nullable: true },
 		mutedWords: { type: 'array' },
 		mutedInstances: { type: 'array', items: {
 			type: 'string',
