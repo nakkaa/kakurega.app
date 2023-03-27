@@ -37,6 +37,11 @@ export class User {
 	})
 	public hideOnlineStatus: boolean;
 
+	@Column('boolean', {
+		default: false,
+	})
+	public hideSearchResult: boolean;
+
 	@Column('varchar', {
 		length: 128,
 		comment: 'The username of the User.',

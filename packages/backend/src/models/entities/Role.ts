@@ -63,6 +63,15 @@ type CondFormulaValuePatreonAmountsMoreThanOrEq = {
 	type: 'patreonAmountsMoreThanOrEq';
 	value: number
 }
+type CondFormulaValueNotesLessThanOrEq = {
+	type: 'notesLessThanOrEq';
+	value: number;
+};
+
+type CondFormulaValueNotesMoreThanOrEq = {
+	type: 'notesMoreThanOrEq';
+	value: number;
+};
 
 export type RoleCondFormulaValue =
 	CondFormulaValueAnd |
@@ -77,7 +86,9 @@ export type RoleCondFormulaValue =
 	CondFormulaValueFollowingLessThanOrEq |
 	CondFormulaValueFollowingMoreThanOrEq |
 	CondFormulaValuePatreonAmountsLessThanOrEq |
-	CondFormulaValuePatreonAmountsMoreThanOrEq;
+	CondFormulaValuePatreonAmountsMoreThanOrEq |
+	CondFormulaValueNotesLessThanOrEq |
+	CondFormulaValueNotesMoreThanOrEq;
 
 @Entity()
 export class Role {
