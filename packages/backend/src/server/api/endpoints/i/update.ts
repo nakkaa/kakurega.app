@@ -104,6 +104,7 @@ export const paramDef = {
 		isLocked: { type: 'boolean' },
 		isExplorable: { type: 'boolean' },
 		hideOnlineStatus: { type: 'boolean' },
+		hideSearchResult: { type: 'boolean' },
 		publicReactions: { type: 'boolean' },
 		carefulBot: { type: 'boolean' },
 		autoAcceptFollowed: { type: 'boolean' },
@@ -198,6 +199,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (typeof ps.isLocked === 'boolean') updates.isLocked = ps.isLocked;
 			if (typeof ps.isExplorable === 'boolean') updates.isExplorable = ps.isExplorable;
 			if (typeof ps.hideOnlineStatus === 'boolean') updates.hideOnlineStatus = ps.hideOnlineStatus;
+			if (typeof ps.hideSearchResult === 'boolean') updates.hideSearchResult = ps.hideSearchResult;
 			if (typeof ps.publicReactions === 'boolean') profileUpdates.publicReactions = ps.publicReactions;
 			if (typeof ps.isBot === 'boolean') updates.isBot = ps.isBot;
 			if (typeof ps.showTimelineReplies === 'boolean') updates.showTimelineReplies = ps.showTimelineReplies;

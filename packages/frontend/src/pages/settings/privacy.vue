@@ -27,6 +27,10 @@
 		{{ i18n.ts.hideOnlineStatus }}
 		<template #caption>{{ i18n.ts.hideOnlineStatusDescription }}</template>
 	</MkSwitch>
+	<MkSwitch v-model="hideSearchResult" @update:model-value="save()">
+		{{ i18n.ts.hideSearchResult }}<span class="_beta">{{ i18n.ts.originalFeature }}</span>
+		<template #caption>{{ i18n.ts.hideSearchResultDescription }}</template>
+	</MkSwitch>
 	<MkSwitch v-model="noCrawle" @update:model-value="save()">
 		{{ i18n.ts.noCrawle }}
 		<template #caption>{{ i18n.ts.noCrawleDescription }}</template>
@@ -80,6 +84,7 @@ let autoAcceptFollowed = $ref($i.autoAcceptFollowed);
 let noCrawle = $ref($i.noCrawle);
 let isExplorable = $ref($i.isExplorable);
 let hideOnlineStatus = $ref($i.hideOnlineStatus);
+let hideSearchResult = $ref($i.hideSearchResult);
 let publicReactions = $ref($i.publicReactions);
 let ffVisibility = $ref($i.ffVisibility);
 let enableGTL = $ref($i.enableGTL);
@@ -106,6 +111,7 @@ function save() {
 		noCrawle: !!noCrawle,
 		isExplorable: !!isExplorable,
 		hideOnlineStatus: !!hideOnlineStatus,
+		hideSearchResult: !!hideSearchResult,
 		publicReactions: !!publicReactions,
 		ffVisibility: ffVisibility,
 		enableGTL: enableGTL,
