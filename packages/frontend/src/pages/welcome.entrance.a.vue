@@ -36,6 +36,7 @@
 						<MkButton full rounded @click="exploreOtherServers()">{{ i18n.ts.exploreOtherServers }}</MkButton>
 						<MkButton full rounded data-cy-signin @click="signin()">{{ i18n.ts.login }}</MkButton>
 					</div>
+				</div>
 			</div>
 			<div v-if="instance.policies.ltlAvailable" class="tl">
 				<div class="title">{{ i18n.ts.letsLookAtTimeline }}</div>
