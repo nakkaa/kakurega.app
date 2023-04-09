@@ -92,7 +92,7 @@ export const defaultStore = markRaw(new Storage('base', {
 	},
 	reactionAcceptance: {
 		where: 'account',
-		default: null,
+		default: null as 'likeOnly' | 'likeOnlyForRemote' | null,
 	},
 	mutedWords: {
 		where: 'account',
@@ -303,6 +303,10 @@ export const defaultStore = markRaw(new Storage('base', {
 		default: false,
 	},
 	showClipButtonInNoteFooter: {
+		where: 'device',
+		default: false,
+	},
+	largeNoteReactions: {
 		where: 'device',
 		default: false,
 	},

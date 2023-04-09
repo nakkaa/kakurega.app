@@ -3,7 +3,7 @@
 	ref="buttonEl"
 	v-ripple="canToggle"
 	class="_button"
-	:class="[$style.root, { [$style.reacted]: note.myReaction == reaction, [$style.canToggle]: (canToggle || targetEmoji) }]"
+	:class="[$style.root, { [$style.reacted]: note.myReaction == reaction, [$style.canToggle]: (canToggle || targetEmoji), [$style.large]: defaultStore.state.largeNoteReactions }]"
 	@click="toggleReaction()"
 >
 	<MkReactionIcon :class="$style.icon" :reaction="reaction" :emoji-url="note.reactionEmojis[reaction.substr(1, reaction.length - 2)]"/>
@@ -135,6 +135,17 @@ useTooltip(buttonEl, async (showing) => {
 
 	&:not(.canToggle) {
 		cursor: default;
+	}
+
+	&.large {
+		height: 42px;
+		font-size: 1.5em;
+		border-radius: 6px;
+
+		> .count {
+			font-size: 0.7em;
+			line-height: 42px;
+		}
 	}
 
 	&.reacted {

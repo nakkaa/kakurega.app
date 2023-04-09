@@ -48,6 +48,7 @@
 			<div class="_gaps_s">
 				<MkSwitch v-model="showNoteActionsOnlyHover">{{ i18n.ts.showNoteActionsOnlyHover }}</MkSwitch>
 				<MkSwitch v-model="showClipButtonInNoteFooter">{{ i18n.ts.showClipButtonInNoteFooter }}</MkSwitch>
+				<MkSwitch v-model="largeNoteReactions">{{ i18n.ts.largeNoteReactions }}</MkSwitch>
 				<MkSwitch v-model="collapseRenotes">{{ i18n.ts.collapseRenotes }}</MkSwitch>
 
 				<MkSelect v-if="collapseRenotes" v-model="collapseRenotesTrigger">
@@ -167,6 +168,7 @@ const overridedDeviceKind = computed(defaultStore.makeGetterSetter('overridedDev
 const serverDisconnectedBehavior = computed(defaultStore.makeGetterSetter('serverDisconnectedBehavior'));
 const showNoteActionsOnlyHover = computed(defaultStore.makeGetterSetter('showNoteActionsOnlyHover'));
 const showClipButtonInNoteFooter = computed(defaultStore.makeGetterSetter('showClipButtonInNoteFooter'));
+const largeNoteReactions = computed(defaultStore.makeGetterSetter('largeNoteReactions'));
 const collapseRenotes = computed(defaultStore.makeGetterSetter('collapseRenotes'));
 const collapseRenotesTrigger = computed(defaultStore.makeGetterSetter('collapseRenotesTrigger'));
 const reduceAnimation = computed(defaultStore.makeGetterSetter('animation', v => !v, v => !v));
