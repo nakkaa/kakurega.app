@@ -41,5 +41,8 @@
 		".eslintrc.js",
 		"./**/*.ts",
 		"./**/*.vue"
+	],
+	"exclude": [
+		".storybook/**/*",
 	]
 }

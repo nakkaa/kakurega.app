@@ -16,7 +16,7 @@
 		<div class="contents">
 			<div class="spacer"/>
 			<div class="main">
-				<img :src="$instance.iconUrl || $instance.faviconUrl || '/favicon.ico'" alt="" class="icon"/>
+				<img :src="instance.iconUrl || instance.faviconUrl || '/favicon.ico'" alt="" class="icon"/>
 				<button class="_button _acrylic menu" @click="showMenu"><i class="ti ti-dots"></i></button>
 				<div class="fg">
 					<h1>
@@ -36,7 +36,6 @@
 						<MkButton full rounded @click="exploreOtherServers()">{{ i18n.ts.exploreOtherServers }}</MkButton>
 						<MkButton full rounded data-cy-signin @click="signin()">{{ i18n.ts.login }}</MkButton>
 					</div>
-				</div>
 			</div>
 			<div v-if="instance.policies.ltlAvailable" class="tl">
 				<div class="title">{{ i18n.ts.letsLookAtTimeline }}</div>
