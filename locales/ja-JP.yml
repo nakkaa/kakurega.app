@@ -768,6 +768,8 @@ receiveAnnouncementFromInstance: "サーバーからのお知らせを受け取�
 emailNotification: "メール通知"
 publish: "公開"
 inChannelSearch: "チャンネル内検索"
+channelSearch: "チャンネル検索"
+excludeNonActiveChannels: "ノートが投稿されていないチャンネルを除外"
 useReactionPickerForContextMenu: "右クリックでリアクションピッカーを開く"
 typingUsers: "{users}が入力中"
 jumpToSpecifiedDate: "特定の日付にジャンプ"
@@ -1470,10 +1472,21 @@ _channel:
   setBanner: "バナーを設定"
   removeBanner: "バナーを削除"
   featured: "トレンド"
+  list: "チャンネル一覧"
   owned: "管理中"
   following: "フォロー中"
   usersCount: "{n}人が参加中"
   notesCount: "{n}投稿があります"
+
+_sortType:
+  notesCountDesc: "投稿数が多い順"
+  notesCountAsc: "投稿数が少ない順"
+  usersCountDesc: "参加人数が多い順"
+  usersCountAsc: "参加人数が少ない順"
+  lastNotedAtDesc: "更新日時が新しい順"
+  lastNotedAtAsc: "更新日時が古い順"
+  nameDesc: "名前 (降順)"
+  nameAsc: "名前 (昇順)"
 
 _menuDisplay:
   sideFull: "横"
