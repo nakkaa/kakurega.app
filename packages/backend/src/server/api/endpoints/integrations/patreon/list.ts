@@ -49,7 +49,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				if (patreon.amounts < meta.supporterNameThreshold) continue;
 				users.push({
 					name: patreon.user.name ?? patreon.user.username,
-					avatarUrl: this.userEntityService.getAvatarUrlSync(patreon.user),
+					avatarUrl: patreon.user.avatarUrl ?? this.userEntityService.getIdenticonUrl(patreon.user),
 					type: meta.supporterNameWithIconThreshold <= patreon.amounts ? 'nameWithIcon' : 'name',
 				});
 			}
