@@ -28,6 +28,7 @@ export const paramDef = {
 		offset: { type: 'integer', default: 0 },
 		search: { type: 'string', nullable: true },
 		excludeNonActiveChannels: { type: 'boolean', nullable: true },
+		includeDescription: { type: 'boolean', nullable: true },
 		sort: { type: 'string', nullable: true, enum: ['+lastNotedAt', '-lastNotedAt', '+name', '-name', '+notesCount', '-notesCount', '+usersCount', '-usersCount'] },
 	},
 	required: [],
@@ -58,6 +59,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 			if (ps.search) {
 				query.andWhere('channel.name like :name', { name: '%' + sqlLikeEscape(ps.search) + '%' });
+
+				if (ps.includeDescription) {
+					query.orWhere('channel.description like :description', { description: '%' + sqlLikeEscape(ps.search) + '%' });
+				}
 			}
 
 			if (ps.excludeNonActiveChannels) {
