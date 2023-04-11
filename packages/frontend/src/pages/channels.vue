@@ -2,12 +2,7 @@
 <MkStickyContainer>
 	<template #header><MkPageHeader v-model:tab="tab" :actions="headerActions" :tabs="headerTabs"/></template>
 	<MkSpacer :content-max="700">
-		<div v-if="tab === 'featured'">
-			<MkPagination v-slot="{items}" :pagination="featuredPagination">
-				<MkChannelPreview v-for="channel in items" :key="channel.id" class="_margin" :channel="channel"/>
-			</MkPagination>
-		</div>
-		<div v-else-if="tab === 'list'">
+		<div v-if="tab === 'list'">
 			<MkFoldableSection :expanded="false">
 				<template #header>{{ i18n.ts.search }}</template>
 				<div class="_gaps_m search-form">
@@ -19,12 +14,20 @@
 						<template #label>{{ i18n.ts.sort }}</template>
 						<option v-for="x in sortOptions" :key="x.value" :value="x.value">{{ x.displayName }}</option>
 					</MkSelect>
+					<MkCheckbox v-model="includeDescription" :large="true">
+						<template #label>{{ i18n.ts.includeDescription }}</template>
+					</MkCheckbox>
 					<MkCheckbox v-model="excludeNonActiveChannels" :large="true">
 						<template #label>{{ i18n.ts.excludeNonActiveChannels }}</template>
 					</MkCheckbox>
 				</div>
 			</MkFoldableSection>
 			<MkPagination v-slot="{ items }" :pagination="listPagination">
+				<MkChannelPreview v-for="channel in items" :key="channel.id" class="_margin" :channel="channel"/>
+			</MkPagination>
+		</div>
+		<div v-else-if="tab === 'featured'">
+			<MkPagination v-slot="{items}" :pagination="featuredPagination">
 				<MkChannelPreview v-for="channel in items" :key="channel.id" class="_margin" :channel="channel"/>
 			</MkPagination>
 		</div>
@@ -65,9 +68,9 @@ const router = useRouter();
 
 let tab = $ref('featured');
 let sortType = ref('+notesCount');
-let tempSearchQuery = ref('');
 let searchQuery = ref('');
 let excludeNonActiveChannels = ref(false);
+let includeDescription = ref(false);
 
 const featuredPagination = {
 	endpoint: 'channels/featured' as const,
@@ -81,6 +84,7 @@ const listPagination = {
 		sort: sortType.value,
 		search: searchQuery.value,
 		excludeNonActiveChannels: excludeNonActiveChannels.value,
+		includeDescription: includeDescription.value,
 	})),
 };
 const favoritesPagination = {
@@ -119,13 +123,13 @@ const headerActions = $computed(() => [{
 }]);
 
 const headerTabs = $computed(() => [{
+	key: 'list',
+	title: i18n.ts._channel.listAndSearch,
+	icon: 'ti ti-search',
+}, {
 	key: 'featured',
 	title: i18n.ts._channel.featured,
 	icon: 'ti ti-comet',
-}, {
-	key: 'list',
-	title: i18n.ts._channel.list,
-	icon: 'ti ti-list',
 }, {
 	key: 'favorites',
 	title: i18n.ts.favorites,
