@@ -39,7 +39,7 @@
 		<MkAvatar :class="$style.collapsedRenoteTargetAvatar" :user="appearNote.user" link preview/>
 		<Mfm :text="getNoteSummary(appearNote)" :plain="true" :nowrap="true" :author="appearNote.user" :class="$style.collapsedRenoteTargetText" @click="renoteCollapsed = false"/>
 	</div>
-	<article v-else :class="$style.article" @contextmenu.stop="onContextmenu">
+	<article v-else :class="[$style.article, { [$style.forceSmallPadding]: forceSmallPadding }]" @contextmenu.stop="onContextmenu">
 		<MkInstanceTickerMini v-if="showTicker && tickerStyle === 'minimal'" :class="$style.tickerMini" :instance="appearNote.user.instance"/>
 		<MkAvatar :class="$style.avatar" :user="appearNote.user" link preview/>
 		<div :class="$style.main">
@@ -152,6 +152,7 @@ import { checkWordMute } from '@/scripts/check-word-mute';
 import { userPage } from '@/filters/user';
 import * as os from '@/os';
 import { defaultStore, noteViewInterruptors } from '@/store';
+import { ui } from '@/config';
 import { reactionPicker } from '@/scripts/reaction-picker';
 import { extractUrlFromMfm } from '@/scripts/extract-url-from-mfm';
 import { $i } from '@/account';
@@ -220,6 +221,7 @@ const translating = ref(false);
 const showTicker = (defaultStore.state.instanceTicker === 'always') || (defaultStore.state.instanceTicker === 'remote' && appearNote.user.instance);
 const tickerStyle = defaultStore.state.instanceTickerStyle;
 const canRenote = computed(() => ['public', 'home'].includes(appearNote.visibility) || appearNote.userId === $i.id);
+const forceSmallPadding = ref(ui === 'deck' && defaultStore.state.forceSmallPadding);
 let renoteCollapsed = $ref(isRenote && checkCollapseRenote(appearNote, $i));
 
 const keymap = {
@@ -620,6 +622,10 @@ function showReactions(): void {
 	position: relative;
 	display: flex;
 	padding: 28px 32px;
+}
+
+.forceSmallPadding {
+	padding: 16px !important;
 }
 
 .avatar {

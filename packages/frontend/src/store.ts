@@ -242,6 +242,10 @@ export const defaultStore = markRaw(new Storage('base', {
 		where: 'device',
 		default: 'default' as 'default' | 'minimal' | 'icon',
 	},
+	forceSmallPadding: {
+		where: 'device',
+		default: true,
+	},
 	reactionPickerSize: {
 		where: 'device',
 		default: 1,
