@@ -6,7 +6,7 @@
 	<div style="overflow: clip;">
 		<MkSpacer :content-max="600" :margin-min="20">
 			<div class="_gaps_m">
-				<p>{{ i18n.t('supporterDescription', { name: $instance.name ?? host }) }}</p>
+				<p>{{ i18n.t('supporterDescription', { name: instance.name ?? host }) }}</p>
 				<FormSection :first="true">
 					<template #label>
 						<Mfm text="$[jelly ❤]"/> {{ i18n.ts.supporterListTitle }}
@@ -34,6 +34,7 @@ import FormSection from '@/components/form/section.vue';
 import { i18n } from '@/i18n';
 import { host } from '@/config';
 import * as os from '@/os';
+import { instance } from '@/instance';
 import { definePageMetadata } from '@/scripts/page-metadata';
 
  type SupporterUser = {
