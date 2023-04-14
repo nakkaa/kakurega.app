@@ -1515,6 +1515,10 @@ _instanceMute:
   title: "設定したサーバーのノートを隠します。"
   heading: "ミュートするサーバー"
 
+_instanceMuteGtl:
+  instanceMuteDescription: "グローバルタイムラインでのみ有効なサーバーミュートです。"
+  heading: "ミュートするサーバー (グローバルタイムライン)"
+
 _theme:
   explore: "テーマを探す"
   install: "テーマのインストール"

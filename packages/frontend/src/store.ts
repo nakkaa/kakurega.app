@@ -153,6 +153,10 @@ export const defaultStore = markRaw(new Storage('base', {
 			arg: null,
 		},
 	},
+	mutedInstancesGtl: {
+		where: 'account',
+		default: [] as string[],
+	},
 
 	overridedDeviceKind: {
 		where: 'device',
