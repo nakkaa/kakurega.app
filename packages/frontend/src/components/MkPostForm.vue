@@ -174,7 +174,7 @@ let visibleUsers = $ref([]);
 if (props.initialVisibleUsers) {
 	props.initialVisibleUsers.forEach(pushVisibleUser);
 }
-let reactionAcceptance = $ref(defaultStore.state.reactionAcceptance);
+let reactionAcceptance = $ref(defaultStore.state.rememberReactionAcceptance ? defaultStore.state.reactionAcceptance : null);
 let autocomplete = $ref(null);
 let draghover = $ref(false);
 let quoteId = $ref(null);
@@ -486,6 +486,11 @@ async function toggleReactionAcceptance() {
 		default: reactionAcceptance,
 	});
 	if (select.canceled) return;
+
+	if (defaultStore.state.rememberReactionAcceptance) {
+		defaultStore.set('reactionAcceptance', select.result);
+	}
+	
 	reactionAcceptance = select.result;
 }
 
