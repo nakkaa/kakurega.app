@@ -52,7 +52,6 @@ export const fontList = {
 };
 
 export function applyFont(fontname: null | string) {
-	console.log('called');
 	let style = document.getElementById('custom-font');
 
 	if (!fontname) {

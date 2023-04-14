@@ -63,6 +63,8 @@
 		</div>
 	</FormSection>
 
+	<MkSwitch v-model="rememberReactionAcceptance" @update:model-value="save()">{{ i18n.ts.rememberReactionAcceptance }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></MkSwitch>
+
 	<MkSwitch v-model="keepCw" @update:model-value="save()">{{ i18n.ts.keepCw }}</MkSwitch>
 </div>
 </template>
@@ -92,6 +94,7 @@ let enableGTL = $ref($i.enableGTL);
 let defaultNoteVisibility = $computed(defaultStore.makeGetterSetter('defaultNoteVisibility'));
 let defaultNoteLocalOnly = $computed(defaultStore.makeGetterSetter('defaultNoteLocalOnly'));
 let rememberNoteVisibility = $computed(defaultStore.makeGetterSetter('rememberNoteVisibility'));
+let rememberReactionAcceptance = $computed(defaultStore.makeGetterSetter('rememberReactionAcceptance'));
 let keepCw = $computed(defaultStore.makeGetterSetter('keepCw'));
 
 async function reloadAsk() {

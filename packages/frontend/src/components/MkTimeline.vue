@@ -29,6 +29,8 @@ provide('inChannel', computed(() => props.src === 'channel'));
 const tlComponent: InstanceType<typeof MkNotes> = $ref();
 
 const prepend = note => {
+	if (props.src === 'global' && defaultStore.state.mutedInstancesGtl.includes(note.user.host)) return;
+
 	tlComponent.pagingComponent?.prepend(note);
 
 	emit('note');

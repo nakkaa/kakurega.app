@@ -62,6 +62,10 @@ export const defaultStore = markRaw(new Storage('base', {
 		where: 'account',
 		default: false,
 	},
+	rememberReactionAcceptance: {
+		where: 'account',
+		default: false,
+	},
 	defaultNoteVisibility: {
 		where: 'account',
 		default: 'public',
@@ -153,6 +157,10 @@ export const defaultStore = markRaw(new Storage('base', {
 			arg: null,
 		},
 	},
+	mutedInstancesGtl: {
+		where: 'account',
+		default: [] as string[],
+	},
 
 	overridedDeviceKind: {
 		where: 'device',
@@ -241,6 +249,10 @@ export const defaultStore = markRaw(new Storage('base', {
 	instanceTickerStyle: {
 		where: 'device',
 		default: 'default' as 'default' | 'minimal' | 'icon',
+	},
+	forceSmallPadding: {
+		where: 'device',
+		default: true,
 	},
 	reactionPickerSize: {
 		where: 'device',
