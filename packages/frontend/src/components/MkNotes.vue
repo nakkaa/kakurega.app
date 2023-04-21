@@ -1,5 +1,5 @@
 <template>
-<MkPagination ref="pagingComponent" :pagination="pagination">
+<MkPagination ref="pagingComponent" :pagination="pagination" :suppress-infinity-fetch="isNeedSuppressInfinityFetch()">
 	<template #empty>
 		<div class="_fullinfo">
 			<img src="/static-assets/aira/info.png" class="_ghost"/>
@@ -51,13 +51,17 @@ const props = defineProps<{
 
 const pagingComponent = shallowRef<InstanceType<typeof MkPagination>>();
 
+const isNeedSuppressInfinityFetch = () => {
+	return props.filter && Object.values(props.filter).some(x => x);
+};
+
 const isFilteredNote = (note: Note) => {
 	if (!props.filter) return false;
 	const filter = props.filter;
 
 	if (filter.excludeRenotes && note.renote) return true;
 	if (filter.excludeReplies && note.reply) return true;
-	if (filter.mediaOnly && (!note.fileIds?.length || !note.reply?.fileIds?.length)) return true;
+	if (filter.mediaOnly && !note.fileIds?.length && !note.renote?.fileIds?.length) return true;
 
 	if (filter.excludeKeywords?.some(keyword => note.text?.includes(keyword))) return true;
 	if (filter.includeKeywords && !filter.includeKeywords.some(keyword => note.text?.includes(keyword))) return true;
