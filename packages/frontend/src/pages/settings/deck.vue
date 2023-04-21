@@ -4,8 +4,6 @@
 
 	<MkSwitch v-model="alwaysShowMainColumn">{{ i18n.ts._deck.alwaysShowMainColumn }}</MkSwitch>
 
-	<MkSwitch v-model="forceSmallPadding">{{ i18n.ts._deck.forceSmallPadding }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></MkSwitch>
-
 	<MkRadios v-model="columnAlign">
 		<template #label>{{ i18n.ts._deck.columnAlign }}</template>
 		<option value="left">{{ i18n.ts.left }}</option>
@@ -19,14 +17,12 @@ import { computed } from 'vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 import MkRadios from '@/components/MkRadios.vue';
 import { deckStore } from '@/ui/deck/deck-store';
-import { defaultStore } from '@/store';
 import { i18n } from '@/i18n';
 import { definePageMetadata } from '@/scripts/page-metadata';
 
 const navWindow = computed(deckStore.makeGetterSetter('navWindow'));
 const alwaysShowMainColumn = computed(deckStore.makeGetterSetter('alwaysShowMainColumn'));
 const columnAlign = computed(deckStore.makeGetterSetter('columnAlign'));
-const forceSmallPadding = computed(defaultStore.makeGetterSetter('forceSmallPadding'));
 
 const headerActions = $computed(() => []);
 
