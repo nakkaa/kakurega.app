@@ -1,5 +1,5 @@
 <template>
-<XColumn :menu="menu" :column="column" :is-stacked="isStacked" @parent-focus="$event => emit('parent-focus', $event)">
+<XColumn :menu="menu" :column="column" :is-stacked="isStacked" :enable-filter="true" @parent-focus="$event => emit('parent-focus', $event)">
 	<template #header>
 		<i class="ti ti-device-tv"></i><span style="margin-left: 8px;">{{ column.name }}</span>
 	</template>
@@ -8,7 +8,7 @@
 		<div style="padding: 8px; text-align: center;">
 			<MkButton primary gradate rounded inline @click="post"><i class="ti ti-pencil"></i></MkButton>
 		</div>
-		<MkTimeline ref="timeline" src="channel" :channel="column.channelId" @after="() => emit('loaded')"/>
+		<MkTimeline ref="timeline" src="channel" :channel="column.channelId" :filter="column.filter" @after="() => emit('loaded')"/>
 	</template>
 </XColumn>
 </template>

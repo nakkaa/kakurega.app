@@ -2,6 +2,7 @@ import { throttle } from 'throttle-debounce';
 import { markRaw } from 'vue';
 import { notificationTypes } from 'misskey-js';
 import { Storage } from '../../pizzax';
+import type { Filter as NoteFiler } from '@/components/MkNotes.vue';
 import { api } from '@/os';
 import { deepClone } from '@/scripts/clone';
 
@@ -25,6 +26,7 @@ export type Column = {
 	roleId?: string;
 	includingTypes?: typeof notificationTypes[number][];
 	tl?: 'home' | 'local' | 'social' | 'global';
+	filter?: NoteFiler;
 };
 
 export const deckStore = markRaw(new Storage('deck', {

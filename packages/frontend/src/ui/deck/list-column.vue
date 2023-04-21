@@ -1,10 +1,10 @@
 <template>
-<XColumn :menu="menu" :column="column" :is-stacked="isStacked" @parent-focus="$event => emit('parent-focus', $event)">
+<XColumn :menu="menu" :column="column" :is-stacked="isStacked" :enable-filter="true" @parent-focus="$event => emit('parent-focus', $event)">
 	<template #header>
 		<i class="ti ti-list"></i><span style="margin-left: 8px;">{{ column.name }}</span>
 	</template>
 
-	<MkTimeline v-if="column.listId" ref="timeline" src="list" :list="column.listId" @after="() => emit('loaded')"/>
+	<MkTimeline v-if="column.listId" ref="timeline" src="list" :list="column.listId" :filter="column.filter" @after="() => emit('loaded')"/>
 </XColumn>
 </template>
 

@@ -1494,6 +1494,15 @@ _sortType:
   nameDesc: "名前 (降順)"
   nameAsc: "名前 (昇順)"
 
+_filter:
+  includeKeywords: "以下のキーワードを含む"
+  includeKeywordsAll: "以下のキーワードすべてを含む"
+  excludeKeywords: "以下のキーワードを含まない"
+  excludeRenotes: "Renoteを除外"
+  excludeReplies: "返信を除外"
+  mediaOnly: "メディアが添付されているノートのみ"
+  splitDescription: "半角スペースで区切ることで複数のキーワードを指定出来ます"
+
 _menuDisplay:
   sideFull: "横"
   sideIcon: "横(アイコン)"
