@@ -1,10 +1,10 @@
 <template>
-<MkNotes ref="tlComponent" :no-gap="!defaultStore.state.showGapBetweenNotesInTimeline" :pagination="pagination" @queue="emit('queue', $event)"/>
+<MkNotes ref="tlComponent" :no-gap="!defaultStore.state.showGapBetweenNotesInTimeline" :pagination="pagination" :filter="props.filter" @queue="emit('queue', $event)"/>
 </template>
 
 <script lang="ts" setup>
 import { computed, provide, onUnmounted } from 'vue';
-import MkNotes from '@/components/MkNotes.vue';
+import MkNotes, { type Filter as NoteFilter } from '@/components/MkNotes.vue';
 import { stream } from '@/stream';
 import * as sound from '@/scripts/sound';
 import { $i } from '@/account';
@@ -17,6 +17,7 @@ const props = defineProps<{
 	channel?: string;
 	role?: string;
 	sound?: boolean;
+	filter?: NoteFilter;
 }>();
 
 const emit = defineEmits<{

@@ -19,7 +19,7 @@
 				:ad="true"
 				:class="$style.notes"
 			>
-				<MkNote :key="note._featuredId_ || note._prId_ || note.id" :class="$style.note" :note="note"/>
+				<MkNote v-if="!isFilteredNote(note)" :key="note._featuredId_ || note._prId_ || note.id" :class="$style.note" :note="note"/>
 			</MkDateSeparatedList>
 		</div>
 	</template>
@@ -28,17 +28,43 @@
 
 <script lang="ts" setup>
 import { shallowRef } from 'vue';
+import type { Note } from 'misskey-js/built/entities';
 import MkNote from '@/components/MkNote.vue';
 import MkDateSeparatedList from '@/components/MkDateSeparatedList.vue';
 import MkPagination, { Paging } from '@/components/MkPagination.vue';
 import { i18n } from '@/i18n';
 
+export type Filter = {
+	includeKeywords?: string[];
+	includeKeywordsAll?: string[];
+	excludeKeywords?: string[];
+	excludeRenotes?: boolean;
+	excludeReplies?: boolean;
+	mediaOnly?: boolean;
+}
+
 const props = defineProps<{
 	pagination: Paging;
 	noGap?: boolean;
+	filter?: Filter;
 }>();
 
 const pagingComponent = shallowRef<InstanceType<typeof MkPagination>>();
+
+const isFilteredNote = (note: Note) => {
+	if (!props.filter) return false;
+	const filter = props.filter;
+
+	if (filter.excludeRenotes && note.renote) return true;
+	if (filter.excludeReplies && note.reply) return true;
+	if (filter.mediaOnly && (!note.fileIds?.length || !note.reply?.fileIds?.length)) return true;
+
+	if (filter.excludeKeywords?.some(keyword => note.text?.includes(keyword))) return true;
+	if (filter.includeKeywords && !filter.includeKeywords.some(keyword => note.text?.includes(keyword))) return true;
+	if (filter.includeKeywordsAll && !filter.includeKeywordsAll.every(keyword => note.text?.includes(keyword))) return true;
+
+	return false;
+};
 
 defineExpose({
 	pagingComponent,

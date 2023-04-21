@@ -113,6 +113,7 @@ export default class Connection {
 			case 'disconnect': this.onChannelDisconnectRequested(body); break;
 			case 'channel': this.onChannelMessageRequested(body); break;
 			case 'ch': this.onChannelMessageRequested(body); break; // alias
+			case 'ping': this.onPingRequested(); break;
 		}
 	}
 
@@ -279,6 +280,14 @@ export default class Connection {
 		if (channel != null && channel.onMessage != null) {
 			channel.onMessage(data.type, data.body);
 		}
+	}
+
+	/**
+	 * ping要求時
+	 */
+	@bindThis
+	private onPingRequested() {
+		this.sendMessageToWs('ping', 'pong');
 	}
 
 	/**

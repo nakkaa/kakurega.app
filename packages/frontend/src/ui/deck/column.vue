@@ -44,6 +44,7 @@ const props = withDefaults(defineProps<{
 	isStacked?: boolean;
 	naked?: boolean;
 	menu?: MenuItem[];
+	enableFilter?: boolean;
 }>(), {
 	isStacked: false,
 	naked: false,
@@ -173,8 +174,66 @@ function getMenu() {
 		},
 	}];
 
-	if (props.menu) {
+	if (props.enableFilter || props.menu) {
 		items.unshift(null);
+	}
+
+	if (props.enableFilter) {
+		items.unshift({
+			icon: 'ti ti-filter',
+			text: i18n.ts.filter,
+			action: async () => {
+				const { canceled, result } = await os.form(props.column.name, {
+					includeKeywords: {
+						type: 'string',
+						label: i18n.ts._filter.includeKeywords,
+						default: props.column.filter?.includeKeywords?.join(' '),
+						description: i18n.ts._filter.splitDescription,
+					},
+					includeKeywordsAll: {
+						type: 'string',
+						label: i18n.ts._filter.includeKeywordsAll,
+						default: props.column.filter?.includeKeywordsAll?.join(' '),
+						description: i18n.ts._filter.splitDescription,
+					},
+					excludeKeywords: {
+						type: 'string',
+						label: i18n.ts._filter.excludeKeywords,
+						default: props.column.filter?.excludeKeywords?.join(' '),
+						description: i18n.ts._filter.splitDescription,
+					},
+					excludeRenotes: {
+						type: 'boolean',
+						label: i18n.ts._filter.excludeRenotes,
+						default: props.column.filter?.excludeRenotes,
+					},
+					excludeReplies: {
+						type: 'boolean',
+						label: i18n.ts._filter.excludeReplies,
+						default: props.column.filter?.excludeReplies,
+					},
+					mediaOnly: {
+						type: 'boolean',
+						label: i18n.ts._filter.mediaOnly,
+						default: props.column.filter?.mediaOnly,
+					},
+				});
+				if (canceled) return;
+
+				for (const k in result) {
+					if (result[k] === null) result[k] = undefined;
+					if (['includeKeywords', 'includeKeywordsAll', 'excludeKeywords'].includes(k)) {
+						result[k] = result[k]?.split(' ').filter(x => x);
+						if (result[k] && !result[k].length) result[k] = undefined;
+					}
+				}
+
+				updateColumn(props.column.id, { filter: result });
+			},
+		});
+	}
+
+	if (props.menu) {
 		items = props.menu.concat(items);
 	}
 

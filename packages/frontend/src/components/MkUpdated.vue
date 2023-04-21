@@ -2,9 +2,14 @@
 <div class="_panel _shadow" :class="$style.root">
 	<div :class="$style.main">
 		<div :class="$style.title">✨ {{ i18n.ts.misskeyUpdated }}</div>
-		<div :class="$style.text">{{ version }}</div>
+		<div :class="$style.text">
+			Misskey: {{ misskeyVersion }}
+			<br>
+			隠れ家: {{ kakuregaVersion }}
+		</div>
 		<div class="_buttons">
 			<MkButton full @click="whatIsNew">{{ i18n.ts.whatIsNew }}</MkButton>
+			<MkButton full @click="whatIsNewKakurega">{{ i18n.ts.whatIsNewKakurega }}</MkButton>
 			<MkButton full primary @click="close">{{ i18n.ts.gotIt }}</MkButton>
 		</div>
 	</div>
@@ -24,13 +29,21 @@ const emit = defineEmits<{
 
 const zIndex = os.claimZIndex('low');
 
+const misskeyVersion = version.split('-')[0];
+const kakuregaVersion = version.split('-')[1].replace('kakurega.', '');
+
 function close() {
 	emit('closed');
 }
 
 const whatIsNew = () => {
 	emit('closed');
-	window.open('https://misskey.yukineko.me/@admin/pages/release-note', '_blank');
+	window.open(`https://misskey-hub.net/docs/releases.html#_${version.split('-')[0].replace(/\./g, '-')}`, '_blank');
+};
+
+const whatIsNewKakurega = () => {
+	emit('closed');
+	window.open('https://github.com/hideki0403/misskey.yukineko.me/blob/master-kakurega/CHANGELOG_KAKUREGA.md', '_blank');
 };
 </script>
 

@@ -840,7 +840,8 @@ troubleshooting: "トラブルシューティング"
 useBlurEffect: "UIにぼかし効果を使用"
 learnMore: "詳しく"
 misskeyUpdated: "Misskeyが更新されました！"
-whatIsNew: "更新情報を見る"
+whatIsNew: "更新情報を見る (Misskey)"
+whatIsNewKakurega: "更新情報を見る (隠れ家)"
 translate: "翻訳"
 translatedFrom: "{x}から翻訳"
 accountDeletionInProgress: "アカウントの削除が進行中です"
@@ -1494,6 +1495,15 @@ _sortType:
   nameDesc: "名前 (降順)"
   nameAsc: "名前 (昇順)"
 
+_filter:
+  includeKeywords: "以下のキーワードを含む"
+  includeKeywordsAll: "以下のキーワードすべてを含む"
+  excludeKeywords: "以下のキーワードを含まない"
+  excludeRenotes: "Renoteを除外"
+  excludeReplies: "返信を除外"
+  mediaOnly: "メディアが添付されているノートのみ"
+  splitDescription: "半角スペースで区切ることで複数のキーワードを指定出来ます"
+
 _menuDisplay:
   sideFull: "横"
   sideIcon: "横(アイコン)"
@@ -1985,7 +1995,6 @@ _notification:
 _deck:
   alwaysShowMainColumn: "常にメインカラムを表示"
   columnAlign: "カラムの寄せ"
-  forceSmallPadding: "ノートの余白を狭くする"
   addColumn: "カラムを追加"
   configureColumn: "カラムの設定"
   swapLeft: "左に移動"
