@@ -21,14 +21,14 @@
 
 	<div v-else ref="rootEl">
 		<div v-show="pagination.reversed && more" key="_more_" class="_margin">
-			<MkButton v-if="!moreFetching" v-appear="(enableInfiniteScroll && !props.disableAutoLoad) ? fetchMoreAhead : null" :class="$style.more" :disabled="moreFetching" :style="{ cursor: moreFetching ? 'wait' : 'pointer' }" primary rounded @click="fetchMoreAhead">
+			<MkButton v-if="!moreFetching" v-appear="(enableInfiniteScroll && !props.disableAutoLoad) ? () => fetchMore(true, true) : null" :class="$style.more" :disabled="moreFetching" :style="{ cursor: moreFetching ? 'wait' : 'pointer' }" primary rounded @click="() => fetchMore(true, false)">
 				{{ i18n.ts.loadMore }}
 			</MkButton>
 			<MkLoading v-else class="loading"/>
 		</div>
 		<slot :items="items" :fetching="fetching || moreFetching"></slot>
 		<div v-show="!pagination.reversed && more" key="_more_" class="_margin">
-			<MkButton v-if="!moreFetching" v-appear="(enableInfiniteScroll && !props.disableAutoLoad) ? fetchMore : null" :class="$style.more" :disabled="moreFetching" :style="{ cursor: moreFetching ? 'wait' : 'pointer' }" primary rounded @click="fetchMore">
+			<MkButton v-if="!moreFetching" v-appear="(enableInfiniteScroll && !props.disableAutoLoad) ? () => fetchMore(false, true) : null" :class="$style.more" :disabled="moreFetching" :style="{ cursor: moreFetching ? 'wait' : 'pointer' }" primary rounded @click="() => fetchMore(false, false)">
 				{{ i18n.ts.loadMore }}
 			</MkButton>
 			<MkLoading v-else class="loading"/>
@@ -50,6 +50,7 @@ import { i18n } from '@/i18n';
 
 const SECOND_FETCH_LIMIT = 30;
 const TOLERANCE = 16;
+const AUTO_FETCH_LIMIT = 5;
 
 export type Paging<E extends keyof misskey.Endpoints = keyof misskey.Endpoints> = {
 	endpoint: E;
@@ -77,6 +78,7 @@ const props = withDefaults(defineProps<{
 	pagination: Paging;
 	disableAutoLoad?: boolean;
 	displayLimit?: number;
+	suppressInfinityFetch?: boolean;
 }>(), {
 	displayLimit: 20,
 });
@@ -193,7 +195,23 @@ const reload = (): Promise<void> => {
 	return init();
 };
 
-const fetchMore = async (): Promise<void> => {
+let autoFetchCount = 0;
+const fetchMore = async (isAhead: boolean, autoFetch: boolean) => {
+	if (autoFetch && props.suppressInfinityFetch) {
+		if (autoFetchCount >= AUTO_FETCH_LIMIT) return;
+		autoFetchCount++;
+	} else {
+		autoFetchCount = 0;
+	}
+
+	if (isAhead) {
+		await fetchMoreAhead();
+	} else {
+		await fetchMoreBehind();
+	}
+};
+
+const fetchMoreBehind = async (): Promise<void> => {
 	if (!more.value || fetching.value || moreFetching.value || items.value.length === 0) return;
 	moreFetching.value = true;
 	const params = props.pagination.params ? isRef(props.pagination.params) ? props.pagination.params.value : props.pagination.params : {};
