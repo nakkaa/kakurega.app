@@ -11,6 +11,7 @@
 			<i v-else-if="notification.type === 'followRequestAccepted'" class="ti ti-check"></i>
 			<i v-else-if="notification.type === 'renote'" class="ti ti-repeat"></i>
 			<i v-else-if="notification.type === 'reply'" class="ti ti-arrow-back-up"></i>
+			<i v-else-if="notification.type === 'note'" class="ti ti-bell"></i>
 			<i v-else-if="notification.type === 'mention'" class="ti ti-at"></i>
 			<i v-else-if="notification.type === 'quote'" class="ti ti-quote"></i>
 			<i v-else-if="notification.type === 'pollEnded'" class="ti ti-chart-arrows"></i>
@@ -46,6 +47,9 @@
 				<i class="ti ti-quote" :class="$style.quote"></i>
 			</MkA>
 			<MkA v-else-if="notification.type === 'reply'" :class="$style.text" :to="notePage(notification.note)" :title="getNoteSummary(notification.note)">
+				<Mfm :text="getNoteSummary(notification.note)" :plain="true" :nowrap="true" :author="notification.note.user"/>
+			</MkA>
+			<MkA v-else-if="notification.type === 'note'" :class="$style.text" :to="notePage(notification.note)" :title="getNoteSummary(notification.note)">
 				<Mfm :text="getNoteSummary(notification.note)" :plain="true" :nowrap="true" :author="notification.note.user"/>
 			</MkA>
 			<MkA v-else-if="notification.type === 'mention'" :class="$style.text" :to="notePage(notification.note)" :title="getNoteSummary(notification.note)">
@@ -217,6 +221,12 @@ useTooltip(reactionRef, (showing) => {
 .t_achievementEarned {
 	padding: 3px;
 	background: #cb9a11;
+	pointer-events: none;
+}
+
+.t_note {
+	padding: 3px;
+	background: #007aff;
 	pointer-events: none;
 }
 

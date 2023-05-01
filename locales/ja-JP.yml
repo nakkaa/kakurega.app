@@ -1027,6 +1027,8 @@ noteIdOrUrl: "ノートIDまたはURL"
 accountMigration: "アカウントの引っ越し"
 accountMoved: "このユーザーは新しいアカウントに引っ越しました："
 forceShowAds: "常に広告を表示する"
+noteSubscribe: "ノート通知を有効にする"
+noteUnsubscribe: "ノート通知を無効にする"
 
 _accountMigration:
   moveTo: "このアカウントを新しいアカウントに引っ越す"
@@ -1972,6 +1974,7 @@ _notification:
   unreadAntennaNote: "アンテナ {name}"
   emptyPushNotificationMessage: "プッシュ通知の更新をしました"
   achievementEarned: "実績を獲得"
+  newNote: "{name}がノートしました"
 
   _types:
     all: "すべて"
