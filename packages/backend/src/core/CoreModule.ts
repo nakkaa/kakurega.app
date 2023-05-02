@@ -29,6 +29,7 @@ import { NoteDeleteService } from './NoteDeleteService.js';
 import { NotePiningService } from './NotePiningService.js';
 import { NoteReadService } from './NoteReadService.js';
 import { NotificationService } from './NotificationService.js';
+import { NoteNotificationService } from './NoteNotificationService.js';
 import { PollService } from './PollService.js';
 import { PushNotificationService } from './PushNotificationService.js';
 import { QueryService } from './QueryService.js';
@@ -86,6 +87,7 @@ import { RenoteMutingEntityService } from './entities/RenoteMutingEntityService.
 import { NoteEntityService } from './entities/NoteEntityService.js';
 import { NoteFavoriteEntityService } from './entities/NoteFavoriteEntityService.js';
 import { NoteReactionEntityService } from './entities/NoteReactionEntityService.js';
+import { NoteNotificationEntityService } from './entities/NoteNotificationEntityService.js';
 import { NotificationEntityService } from './entities/NotificationEntityService.js';
 import { PageEntityService } from './entities/PageEntityService.js';
 import { PageLikeEntityService } from './entities/PageLikeEntityService.js';
@@ -151,6 +153,7 @@ const $NoteDeleteService: Provider = { provide: 'NoteDeleteService', useExisting
 const $NotePiningService: Provider = { provide: 'NotePiningService', useExisting: NotePiningService };
 const $NoteReadService: Provider = { provide: 'NoteReadService', useExisting: NoteReadService };
 const $NotificationService: Provider = { provide: 'NotificationService', useExisting: NotificationService };
+const $NoteNotificationService: Provider = { provide: 'NoteNotificationService', useExisting: NoteNotificationService };
 const $PollService: Provider = { provide: 'PollService', useExisting: PollService };
 const $ProxyAccountService: Provider = { provide: 'ProxyAccountService', useExisting: ProxyAccountService };
 const $PushNotificationService: Provider = { provide: 'PushNotificationService', useExisting: PushNotificationService };
@@ -209,6 +212,7 @@ const $RenoteMutingEntityService: Provider = { provide: 'RenoteMutingEntityServi
 const $NoteEntityService: Provider = { provide: 'NoteEntityService', useExisting: NoteEntityService };
 const $NoteFavoriteEntityService: Provider = { provide: 'NoteFavoriteEntityService', useExisting: NoteFavoriteEntityService };
 const $NoteReactionEntityService: Provider = { provide: 'NoteReactionEntityService', useExisting: NoteReactionEntityService };
+const $NoteNotificationEntityService: Provider = { provide: 'NoteNotificationEntityService', useExisting: NoteNotificationEntityService };
 const $NotificationEntityService: Provider = { provide: 'NotificationEntityService', useExisting: NotificationEntityService };
 const $PageEntityService: Provider = { provide: 'PageEntityService', useExisting: PageEntityService };
 const $PageLikeEntityService: Provider = { provide: 'PageLikeEntityService', useExisting: PageLikeEntityService };
@@ -276,6 +280,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		NotePiningService,
 		NoteReadService,
 		NotificationService,
+		NoteNotificationService,
 		PollService,
 		ProxyAccountService,
 		PushNotificationService,
@@ -333,6 +338,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		NoteEntityService,
 		NoteFavoriteEntityService,
 		NoteReactionEntityService,
+		NoteNotificationEntityService,
 		NotificationEntityService,
 		PageEntityService,
 		PageLikeEntityService,
@@ -395,6 +401,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		$NotePiningService,
 		$NoteReadService,
 		$NotificationService,
+		$NoteNotificationService,
 		$PollService,
 		$ProxyAccountService,
 		$PushNotificationService,
@@ -452,6 +459,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		$NoteEntityService,
 		$NoteFavoriteEntityService,
 		$NoteReactionEntityService,
+		$NoteNotificationEntityService,
 		$NotificationEntityService,
 		$PageEntityService,
 		$PageLikeEntityService,
@@ -515,6 +523,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		NotePiningService,
 		NoteReadService,
 		NotificationService,
+		NoteNotificationService,
 		PollService,
 		ProxyAccountService,
 		PushNotificationService,
@@ -571,6 +580,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		NoteEntityService,
 		NoteFavoriteEntityService,
 		NoteReactionEntityService,
+		NoteNotificationEntityService,
 		NotificationEntityService,
 		PageEntityService,
 		PageLikeEntityService,
@@ -633,6 +643,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		$NotePiningService,
 		$NoteReadService,
 		$NotificationService,
+		$NoteNotificationService,
 		$PollService,
 		$ProxyAccountService,
 		$PushNotificationService,
@@ -689,6 +700,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		$NoteEntityService,
 		$NoteFavoriteEntityService,
 		$NoteReactionEntityService,
+		$NoteNotificationEntityService,
 		$NotificationEntityService,
 		$PageEntityService,
 		$PageLikeEntityService,
