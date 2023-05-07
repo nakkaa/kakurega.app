@@ -40,6 +40,15 @@
 				<MkSwitch v-model="agreeNote" style="margin-top: 16px;" data-cy-signup-rules-notes-agree>{{ i18n.ts.agree }}</MkSwitch>
 			</MkFolder>
 
+			<MkFolder :default-open="true">
+				<template #label>{{ i18n.ts.ageCheck }}</template>
+				<template #suffix><i v-if="ageLimitAgreement" class="ti ti-check" style="color: var(--success)"></i></template>
+
+				<span>{{ i18n.ts.ageCheckDescription }}</span>
+
+				<MkSwitch v-model="ageLimitAgreement" style="margin-top: 16px;">{{ i18n.ts.imOverSixteen }}</MkSwitch>
+			</MkFolder>
+
 			<div v-if="!agreed" style="text-align: center;">{{ i18n.ts.pleaseAgreeAllToContinue }}</div>
 
 			<div class="_buttonsCenter">
@@ -66,9 +75,10 @@ const availableTos = instance.tosUrl != null;
 const agreeServerRules = ref(false);
 const agreeTos = ref(false);
 const agreeNote = ref(false);
+const ageLimitAgreement = ref(false);
 
 const agreed = computed(() => {
-	return (!availableServerRules || agreeServerRules.value) && (!availableTos || agreeTos.value) && agreeNote.value;
+	return (!availableServerRules || agreeServerRules.value) && (!availableTos || agreeTos.value) && agreeNote.value && ageLimitAgreement.value;
 });
 
 const emit = defineEmits<{
