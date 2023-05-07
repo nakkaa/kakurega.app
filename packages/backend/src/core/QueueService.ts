@@ -11,7 +11,6 @@ import type { Antenna } from '@/server/api/endpoints/i/import-antennas.js';
 import type { DbQueue, DeliverQueue, EndedPollNotificationQueue, InboxQueue, ObjectStorageQueue, RelationshipQueue, SystemQueue, WebhookDeliverQueue } from './QueueModule.js';
 import type { DbJobData, RelationshipJobData, ThinUser } from '../queue/types.js';
 import type httpSignature from '@peertube/http-signature';
-import Bull from 'bull';
 
 @Injectable()
 export class QueueService {
