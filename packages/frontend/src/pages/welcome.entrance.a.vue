@@ -1,30 +1,31 @@
 <template>
-<div v-if="meta" class="rsqzvsbo">
-	<MkFeaturedPhotos class="bg"/>
-	<XTimeline class="tl"/>
-	<div class="shape1"></div>
-	<div class="shape2"></div>
-	<img src="/client-assets/misskey.svg" class="misskey"/>
-	<div class="emojis">
-		<MkEmoji :normal="true" :no-style="true" emoji="👍"/>
-		<MkEmoji :normal="true" :no-style="true" emoji="❤"/>
-		<MkEmoji :normal="true" :no-style="true" emoji="😆"/>
-		<MkEmoji :normal="true" :no-style="true" emoji="🎉"/>
-		<MkEmoji :normal="true" :no-style="true" emoji="🍮"/>
+	<div v-if="meta" class="rsqzvsbo">
+		<MkFeaturedPhotos class="bg" />
+		<XTimeline class="tl" />
+		<div class="shape1"></div>
+		<div class="shape2"></div>
+		<img src="/client-assets/misskey.svg" class="misskey" />
+		<div class="emojis">
+			<MkEmoji :normal="true" :no-style="true" emoji="👍" />
+			<MkEmoji :normal="true" :no-style="true" emoji="❤" />
+			<MkEmoji :normal="true" :no-style="true" emoji="😆" />
+			<MkEmoji :normal="true" :no-style="true" emoji="🎉" />
+			<MkEmoji :normal="true" :no-style="true" emoji="🍮" />
+		</div>
+		<div class="contents">
+			<MkVisitorDashboard />
+		</div>
+		<div v-if="instances && instances.length > 0" class="federation">
+			<MarqueeText :duration="40">
+				<MkA v-for="instance in instances" :key="instance.id" :class="$style.federationInstance"
+					:to="`/instance-info/${instance.host}`" behavior="window">
+					<!--<MkInstanceCardMini :instance="instance"/>-->
+					<img v-if="instance.iconUrl" class="icon" :src="instance.iconUrl" alt="" />
+					<span class="name _monospace">{{ instance.host }}</span>
+				</MkA>
+			</MarqueeText>
+		</div>
 	</div>
-	<div class="contents">
-		<MkVisitorDashboard/>
-	</div>
-	<div v-if="instances && instances.length > 0" class="federation">
-		<MarqueeText :duration="40">
-			<MkA v-for="instance in instances" :key="instance.id" :class="$style.federationInstance" :to="`/instance-info/${instance.host}`" behavior="window">
-				<!--<MkInstanceCardMini :instance="instance"/>-->
-				<img v-if="instance.iconUrl" class="icon" :src="instance.iconUrl" alt=""/>
-				<span class="name _monospace">{{ instance.host }}</span>
-			</MkA>
-		</MarqueeText>
-	</div>
-</div>
 </template>
 
 <script lang="ts" setup>
@@ -77,8 +78,8 @@ os.apiGet('federation/instances', {
 		width: 500px;
 		height: calc(100% - 256px);
 		overflow: hidden;
-		-webkit-mask-image: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 128px, rgba(0,0,0,1) calc(100% - 128px), rgba(0,0,0,0) 100%);
-		mask-image: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 128px, rgba(0,0,0,1) calc(100% - 128px), rgba(0,0,0,0) 100%);
+		-webkit-mask-image: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 128px, rgba(0, 0, 0, 1) calc(100% - 128px), rgba(0, 0, 0, 0) 100%);
+		mask-image: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 128px, rgba(0, 0, 0, 1) calc(100% - 128px), rgba(0, 0, 0, 0) 100%);
 
 		@media (max-width: 1200px) {
 			display: none;
@@ -94,6 +95,7 @@ os.apiGet('federation/instances', {
 		background: var(--accent);
 		clip-path: polygon(0% 0%, 45% 0%, 20% 100%, 0% 100%);
 	}
+
 	> .shape2 {
 		position: fixed;
 		top: 0;
@@ -130,11 +132,8 @@ os.apiGet('federation/instances', {
 		}
 	}
 
-	> .container {
+	> .contents {
 		position: relative;
-		display: table;
-		height: 100vh;
-		margin-left: 300px;
 		width: min(430px, calc(100% - 32px));
 		margin-left: 128px;
 		padding: 100px 0 100px 0;
