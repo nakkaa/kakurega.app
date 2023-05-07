@@ -51,6 +51,7 @@ import { WebhookService } from './WebhookService.js';
 import { ProxyAccountService } from './ProxyAccountService.js';
 import { UtilityService } from './UtilityService.js';
 import { FileInfoService } from './FileInfoService.js';
+import { SearchService } from './SearchService.js';
 import { ChartLoggerService } from './chart/ChartLoggerService.js';
 import FederationChart from './chart/charts/federation.js';
 import NotesChart from './chart/charts/notes.js';
@@ -175,6 +176,8 @@ const $VideoProcessingService: Provider = { provide: 'VideoProcessingService', u
 const $WebhookService: Provider = { provide: 'WebhookService', useExisting: WebhookService };
 const $UtilityService: Provider = { provide: 'UtilityService', useExisting: UtilityService };
 const $FileInfoService: Provider = { provide: 'FileInfoService', useExisting: FileInfoService };
+const $SearchService: Provider = { provide: 'SearchService', useExisting: SearchService };
+
 const $ChartLoggerService: Provider = { provide: 'ChartLoggerService', useExisting: ChartLoggerService };
 const $FederationChart: Provider = { provide: 'FederationChart', useExisting: FederationChart };
 const $NotesChart: Provider = { provide: 'NotesChart', useExisting: NotesChart };
@@ -302,6 +305,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		WebhookService,
 		UtilityService,
 		FileInfoService,
+		SearchService,
 		ChartLoggerService,
 		FederationChart,
 		NotesChart,
@@ -423,6 +427,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		$WebhookService,
 		$UtilityService,
 		$FileInfoService,
+		$SearchService,
 		$ChartLoggerService,
 		$FederationChart,
 		$NotesChart,
@@ -545,6 +550,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		WebhookService,
 		UtilityService,
 		FileInfoService,
+		SearchService,
 		FederationChart,
 		NotesChart,
 		UsersChart,
@@ -665,6 +671,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		$WebhookService,
 		$UtilityService,
 		$FileInfoService,
+		$SearchService,
 		$FederationChart,
 		$NotesChart,
 		$UsersChart,

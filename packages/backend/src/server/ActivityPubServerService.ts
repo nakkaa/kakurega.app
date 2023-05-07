@@ -11,7 +11,7 @@ import * as url from '@/misc/prelude/url.js';
 import type { Config } from '@/config.js';
 import { ApRendererService } from '@/core/activitypub/ApRendererService.js';
 import { QueueService } from '@/core/QueueService.js';
-import type { LocalUser, User } from '@/models/entities/User.js';
+import type { LocalUser, RemoteUser, User } from '@/models/entities/User.js';
 import { UserKeypairService } from '@/core/UserKeypairService.js';
 import type { Following } from '@/models/entities/Following.js';
 import { countIf } from '@/misc/prelude/array.js';
@@ -630,7 +630,42 @@ export class ActivityPubServerService {
 					id: request.params.followee,
 					host: Not(IsNull()),
 				}),
-			]);
+			]) as [LocalUser | RemoteUser | null, LocalUser | RemoteUser | null];
+
+			if (follower == null || followee == null) {
+				reply.code(404);
+				return;
+			}
+
+			reply.header('Cache-Control', 'public, max-age=180');
+			this.setResponseType(request, reply);
+			return (this.apRendererService.addContext(this.apRendererService.renderFollow(follower, followee)));
+		});
+
+		// follow
+		fastify.get<{ Params: { followRequestId: string ; } }>('/follows/:followRequestId', async (request, reply) => {
+			// This may be used before the follow is completed, so we do not
+			// check if the following exists and only check if the follow request exists.
+
+			const followRequest = await this.followRequestsRepository.findOneBy({
+				id: request.params.followRequestId,
+			});
+
+			if (followRequest == null) {
+				reply.code(404);
+				return;
+			}
+
+			const [follower, followee] = await Promise.all([
+				this.usersRepository.findOneBy({
+					id: followRequest.followerId,
+					host: IsNull(),
+				}),
+				this.usersRepository.findOneBy({
+					id: followRequest.followeeId,
+					host: Not(IsNull()),
+				}),
+			]) as [LocalUser | RemoteUser | null, LocalUser | RemoteUser | null];
 
 			if (follower == null || followee == null) {
 				reply.code(404);

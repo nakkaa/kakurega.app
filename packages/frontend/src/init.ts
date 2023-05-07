@@ -6,18 +6,6 @@ import 'vite/modulepreload-polyfill';
 
 import '@/style.scss';
 
-//#region account indexedDB migration
-import { set } from '@/scripts/idb-proxy';
-
-{
-	const accounts = miLocalStorage.getItem('accounts');
-	if (accounts) {
-		set('accounts', JSON.parse(accounts));
-		miLocalStorage.removeItem('accounts');
-	}
-}
-//#endregion
-
 import { computed, createApp, watch, markRaw, version as vueVersion, defineAsyncComponent } from 'vue';
 import { compareVersions } from 'compare-versions';
 import JSON5 from 'json5';
@@ -44,11 +32,11 @@ import { reloadChannel } from '@/scripts/unison-reload';
 import { reactionPicker } from '@/scripts/reaction-picker';
 import { getUrlWithoutLoginId } from '@/scripts/login-id';
 import { getAccountFromId } from '@/scripts/get-account-from-id';
-import { deckStore } from './ui/deck/deck-store';
-import { miLocalStorage } from './local-storage';
-import { claimAchievement, claimedAchievements } from './scripts/achievements';
-import { fetchCustomEmojis } from './custom-emojis';
-import { mainRouter } from './router';
+import { deckStore } from '@/ui/deck/deck-store';
+import { miLocalStorage } from '@/local-storage';
+import { claimAchievement, claimedAchievements } from '@/scripts/achievements';
+import { fetchCustomEmojis } from '@/custom-emojis';
+import { mainRouter } from '@/router';
 
 console.info(`Misskey v${version}`);
 
@@ -57,7 +45,9 @@ if (_DEV_) {
 
 	console.info(`vue ${vueVersion}`);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	(window as any).$i = $i;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	(window as any).$store = defaultStore;
 
 	window.addEventListener('error', event => {
@@ -186,7 +176,7 @@ fetchInstanceMetaPromise.then(() => {
 
 try {
 	await fetchCustomEmojis();
-} catch (err) {}
+} catch (err) { /* empty */ }
 
 const app = createApp(
 	new URLSearchParams(window.location.search).has('zen') ? defineAsyncComponent(() => import('@/ui/zen.vue')) :
@@ -214,20 +204,20 @@ await deckStore.ready;
 
 // https://github.com/misskey-dev/misskey/pull/8575#issuecomment-1114239210
 // なぜかinit.tsの内容が2回実行されることがあるため、mountするdivを1つに制限する
-const rootEl = (() => {
+const rootEl = ((): HTMLElement => {
 	const MISSKEY_MOUNT_DIV_ID = 'misskey_app';
 
-	const currentEl = document.getElementById(MISSKEY_MOUNT_DIV_ID);
+	const currentRoot = document.getElementById(MISSKEY_MOUNT_DIV_ID);
 
-	if (currentEl) {
+	if (currentRoot) {
 		console.warn('multiple import detected');
-		return currentEl;
+		return currentRoot;
 	}
 
-	const rootEl = document.createElement('div');
-	rootEl.id = MISSKEY_MOUNT_DIV_ID;
-	document.body.appendChild(rootEl);
-	return rootEl;
+	const root = document.createElement('div');
+	root.id = MISSKEY_MOUNT_DIV_ID;
+	document.body.appendChild(root);
+	return root;
 })();
 
 app.mount(rootEl);
@@ -258,8 +248,7 @@ if (lastVersion !== version) {
 				popup(defineAsyncComponent(() => import('@/components/MkUpdated.vue')), {}, {}, 'closed');
 			}
 		}
-	} catch (err) {
-	}
+	} catch (err) { /* empty */ }
 }
 
 await defaultStore.ready;
@@ -457,6 +446,10 @@ if ($i) {
 		claimAchievement('client30min');
 	}, 1000 * 60 * 30);
 
+	window.setTimeout(() => {
+		claimAchievement('client60min');
+	}, 1000 * 60 * 60);
+
 	const lastUsed = miLocalStorage.getItem('lastUsed');
 	if (lastUsed) {
 		const lastUsedDate = parseInt(lastUsed, 10);
@@ -471,7 +464,7 @@ if ($i) {
 
 	const latestDonationInfoShownAt = miLocalStorage.getItem('latestDonationInfoShownAt');
 	const neverShowDonationInfo = miLocalStorage.getItem('neverShowDonationInfo');
-	if (neverShowDonationInfo !== 'true' && (new Date($i.createdAt).getTime() < (Date.now() - (1000 * 60 * 60 * 24 * 3)))) {
+	if (neverShowDonationInfo !== 'true' && (new Date($i.createdAt).getTime() < (Date.now() - (1000 * 60 * 60 * 24 * 3))) && !location.pathname.startsWith('/miauth')) {
 		if (latestDonationInfoShownAt == null || (new Date(latestDonationInfoShownAt).getTime() < (Date.now() - (1000 * 60 * 60 * 24 * 30)))) {
 			popup(defineAsyncComponent(() => import('@/components/MkDonation.vue')), {}, {}, 'closed');
 		}
