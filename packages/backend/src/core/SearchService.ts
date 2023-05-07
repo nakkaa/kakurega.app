@@ -149,6 +149,9 @@ export class SearchService {
 			if (res.hits.length === 0) return [];
 			const notes = await this.notesRepository.findBy({
 				id: In(res.hits.map(x => x.id)),
+				user: {
+					hideSearchResult: false,
+				}
 			});
 			return notes.sort((a, b) => a.id > b.id ? -1 : 1);
 		} else {
@@ -162,7 +165,7 @@ export class SearchService {
 
 			query
 				.andWhere('note.text ILIKE :q', { q: `%${ sqlLikeEscape(q) }%` })
-				.innerJoinAndSelect('note.user', 'user')
+				.innerJoinAndSelect('note.user', 'user', 'user.hideSearchResult = FALSE')
 				.leftJoinAndSelect('note.reply', 'reply')
 				.leftJoinAndSelect('note.renote', 'renote')
 				.leftJoinAndSelect('reply.user', 'replyUser')
