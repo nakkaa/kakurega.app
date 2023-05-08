@@ -3,7 +3,7 @@
 	<template #header><MkPageHeader v-model:tab="tab" :tabs="headerTabs"/></template>
 	<MKSpacer v-if="!(typeof error === 'undefined')" :content-max="1200">
 		<div :class="$style.root">
-			<img :class="$style.img" src="https://xn--931a.moe/assets/error.jpg" class="_ghost"/>
+			<img :class="$style.img" src="/static-assets/aira/error.png" class="_ghost"/>
 			<p :class="$style.text">
 				<i class="ti ti-alert-triangle"></i>
 				{{ error }}
