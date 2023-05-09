@@ -10,7 +10,7 @@
 <XAntennaColumn v-else-if="column.type === 'antenna'" :column="column" :is-stacked="isStacked" @parent-focus="emit('parent-focus', $event)"/>
 <XMentionsColumn v-else-if="column.type === 'mentions'" :column="column" :is-stacked="isStacked" @parent-focus="emit('parent-focus', $event)"/>
 <XDirectColumn v-else-if="column.type === 'direct'" :column="column" :is-stacked="isStacked" @parent-focus="emit('parent-focus', $event)"/>
-<!-- <XRoleTimelineColumn v-else-if="column.type === 'roleTimeline'" :column="column" :is-stacked="isStacked" @parent-focus="emit('parent-focus', $event)"/> -->
+<XRoleTimelineColumn v-else-if="column.type === 'roleTimeline'" :column="column" :is-stacked="isStacked" @parent-focus="emit('parent-focus', $event)"/>
 </template>
 
 <script lang="ts" setup>

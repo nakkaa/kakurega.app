@@ -27,9 +27,13 @@
 		},
 		"typeRoots": [
 			"node_modules/@types",
+			"node_modules/@vue-macros",
 			"@types",
 		],
-		"types": ["vite/client"],
+		"types": [
+			"vite/client",
+			"reactivity-transform/macros-global"
+		],
 		"lib": [
 			"esnext",
 			"dom"

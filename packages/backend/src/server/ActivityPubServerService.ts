@@ -11,7 +11,7 @@ import * as url from '@/misc/prelude/url.js';
 import type { Config } from '@/config.js';
 import { ApRendererService } from '@/core/activitypub/ApRendererService.js';
 import { QueueService } from '@/core/QueueService.js';
-import type { LocalUser, User } from '@/models/entities/User.js';
+import type { LocalUser, RemoteUser, User } from '@/models/entities/User.js';
 import { UserKeypairService } from '@/core/UserKeypairService.js';
 import type { Following } from '@/models/entities/Following.js';
 import { countIf } from '@/misc/prelude/array.js';
@@ -363,9 +363,10 @@ export class ActivityPubServerService {
 		if (page) {
 			const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'), sinceId, untilId)
 				.andWhere('note.userId = :userId', { userId: user.id })
-				.andWhere(new Brackets(qb => { qb
-					.where('note.visibility = \'public\'')
-					.orWhere('note.visibility = \'home\'');
+				.andWhere(new Brackets(qb => {
+					qb
+						.where('note.visibility = \'public\'')
+						.orWhere('note.visibility = \'home\'');
 				}))
 				.andWhere('note.localOnly = FALSE');
 
@@ -630,7 +631,7 @@ export class ActivityPubServerService {
 					id: request.params.followee,
 					host: Not(IsNull()),
 				}),
-			]);
+			]) as [LocalUser | RemoteUser | null, LocalUser | RemoteUser | null];
 
 			if (follower == null || followee == null) {
 				reply.code(404);
@@ -643,7 +644,7 @@ export class ActivityPubServerService {
 		});
 
 		// follow
-		fastify.get<{ Params: { followRequestId: string ; } }>('/follows/:followRequestId', async (request, reply) => {
+		fastify.get<{ Params: { followRequestId: string; } }>('/follows/:followRequestId', async (request, reply) => {
 			// This may be used before the follow is completed, so we do not
 			// check if the following exists and only check if the follow request exists.
 
@@ -665,7 +666,7 @@ export class ActivityPubServerService {
 					id: followRequest.followeeId,
 					host: Not(IsNull()),
 				}),
-			]);
+			]) as [LocalUser | RemoteUser | null, LocalUser | RemoteUser | null];
 
 			if (follower == null || followee == null) {
 				reply.code(404);

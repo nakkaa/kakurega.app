@@ -105,6 +105,8 @@ export const paramDef = {
 		supporterNameWithIconThreshold: { type: 'integer', nullable: true },
 		enableChartsForRemoteUser: { type: 'boolean' },
 		enableChartsForFederatedInstances: { type: 'boolean' },
+		serverRules: { type: 'array', items: { type: 'string' } },
+		preservedUsernames: { type: 'array', items: { type: 'string' } },
 	},
 	required: [],
 } as const;
@@ -432,6 +434,14 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 			if (ps.enableChartsForFederatedInstances !== undefined) {
 				set.enableChartsForFederatedInstances = ps.enableChartsForFederatedInstances;
+			}
+
+			if (ps.serverRules !== undefined) {
+				set.serverRules = ps.serverRules;
+			}
+
+			if (ps.preservedUsernames !== undefined) {
+				set.preservedUsernames = ps.preservedUsernames;
 			}
 
 			await this.metaService.update(set);

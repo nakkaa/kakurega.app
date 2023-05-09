@@ -44,7 +44,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		private channelEntityService: ChannelEntityService,
 	) {
 		super(meta, paramDef, async (ps, me) => {
-			const query = this.channelsRepository.createQueryBuilder('channel');
+			const query = this.channelsRepository.createQueryBuilder('channel').andWhere('channel.isArchived = FALSE');
 
 			switch (ps.sort) {
 				case '+lastNotedAt': query.orderBy('channel.lastNotedAt', 'DESC', 'NULLS LAST'); break;
