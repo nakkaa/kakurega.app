@@ -14,12 +14,12 @@
 						<template #label>{{ i18n.ts.sort }}</template>
 						<option v-for="x in sortOptions" :key="x.value" :value="x.value">{{ x.displayName }}</option>
 					</MkSelect>
-					<MkCheckbox v-model="includeDescription" :large="true">
+					<MkSwitch v-model="includeDescription" :large="true">
 						<template #label>{{ i18n.ts.includeDescription }}</template>
-					</MkCheckbox>
-					<MkCheckbox v-model="excludeNonActiveChannels" :large="true">
+					</MkSwitch>
+					<MkSwitch v-model="excludeNonActiveChannels" :large="true">
 						<template #label>{{ i18n.ts.excludeNonActiveChannels }}</template>
-					</MkCheckbox>
+					</MkSwitch>
 				</div>
 			</MkFoldableSection>
 			<MkPagination v-slot="{ items }" :pagination="listPagination">
@@ -58,7 +58,7 @@ import MkPagination from '@/components/MkPagination.vue';
 import MkButton from '@/components/MkButton.vue';
 import MkSelect from '@/components/MkSelect.vue';
 import MkInput from '@/components/MkInput.vue';
-import MkCheckbox from '@/components/MkCheckbox.vue';
+import MkSwitch from '@/components/MkSwitch.vue';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';
 import { useRouter } from '@/router';
 import { definePageMetadata } from '@/scripts/page-metadata';
