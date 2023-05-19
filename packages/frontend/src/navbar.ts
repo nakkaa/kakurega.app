@@ -7,6 +7,7 @@ import * as os from '@/os';
 import { i18n } from '@/i18n';
 import { ui } from '@/config';
 import { unisonReload } from '@/scripts/unison-reload';
+import { defaultStore } from '@/store';
 
 export const navbarItemDef = reactive({
 	notifications: {
@@ -127,6 +128,31 @@ export const navbarItemDef = reactive({
 					miLocalStorage.setItem('ui', 'classic');
 					unisonReload();
 				},
+			}], ev.currentTarget ?? ev.target);
+		},
+	},
+	quickSettings: {
+		title: i18n.ts.quickSettings,
+		icon: 'ti ti-tool',
+		action: (ev) => {
+			os.popupMenu([{
+				type: 'parent',
+				text: i18n.ts.hideNsfwNote,
+				children: [{
+					text: i18n.ts.on,
+					active: defaultStore.state.hideNsfwNote,
+					action: () => {
+						defaultStore.set('hideNsfwNote', true);
+						unisonReload();
+					},
+				}, {
+					text: i18n.ts.off,
+					active: !defaultStore.state.hideNsfwNote,
+					action: () => {
+						defaultStore.set('hideNsfwNote', false);
+						unisonReload();
+					},
+				}],
 			}], ev.currentTarget ?? ev.target);
 		},
 	},
