@@ -71,6 +71,9 @@
 				<option value="ignore">{{ i18n.ts._nsfw.ignore }}</option>
 				<option value="force">{{ i18n.ts._nsfw.force }}</option>
 			</MkSelect>
+
+			<MkSwitch v-model="hideNsfwNote">{{ i18n.ts.hideNsfwNote }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></MkSwitch>
+
 		<!--
 			<MkRadios v-model="mediaListWithOneImageAppearance">
 				<template #label>{{ i18n.ts.mediaListWithOneImageAppearance }}</template>
@@ -229,6 +232,7 @@ const loadRawImages = computed(defaultStore.makeGetterSetter('loadRawImages'));
 const enableDataSaverMode = computed(defaultStore.makeGetterSetter('enableDataSaverMode'));
 const imageNewTab = computed(defaultStore.makeGetterSetter('imageNewTab'));
 const nsfw = computed(defaultStore.makeGetterSetter('nsfw'));
+const hideNsfwNote = computed(defaultStore.makeGetterSetter('hideNsfwNote'));
 const showFixedPostForm = computed(defaultStore.makeGetterSetter('showFixedPostForm'));
 const showFixedPostFormInChannel = computed(defaultStore.makeGetterSetter('showFixedPostFormInChannel'));
 const numberOfPageCache = computed(defaultStore.makeGetterSetter('numberOfPageCache'));
@@ -275,6 +279,7 @@ watch([
 	instanceTicker,
 	instanceTickerStyle,
 	overridedDeviceKind,
+	hideNsfwNote,
 ], async () => {
 	await reloadAsk();
 });
