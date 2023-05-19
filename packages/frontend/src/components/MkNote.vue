@@ -1,6 +1,6 @@
 <template>
 <div
-	v-if="!muted"
+	v-if="!hideNote"
 	v-show="!isDeleted"
 	ref="el"
 	v-hotkey="keymap"
@@ -122,7 +122,7 @@
 		</div>
 	</article>
 </div>
-<div v-else :class="$style.muted" @click="muted = false">
+<div v-else :class="$style.muted" @click="hideNote = false">
 	<I18n :src="i18n.ts.userSaysSomething" tag="small">
 		<template #name>
 			<MkA v-user-preview="appearNote.userId" :to="userPage(appearNote.user)">
@@ -217,7 +217,9 @@ const isLong = (appearNote.cw == null && appearNote.text != null && (
 ));
 const collapsed = ref(appearNote.cw == null && isLong);
 const isDeleted = ref(false);
-const muted = ref(checkWordMute(appearNote, $i, defaultStore.state.mutedWords));
+const muted = checkWordMute(appearNote, $i, defaultStore.state.mutedWords);
+const isSensitive = defaultStore.state.hideNsfwNote && (appearNote as misskey.entities.Note)?.files.some(x => x.isSensitive);
+const hideNote = ref(muted || isSensitive);
 const translation = ref<any>(null);
 const translating = ref(false);
 const showTicker = (defaultStore.state.instanceTicker === 'always') || (defaultStore.state.instanceTicker === 'remote' && appearNote.user.instance);
