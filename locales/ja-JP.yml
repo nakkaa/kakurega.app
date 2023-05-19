@@ -955,6 +955,8 @@ enableAutoSensitiveDescription: "利用可能な場合は、機械学習を利�
 activeEmailValidationDescription: "ユーザーのメールアドレスのバリデーションを、捨てアドかどうかや実際に通信可能かどうかなどを判定しより積極的に行います。オフにすると単に文字列として正しいかどうかのみチェックされます。"
 hideNsfwNote: "閲覧注意のメディアを含むノートを折りたたむ"
 quickSettings: "クイック設定"
+filenameRandomize: "ファイル名をランダム化"
+filenameRandomizeDescription: "ファイルのアップロード時にファイル名をランダムな文字列に変更します。以前にアップロードしたファイルのファイル名は変更されません。"
 navbar: "ナビゲーションバー"
 shuffle: "シャッフル"
 account: "アカウント"

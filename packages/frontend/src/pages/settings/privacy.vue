@@ -43,6 +43,10 @@
 		{{ i18n.ts.makeExplorable }}
 		<template #caption>{{ i18n.ts.makeExplorableDescription }}</template>
 	</MkSwitch>
+	<MkSwitch v-model="filenameRandomize">
+		<template #label>{{ i18n.ts.filenameRandomize }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></template>
+		<template #caption>{{ i18n.ts.filenameRandomizeDescription }}</template>
+	</MkSwitch>
 
 	<FormSection>
 		<div class="_gaps_m">
@@ -101,6 +105,7 @@ let defaultNoteLocalOnly = $computed(defaultStore.makeGetterSetter('defaultNoteL
 let rememberNoteVisibility = $computed(defaultStore.makeGetterSetter('rememberNoteVisibility'));
 let rememberReactionAcceptance = $computed(defaultStore.makeGetterSetter('rememberReactionAcceptance'));
 let keepCw = $computed(defaultStore.makeGetterSetter('keepCw'));
+let filenameRandomize = $computed(defaultStore.makeGetterSetter('filenameRandomize'));
 
 async function reloadAsk() {
 	const { canceled } = await os.confirm({
