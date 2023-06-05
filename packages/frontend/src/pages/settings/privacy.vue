@@ -1,21 +1,21 @@
 <template>
 <div class="_gaps_m">
-	<MkSelect v-model="enableGTL" @update:model-value="save(); reloadAsk()">
+	<MkSelect v-model="enableGTL" @update:modelValue="save(); reloadAsk()">
 		<template #label>{{ i18n.ts.enableGTL }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></template>
 		<option :value="null">{{ i18n.ts._enableGTL.default }}</option>
 		<option :value="true">{{ i18n.ts._enableGTL._true }}</option>
 		<option :value="false">{{ i18n.ts._enableGTL._false }}</option>
 	</MkSelect>
 
-	<MkSwitch v-model="isLocked" @update:model-value="save()">{{ i18n.ts.makeFollowManuallyApprove }}<template #caption>{{ i18n.ts.lockedAccountInfo }}</template></MkSwitch>
-	<MkSwitch v-if="isLocked" v-model="autoAcceptFollowed" @update:model-value="save()">{{ i18n.ts.autoAcceptFollowed }}</MkSwitch>
+	<MkSwitch v-model="isLocked" @update:modelValue="save()">{{ i18n.ts.makeFollowManuallyApprove }}<template #caption>{{ i18n.ts.lockedAccountInfo }}</template></MkSwitch>
+	<MkSwitch v-if="isLocked" v-model="autoAcceptFollowed" @update:modelValue="save()">{{ i18n.ts.autoAcceptFollowed }}</MkSwitch>
 
-	<MkSwitch v-model="publicReactions" @update:model-value="save()">
+	<MkSwitch v-model="publicReactions" @update:modelValue="save()">
 		{{ i18n.ts.makeReactionsPublic }}
 		<template #caption>{{ i18n.ts.makeReactionsPublicDescription }}</template>
 	</MkSwitch>
 		
-	<MkSelect v-model="ffVisibility" @update:model-value="save()">
+	<MkSelect v-model="ffVisibility" @update:modelValue="save()">
 		<template #label>{{ i18n.ts.ffVisibility }}</template>
 		<option value="public">{{ i18n.ts._ffVisibility.public }}</option>
 		<option value="followers">{{ i18n.ts._ffVisibility.followers }}</option>
@@ -23,23 +23,23 @@
 		<template #caption>{{ i18n.ts.ffVisibilityDescription }}</template>
 	</MkSelect>
 		
-	<MkSwitch v-model="hideOnlineStatus" @update:model-value="save()">
+	<MkSwitch v-model="hideOnlineStatus" @update:modelValue="save()">
 		{{ i18n.ts.hideOnlineStatus }}
 		<template #caption>{{ i18n.ts.hideOnlineStatusDescription }}</template>
 	</MkSwitch>
-	<MkSwitch v-model="hideSearchResult" @update:model-value="save()">
+	<MkSwitch v-model="hideSearchResult" @update:modelValue="save()">
 		{{ i18n.ts.hideSearchResult }}<span class="_beta">{{ i18n.ts.originalFeature }}</span>
 		<template #caption>{{ i18n.ts.hideSearchResultDescription }}</template>
 	</MkSwitch>
-	<MkSwitch v-model="noCrawle" @update:model-value="save()">
+	<MkSwitch v-model="noCrawle" @update:modelValue="save()">
 		{{ i18n.ts.noCrawle }}
 		<template #caption>{{ i18n.ts.noCrawleDescription }}</template>
 	</MkSwitch>
-	<MkSwitch v-model="preventAiLearning" @update:model-value="save()">
+	<MkSwitch v-model="preventAiLearning" @update:modelValue="save()">
 		{{ i18n.ts.preventAiLearning }}<span class="_beta">{{ i18n.ts.beta }}</span>
 		<template #caption>{{ i18n.ts.preventAiLearningDescription }}</template>
 	</MkSwitch>
-	<MkSwitch v-model="isExplorable" @update:model-value="save()">
+	<MkSwitch v-model="isExplorable" @update:modelValue="save()">
 		{{ i18n.ts.makeExplorable }}
 		<template #caption>{{ i18n.ts.makeExplorableDescription }}</template>
 	</MkSwitch>
@@ -50,7 +50,7 @@
 
 	<FormSection>
 		<div class="_gaps_m">
-			<MkSwitch v-model="rememberNoteVisibility" @update:model-value="save()">{{ i18n.ts.rememberNoteVisibility }}</MkSwitch>
+			<MkSwitch v-model="rememberNoteVisibility" @update:modelValue="save()">{{ i18n.ts.rememberNoteVisibility }}</MkSwitch>
 			<MkFolder v-if="!rememberNoteVisibility">
 				<template #label>{{ i18n.ts.defaultNoteVisibility }}</template>
 				<template v-if="defaultNoteVisibility === 'public'" #suffix>{{ i18n.ts._visibility.public }}</template>
@@ -71,9 +71,9 @@
 		</div>
 	</FormSection>
 
-	<MkSwitch v-model="rememberReactionAcceptance" @update:model-value="save()">{{ i18n.ts.rememberReactionAcceptance }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></MkSwitch>
+	<MkSwitch v-model="rememberReactionAcceptance" @update:modelValue="save()">{{ i18n.ts.rememberReactionAcceptance }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></MkSwitch>
 
-	<MkSwitch v-model="keepCw" @update:model-value="save()">{{ i18n.ts.keepCw }}</MkSwitch>
+	<MkSwitch v-model="keepCw" @update:modelValue="save()">{{ i18n.ts.keepCw }}</MkSwitch>
 </div>
 </template>
 

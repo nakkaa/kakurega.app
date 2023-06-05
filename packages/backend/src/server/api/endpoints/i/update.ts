@@ -142,7 +142,6 @@ export const paramDef = {
 		preventAiLearning: { type: 'boolean' },
 		isBot: { type: 'boolean' },
 		isCat: { type: 'boolean' },
-		showTimelineReplies: { type: 'boolean' },
 		injectFeaturedNote: { type: 'boolean' },
 		receiveAnnouncementEmail: { type: 'boolean' },
 		alwaysMarkNsfw: { type: 'boolean' },
@@ -242,7 +241,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (typeof ps.hideSearchResult === 'boolean') updates.hideSearchResult = ps.hideSearchResult;
 			if (typeof ps.publicReactions === 'boolean') profileUpdates.publicReactions = ps.publicReactions;
 			if (typeof ps.isBot === 'boolean') updates.isBot = ps.isBot;
-			if (typeof ps.showTimelineReplies === 'boolean') updates.showTimelineReplies = ps.showTimelineReplies;
 			if (typeof ps.carefulBot === 'boolean') profileUpdates.carefulBot = ps.carefulBot;
 			if (typeof ps.autoAcceptFollowed === 'boolean') profileUpdates.autoAcceptFollowed = ps.autoAcceptFollowed;
 			if (typeof ps.noCrawle === 'boolean') profileUpdates.noCrawle = ps.noCrawle;

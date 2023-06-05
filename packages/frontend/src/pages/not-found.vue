@@ -1,5 +1,5 @@
 <template>
-<div class="ipledcug">
+<div>
 	<div class="_fullinfo">
 		<img src="/static-assets/aira/not-found.png" class="_ghost"/>
 		<div>{{ i18n.ts.notFoundDescription }}</div>
