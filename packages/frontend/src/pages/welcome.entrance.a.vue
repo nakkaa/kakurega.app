@@ -1,31 +1,18 @@
 <template>
-	<div v-if="meta" class="rsqzvsbo">
-		<MkFeaturedPhotos class="bg" />
-		<!-- <XTimeline class="tl" /> -->
-		<div class="shape1"></div>
-		<div class="shape2"></div>
-		<img src="/client-assets/misskey.svg" class="misskey" />
-		<div class="emojis">
-			<MkEmoji :normal="true" :no-style="true" emoji="👍" />
-			<MkEmoji :normal="true" :no-style="true" emoji="❤" />
-			<MkEmoji :normal="true" :no-style="true" emoji="😆" />
-			<MkEmoji :normal="true" :no-style="true" emoji="🎉" />
-			<MkEmoji :normal="true" :no-style="true" emoji="🍮" />
-		</div>
-		<div class="contents">
-			<MkVisitorDashboard />
-		</div>
-		<div v-if="instances && instances.length > 0" class="federation">
-			<MarqueeText :duration="40">
-				<MkA v-for="instance in instances" :key="instance.id" :class="$style.federationInstance"
-					:to="`/instance-info/${instance.host}`" behavior="window">
-					<!--<MkInstanceCardMini :instance="instance"/>-->
-					<img v-if="instance.iconUrl" class="icon" :src="instance.iconUrl" alt="" />
-					<span class="name _monospace">{{ instance.host }}</span>
-				</MkA>
-			</MarqueeText>
-		</div>
+<div v-if="meta" class="rsqzvsbo">
+	<MkFeaturedPhotos class="bg"/>
+	<!-- <XTimeline class="tl"/> -->
+	<div class="shape1"></div>
+	<div class="shape2"></div>
+	<img src="/client-assets/misskey.svg" class="misskey"/>
+	<div class="emojis">
+		<MkEmoji :normal="true" :noStyle="true" emoji="👍"/>
+		<MkEmoji :normal="true" :noStyle="true" emoji="❤"/>
+		<MkEmoji :normal="true" :noStyle="true" emoji="😆"/>
+		<MkEmoji :normal="true" :noStyle="true" emoji="🎉"/>
+		<MkEmoji :normal="true" :noStyle="true" emoji="🍮"/>
 	</div>
+</div>
 </template>
 
 <script lang="ts" setup>

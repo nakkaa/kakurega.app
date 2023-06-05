@@ -104,7 +104,7 @@ export const defaultStore = markRaw(new Storage('base', {
 	},
 	reactionAcceptance: {
 		where: 'account',
-		default: null as 'likeOnly' | 'likeOnlyForRemote' | null,
+		default: 'nonSensitiveOnly' as 'likeOnly' | 'likeOnlyForRemote' | 'nonSensitiveOnly' | 'nonSensitiveOnlyForLocalLikeOnlyForRemote' | null,
 	},
 	mutedWords: {
 		where: 'account',
@@ -113,6 +113,10 @@ export const defaultStore = markRaw(new Storage('base', {
 	mutedAds: {
 		where: 'account',
 		default: [] as string[],
+	},
+	showTimelineReplies: {
+		where: 'account',
+		default: false,
 	},
 
 	menu: {
@@ -342,6 +346,10 @@ export const defaultStore = markRaw(new Storage('base', {
 		where: 'device',
 		default: false,
 	},
+	devMode: {
+		where: 'device',
+		default: false,
+	},
 	mediaListWithOneImageAppearance: {
 		where: 'device',
 		default: 'expand' as 'expand' | '16_9' | '1_1' | '2_3',
@@ -356,7 +364,11 @@ export const defaultStore = markRaw(new Storage('base', {
 	},
 	enableCondensedLineForAcct: {
 		where: 'device',
-		default: true,
+		default: false,
+	},
+	additionalUnicodeEmojiIndexes: {
+		where: 'device',
+		default: {} as Record<string, Record<string, string[]>>,
 	},
 }));
 
