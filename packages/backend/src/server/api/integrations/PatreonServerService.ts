@@ -116,12 +116,12 @@ export class PatreonServerService {
 			const oauth2 = await getOath2();
 
 			if (!userToken) {
-				throw new FastifyReplyError(400, 'invalid session');
+				throw new FastifyReplyError(400, 'invalid session (code: 1)');
 			} else {
 				const code = request.query.code;
 
 				if (!code || typeof code !== 'string') {
-					throw new FastifyReplyError(400, 'invalid session');
+					throw new FastifyReplyError(400, 'invalid session (code: 2)');
 				}
 
 				const { redirect_uri, state } = await new Promise<any>((res, rej) => {
@@ -132,7 +132,7 @@ export class PatreonServerService {
 				});
 
 				if (request.query.state !== state) {
-					throw new FastifyReplyError(400, 'invalid session');
+					throw new FastifyReplyError(400, 'invalid session (code: 3)');
 				}
 
 				const { accessToken, refreshToken, expiresDate } = await new Promise<any>((res, rej) =>
@@ -160,7 +160,7 @@ export class PatreonServerService {
 				const email = data?.attributes?.email;
 
 				if (typeof email !== 'string') {
-					throw new FastifyReplyError(400, 'invalid session');
+					throw new FastifyReplyError(400, 'invalid session (code: 4)');
 				}
 
 				const user = await this.usersRepository.findOneByOrFail({
