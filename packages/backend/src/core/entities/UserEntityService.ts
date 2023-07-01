@@ -461,6 +461,7 @@ export class UserEntityService implements OnModuleInit {
 				isDeleted: user.isDeleted,
 				hideOnlineStatus: user.hideOnlineStatus,
 				hideSearchResult: user.hideSearchResult,
+				hideFromSupporterPage: profile!.hideFromSupporterPage,
 				hasUnreadSpecifiedNotes: this.noteUnreadsRepository.count({
 					where: { userId: user.id, isSpecified: true },
 					take: 1,
