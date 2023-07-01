@@ -12,13 +12,15 @@
 						<Mfm text="$[jelly ❤]"/> {{ i18n.ts.supporterListTitle }}
 					</template>
 					<div :class="$style.supportersWithIcon">
-						<div v-for="supporter in supporterNameWithIcon" :class="$style.supporterWithIcon">
+						<MkA v-for="supporter in supporterNameWithIcon" :key="supporter.username" :class="$style.supporterWithIcon" :to="userPage({ username: supporter.username, host: null })">
 							<img :class="$style.supporterIcon" :src="supporter.avatarUrl" decoding="async"/>
 							<Mfm :class="$style.supporterName" :text="supporter.name" :plain="true" :nowrap="true"/>
-						</div>
+						</MkA>
 					</div>
 					<div style="margin-top: 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); grid-gap: 12px;">
-						<div v-for="supporter in supporterName" :key="supporter"><Mfm :class="$style.supporterName" :text="supporter" :plain="true" :nowrap="true"/></div>
+						<div v-for="supporter in supporterName" :key="supporter.username">
+							<MkA :class="$style.name" :to="userPage({ username: supporter.username, host: null })"><Mfm :class="$style.supporterName" :text="supporter.name" :plain="true" :nowrap="true"/></MkA>
+						</div>
 					</div>
 					<p>{{ i18n.ts.moreSupporters }}</p>
 				</FormSection>
@@ -35,15 +37,17 @@ import { i18n } from '@/i18n';
 import { host } from '@/config';
 import * as os from '@/os';
 import { instance } from '@/instance';
+import { userPage } from '@/filters/user';
 import { definePageMetadata } from '@/scripts/page-metadata';
 
  type SupporterUser = {
+	username: string,
 	name: string,
 	avatarUrl: string,
 	type: 'name' | 'nameWithIcon'
 }
 
-let supporterName = $ref<string[]>([]);
+let supporterName = $ref<SupporterUser[]>([]);
 let supporterNameWithIcon = $ref<SupporterUser[]>([]);
 
 const headerActions = $computed(() => []);
@@ -55,7 +59,7 @@ onMounted(async () => {
 		if (supporter.type === 'nameWithIcon') {
 			supporterNameWithIcon.push(supporter);
 		} else {
-			supporterName.push(supporter.name);
+			supporterName.push(supporter);
 		}
 	});
 });
@@ -79,6 +83,11 @@ definePageMetadata({
 	padding: 12px;
 	background: var(--buttonBg);
 	border-radius: 6px;
+
+	&:hover {
+		text-decoration: none;
+		background: var(--buttonHoverBg);
+	}
 }
 
 .supporterIcon {
