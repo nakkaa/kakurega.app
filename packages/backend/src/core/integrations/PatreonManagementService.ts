@@ -80,9 +80,9 @@ export class PatreonManagementService implements OnApplicationShutdown {
 	@bindThis
 	private async updateCache(): Promise<void> {
 		const meta = await this.metaService.fetch();
-		if (!meta.enablePatreonIntegration) return;
+		if (!meta.enableSupporterPage) return;
 
-		const members = await this.fetchUsers();
+		const members = meta.enablePatreonIntegration ? await this.fetchUsers() : {};
 		const users = await this.userProfilesRepository.find({
 			where: {
 				integrations: Not('{}'),
