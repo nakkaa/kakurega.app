@@ -49,6 +49,7 @@
 	</MkSwitch>
 	<MkSwitch v-model="hideFromSupporterPage" @update:modelValue="save()">
 		<template #label>{{ i18n.ts.hideFromSupporterPage }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></template>
+		<template #caption>{{ i18n.ts.hideFromSupporterPageDescription }}</template>
 	</MkSwitch>
 
 	<FormSection>

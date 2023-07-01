@@ -1111,6 +1111,7 @@ export interface Locale {
     "installed": string;
     "branding": string;
     "hideFromSupporterPage": string;
+    "hideFromSupporterPageDescription": string;
     "_initialAccountSetting": {
         "accountCreated": string;
         "letsStartAccountSetup": string;
