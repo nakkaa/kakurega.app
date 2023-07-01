@@ -47,6 +47,10 @@
 		<template #label>{{ i18n.ts.filenameRandomize }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></template>
 		<template #caption>{{ i18n.ts.filenameRandomizeDescription }}</template>
 	</MkSwitch>
+	<MkSwitch v-model="hideFromSupporterPage" @update:modelValue="save()">
+		<template #label>{{ i18n.ts.hideFromSupporterPage }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></template>
+		<template #caption>{{ i18n.ts.hideFromSupporterPageDescription }}</template>
+	</MkSwitch>
 
 	<FormSection>
 		<div class="_gaps_m">
@@ -99,6 +103,7 @@ let hideSearchResult = $ref($i.hideSearchResult);
 let publicReactions = $ref($i.publicReactions);
 let ffVisibility = $ref($i.ffVisibility);
 let enableGTL = $ref($i.enableGTL);
+let hideFromSupporterPage = $ref($i.hideFromSupporterPage);
 
 let defaultNoteVisibility = $computed(defaultStore.makeGetterSetter('defaultNoteVisibility'));
 let defaultNoteLocalOnly = $computed(defaultStore.makeGetterSetter('defaultNoteLocalOnly'));
@@ -129,6 +134,7 @@ function save() {
 		publicReactions: !!publicReactions,
 		ffVisibility: ffVisibility,
 		enableGTL: enableGTL,
+		hideFromSupporterPage: !!hideFromSupporterPage,
 	});
 }
 

@@ -22,7 +22,7 @@
 			</div>
 		</div>
 		<div class="sync">
-			<MkSwitch v-model="syncDeviceDarkMode">{{ i18n.ts.syncDeviceDarkMode }}</MkSwitch>
+			<MkSwitch v-model="syncDeviceDarkMode" :disabled="syncTimeDarkMode">{{ i18n.ts.syncDeviceDarkMode }}</MkSwitch>
 			<MkSwitch v-model="syncTimeDarkMode">
 				{{ i18n.ts.syncTimeDarkMode }}
 				<span class="_beta">{{ i18n.ts.originalFeature }}</span>

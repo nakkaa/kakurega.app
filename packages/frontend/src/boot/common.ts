@@ -8,6 +8,7 @@ import { applyTheme } from '@/scripts/theme';
 import { applyFont } from '@/scripts/font';
 import { isDeviceDarkmode } from '@/scripts/is-device-darkmode';
 import { isTimeDarkmode, initializeTimeBasedDarkmode } from '@/scripts/is-time-darkmode';
+import { isMobileData, initializeDetectNetworkChange } from '@/scripts/datasaver';
 import { i18n, updateI18n } from '@/i18n';
 import { confirm, alert, post, popup, toast } from '@/os';
 import { $i, refreshAccount, login, updateAccount, signout } from '@/account';
@@ -182,6 +183,13 @@ export async function common(createVue: () => App<Element>) {
 			defaultStore.set('darkMode', mql.matches);
 		}
 	});
+	//#endregion
+
+	//#region Auto data saver
+	if (defaultStore.state.autoDataSaver) {
+		defaultStore.set('enableDataSaverMode', isMobileData());
+		initializeDetectNetworkChange();
+	}
 	//#endregion
 
 	if (defaultStore.state.customFont) {

@@ -118,7 +118,12 @@
 				<MkSwitch v-model="useSystemFont">{{ i18n.ts.useSystemFont }}</MkSwitch>
 				<MkSwitch v-model="disableDrawer">{{ i18n.ts.disableDrawer }}</MkSwitch>
 				<MkSwitch v-model="forceShowAds">{{ i18n.ts.forceShowAds }}</MkSwitch>
-				<MkSwitch v-model="enableDataSaverMode">{{ i18n.ts.dataSaver }}</MkSwitch>
+				<MkSwitch v-model="enableDataSaverMode" :disabled="autoDataSaver">{{ i18n.ts.dataSaver }}</MkSwitch>
+				<MkSwitch v-model="autoDataSaver" :disabled="!supportAutoDataSaver">
+					<template #caption>{{ i18n.ts.autoDataSaverDescription }}</template>
+					{{ i18n.ts.autoDataSaver }}
+					<span class="_beta">{{ i18n.ts.originalFeature }}</span>
+				</MkSwitch>
 			</div>
 			<div>
 				<MkRadios v-model="emojiStyle">
@@ -203,6 +208,7 @@ import { unisonReload } from '@/scripts/unison-reload';
 import { i18n } from '@/i18n';
 import { definePageMetadata } from '@/scripts/page-metadata';
 import { fontList } from '@/scripts/font';
+import { isSupportNavigatorConnection } from '@/scripts/datasaver';
 import { miLocalStorage } from '@/local-storage';
 
 const lang = ref(miLocalStorage.getItem('lang'));
@@ -239,6 +245,7 @@ const disableShowingAnimatedImages = computed(defaultStore.makeGetterSetter('dis
 const forceShowAds = computed(defaultStore.makeGetterSetter('forceShowAds'));
 const loadRawImages = computed(defaultStore.makeGetterSetter('loadRawImages'));
 const enableDataSaverMode = computed(defaultStore.makeGetterSetter('enableDataSaverMode'));
+const autoDataSaver = computed(defaultStore.makeGetterSetter('autoDataSaver'));
 const imageNewTab = computed(defaultStore.makeGetterSetter('imageNewTab'));
 const nsfw = computed(defaultStore.makeGetterSetter('nsfw'));
 const hideNsfwNote = computed(defaultStore.makeGetterSetter('hideNsfwNote'));
@@ -291,6 +298,8 @@ watch([
 ], async () => {
 	await reloadAsk();
 });
+
+const supportAutoDataSaver = computed(() => isSupportNavigatorConnection());
 
 const emojiIndexLangs = ['en-US'];
 

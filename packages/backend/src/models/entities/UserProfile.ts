@@ -91,6 +91,11 @@ export class UserProfile {
 	})
 	public enableGTL: boolean | null;
 
+	@Column('boolean', {
+		default: false,
+	})
+	public hideFromSupporterPage: boolean;
+
 	@Column('varchar', {
 		length: 128, nullable: true,
 	})

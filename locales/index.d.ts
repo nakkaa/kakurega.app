@@ -1057,6 +1057,8 @@ export interface Locale {
     "video": string;
     "videos": string;
     "dataSaver": string;
+    "autoDataSaver": string;
+    "autoDataSaverDescription": string;
     "accountMigration": string;
     "accountMoved": string;
     "accountMovedShort": string;
@@ -1108,6 +1110,8 @@ export interface Locale {
     "additionalEmojiDictionary": string;
     "installed": string;
     "branding": string;
+    "hideFromSupporterPage": string;
+    "hideFromSupporterPageDescription": string;
     "_initialAccountSetting": {
         "accountCreated": string;
         "letsStartAccountSetup": string;
