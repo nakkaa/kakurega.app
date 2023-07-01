@@ -1107,6 +1107,7 @@ goToMisskey: "Misskeyへ"
 additionalEmojiDictionary: "絵文字の追加辞書"
 installed: "インストール済み"
 branding: "ブランディング"
+hideFromSupporterPage: "支援者ページに自分の名前を表示しないようにする"
 
 _initialAccountSetting:
   accountCreated: "アカウントの作成が完了しました！"

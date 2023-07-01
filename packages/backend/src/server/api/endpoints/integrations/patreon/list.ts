@@ -25,6 +25,7 @@ export const paramDef = {
 } as const;
 
 type SupporterUser = {
+	username: string,
 	name: string,
 	avatarUrl: string,
 	type: 'name' | 'nameWithIcon'
@@ -46,8 +47,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (!meta.enableSupporterPage || !meta.supporterNameThreshold || !meta.supporterNameWithIconThreshold) return [];
 
 			for (const patreon of Object.values(patreons)) {
-				if (patreon.amounts < meta.supporterNameThreshold) continue;
+				if (patreon.amounts < meta.supporterNameThreshold || patreon.isHideFromSupporterPage) continue;
 				users.push({
+					username: patreon.user.username,
 					name: patreon.user.name ?? patreon.user.username,
 					avatarUrl: patreon.user.avatarUrl ?? this.userEntityService.getIdenticonUrl(patreon.user),
 					type: meta.supporterNameWithIconThreshold <= patreon.amounts ? 'nameWithIcon' : 'name',

@@ -11,14 +11,11 @@ import { LoggerService } from '@/core/LoggerService.js';
 import { bindThis } from '@/decorators.js';
 import type { OnApplicationShutdown } from '@nestjs/common';
 
-type KVPair<T = any> = {
-	[key: string]: T;
-}
-
 type PatreonMember = {
 	amounts: number,
 	user: User,
-	isPatreon: boolean
+	isPatreon: boolean,
+	isHideFromSupporterPage: boolean,
 }
 
 @Injectable()
@@ -26,7 +23,7 @@ export class PatreonManagementService implements OnApplicationShutdown {
 	private intervalId: NodeJS.Timer;
 	private timeoutId: NodeJS.Timer;
 	private logger: Logger;
-	private cache: KVPair<PatreonMember> = {};
+	private cache: Record<string, PatreonMember> = {};
 	private cacheLastUpdate = 0;
 	private isWaitingToUpdate = false;
 
@@ -62,7 +59,7 @@ export class PatreonManagementService implements OnApplicationShutdown {
 	}
 
 	@bindThis
-	public getPatreonUsers(): KVPair<PatreonMember> {
+	public getPatreonUsers(): Record<string, PatreonMember> {
 		return this.cache;
 	}
 
@@ -97,7 +94,7 @@ export class PatreonManagementService implements OnApplicationShutdown {
 			},
 		});
 
-		const usersList = {} as KVPair<PatreonMember>;
+		const usersList = {} as Record<string, PatreonMember>;
 
 		for (const user of users) {
 			const patreonId = user.integrations.patreon?.id;
@@ -107,6 +104,7 @@ export class PatreonManagementService implements OnApplicationShutdown {
 				amounts,
 				user: user.user as User,
 				isPatreon: true,
+				isHideFromSupporterPage: user.hideFromSupporterPage,
 			};
 		}
 
@@ -126,12 +124,15 @@ export class PatreonManagementService implements OnApplicationShutdown {
 				},
 			});
 
-			targets.forEach(assign => {
+			targets.forEach(async assign => {
 				const user = assign.user as User;
+				const userProfile = await this.userProfilesRepository.findOneBy({ userId: user.id });
+
 				usersList[user.id] = {
 					user,
 					amounts: isNaN(roleAmounts) ? 500 : roleAmounts,
 					isPatreon: false,
+					isHideFromSupporterPage: userProfile?.hideFromSupporterPage ?? false,
 				};
 			});
 		}
@@ -144,7 +145,7 @@ export class PatreonManagementService implements OnApplicationShutdown {
 	}
 
 	@bindThis
-	private async fetchUsers(): Promise<KVPair<number>> {
+	private async fetchUsers(): Promise<Record<string, number>> {
 		this.logger.debug('Getting patreons from api');
 
 		const campaign = await this.request('/campaigns');
@@ -175,7 +176,7 @@ export class PatreonManagementService implements OnApplicationShutdown {
 
 		if (!Object.keys(responseData).length) return {};
 
-		const membershipUsers = {} as KVPair<number>;
+		const membershipUsers = {} as Record<string, number>;
 		for (const user of responseData) {
 			if (!user.attributes.currently_entitled_amount_cents || !user.attributes.email) continue;
 			membershipUsers[user.attributes.email] = user.attributes.currently_entitled_amount_cents;

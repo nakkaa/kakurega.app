@@ -148,6 +148,7 @@ export const paramDef = {
 		autoSensitive: { type: 'boolean' },
 		ffVisibility: { type: 'string', enum: ['public', 'followers', 'private'] },
 		enableGTL: { type: 'boolean', nullable: true },
+		hideFromSupporterPage: { type: 'boolean' },
 		pinnedPageId: { type: 'string', format: 'misskey:id', nullable: true },
 		mutedWords: { type: 'array' },
 		mutedInstances: { type: 'array', items: {
@@ -254,6 +255,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			}
 			if (typeof ps.autoSensitive === 'boolean') profileUpdates.autoSensitive = ps.autoSensitive;
 			if (ps.emailNotificationTypes !== undefined) profileUpdates.emailNotificationTypes = ps.emailNotificationTypes;
+			if (typeof ps.hideFromSupporterPage === 'boolean') profileUpdates.hideFromSupporterPage = ps.hideFromSupporterPage;
 
 			if (ps.enableGTL !== undefined) {
 				if (typeof ps.enableGTL === 'boolean') {
