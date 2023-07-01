@@ -153,6 +153,22 @@ export const navbarItemDef = reactive({
 						unisonReload();
 					},
 				}],
+			}, {
+				type: 'parent',
+				text: i18n.ts.dataSaver,
+				children: [{
+					text: i18n.ts.on,
+					active: defaultStore.state.enableDataSaverMode,
+					action: () => {
+						defaultStore.set('enableDataSaverMode', true);
+					},
+				}, {
+					text: i18n.ts.off,
+					active: !defaultStore.state.enableDataSaverMode,
+					action: () => {
+						defaultStore.set('enableDataSaverMode', false);
+					},
+				}],
 			}], ev.currentTarget ?? ev.target);
 		},
 	},
