@@ -201,6 +201,20 @@ export const meta = {
 				type: 'string',
 				optional: false, nullable: false,
 			},
+			invite: {
+				type: 'object',
+				optional: false, nullable: true,
+				properties: {
+					createLimit: {
+						type: 'number',
+						optional: false, nullable: true,
+					},
+					resetCycle: {
+						type: 'number',
+						optional: false, nullable: false,
+					},
+				},
+			},
 			features: {
 				type: 'object',
 				optional: true, nullable: false,
@@ -336,6 +350,11 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				policies: { ...DEFAULT_POLICIES, ...instance.policies },
 
 				mediaProxy: this.config.mediaProxy,
+
+				invite: instance.disableRegistration ? {
+					createLimit: instance.inviteCodeCreateLimit,
+					resetCycle: instance.inviteCodeCreateLimitResetCycle,
+				} : null,
 
 				...(ps.detail ? {
 					cacheRemoteFiles: instance.cacheRemoteFiles,
