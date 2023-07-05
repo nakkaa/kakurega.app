@@ -502,6 +502,17 @@ export type Signin = {
 	success: boolean;
 };
 
+export type Invite = {
+	id: ID;
+	code: string;
+	expiresAt: DateString | null;
+	createdAt: DateString;
+	createdBy: UserLite;
+	usedBy: UserLite | null;
+	usedAt: DateString | null;
+	used: boolean;
+}
+
 export type UserSorting =
 	| '+follower'
 	| '-follower'
