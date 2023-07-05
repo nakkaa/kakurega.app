@@ -235,6 +235,7 @@ import * as ep___integrations_patreon_list from './endpoints/integrations/patreo
 import * as ep___invite_create from './endpoints/invite/create.js';
 import * as ep___invite_delete from './endpoints/invite/delete.js';
 import * as ep___invite_list from './endpoints/invite/list.js';
+import * as ep___invite_limit from './endpoints/invite/limit.js';
 import * as ep___meta from './endpoints/meta.js';
 import * as ep___emojis from './endpoints/emojis.js';
 import * as ep___emoji from './endpoints/emoji.js';
@@ -583,6 +584,7 @@ const $integrations_patreon_list: Provider = { provide: 'ep:integrations/patreon
 const $invite_create: Provider = { provide: 'ep:invite/create', useClass: ep___invite_create.default };
 const $invite_delete: Provider = { provide: 'ep:invite/delete', useClass: ep___invite_delete.default };
 const $invite_list: Provider = { provide: 'ep:invite/list', useClass: ep___invite_list.default };
+const $invite_limit: Provider = { provide: 'ep:invite/limit', useClass: ep___invite_limit.default };
 const $meta: Provider = { provide: 'ep:meta', useClass: ep___meta.default };
 const $emojis: Provider = { provide: 'ep:emojis', useClass: ep___emojis.default };
 const $emoji: Provider = { provide: 'ep:emoji', useClass: ep___emoji.default };
@@ -935,6 +937,7 @@ const $retention: Provider = { provide: 'ep:retention', useClass: ep___retention
 		$invite_create,
 		$invite_delete,
 		$invite_list,
+		$invite_limit,
 		$meta,
 		$emojis,
 		$emoji,
@@ -1281,6 +1284,7 @@ const $retention: Provider = { provide: 'ep:retention', useClass: ep___retention
 		$invite_create,
 		$invite_delete,
 		$invite_list,
+		$invite_limit,
 		$meta,
 		$emojis,
 		$emoji,
