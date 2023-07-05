@@ -318,6 +318,10 @@ export type LiteInstanceMetadata = {
 	}[];
 	translatorAvailable: boolean;
 	serverRules: string[];
+	invite: {
+		createLimit: number | null;
+		resetCycle: number;
+	} | null;
 };
 
 export type DetailedInstanceMetadata = LiteInstanceMetadata & {
@@ -511,6 +515,10 @@ export type Invite = {
 	usedBy: UserLite | null;
 	usedAt: DateString | null;
 	used: boolean;
+}
+
+export type InviteLimit = {
+	remaining: number;
 }
 
 export type UserSorting =
