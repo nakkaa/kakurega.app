@@ -1112,6 +1112,18 @@ export interface Locale {
     "branding": string;
     "hideFromSupporterPage": string;
     "hideFromSupporterPageDescription": string;
+    "createInviteCode": string;
+    "inviteCodeCreated": string;
+    "inviteLimitExceeded": string;
+    "createLimitRemaining": string;
+    "inviteLimitResetCycle": string;
+    "expirationDate": string;
+    "inviteCodeUsedAt": string;
+    "registeredUserUsingInviteCode": string;
+    "inviteCodeCreator": string;
+    "unused": string;
+    "used": string;
+    "expired": string;
     "_initialAccountSetting": {
         "accountCreated": string;
         "letsStartAccountSetup": string;
