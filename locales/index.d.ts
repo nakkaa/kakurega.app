@@ -1514,6 +1514,9 @@ export interface Locale {
             "ltlAvailable": string;
             "canPublicNote": string;
             "canInvite": string;
+            "inviteLimit": string;
+            "inviteLimitCycle": string;
+            "inviteExpirationTime": string;
             "canManageCustomEmojis": string;
             "driveCapacity": string;
             "alwaysMarkNsfw": string;
