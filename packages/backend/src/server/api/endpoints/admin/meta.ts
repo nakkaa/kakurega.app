@@ -306,18 +306,6 @@ export const meta = {
 				type: 'number',
 				optional: true, nullable: true,
 			},
-			inviteCodeExpirationTime: {
-				type: 'number',
-				optional: true, nullable: true,
-			},
-			inviteCodeCreateLimit: {
-				type: 'number',
-				optional: true, nullable: true,
-			},
-			inviteCodeCreateLimitResetCycle: {
-				type: 'number',
-				optional: true, nullable: true,
-			}
 		},
 	},
 } as const;
@@ -426,9 +414,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				supporterRoles: instance.supporterRoles,
 				supporterNameThreshold: instance.supporterNameThreshold,
 				supporterNameWithIconThreshold: instance.supporterNameWithIconThreshold,
-				inviteCodeExpirationTime: instance.inviteCodeExpirationTime,
-				inviteCodeCreateLimit: instance.inviteCodeCreateLimit,
-				inviteCodeCreateLimitResetCycle: instance.inviteCodeCreateLimitResetCycle,
 			};
 		});
 	}
