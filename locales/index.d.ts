@@ -1113,14 +1113,18 @@ export interface Locale {
     "hideFromSupporterPage": string;
     "hideFromSupporterPageDescription": string;
     "createInviteCode": string;
+    "createWithOptions": string;
+    "createCount": string;
     "inviteCodeCreated": string;
     "inviteLimitExceeded": string;
     "createLimitRemaining": string;
     "inviteLimitResetCycle": string;
     "expirationDate": string;
+    "noExpirationDate": string;
     "inviteCodeUsedAt": string;
     "registeredUserUsingInviteCode": string;
     "inviteCodeCreator": string;
+    "usedAt": string;
     "unused": string;
     "used": string;
     "expired": string;
