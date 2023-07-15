@@ -52,11 +52,15 @@ export interface Locale {
     "deleteAndEdit": string;
     "deleteAndEditConfirm": string;
     "addToList": string;
+    "addToAntenna": string;
     "sendMessage": string;
     "copyRSS": string;
     "copyUsername": string;
     "copyUserId": string;
     "copyNoteId": string;
+    "copyFileId": string;
+    "copyFolderId": string;
+    "copyProfileUrl": string;
     "searchUser": string;
     "reply": string;
     "loadMore": string;
@@ -141,8 +145,10 @@ export interface Locale {
     "suspendConfirm": string;
     "unsuspendConfirm": string;
     "selectList": string;
+    "editList": string;
     "selectChannel": string;
     "selectAntenna": string;
+    "editAntenna": string;
     "selectWidget": string;
     "editWidgets": string;
     "editWidgetsExit": string;
@@ -321,7 +327,7 @@ export interface Locale {
     "rename": string;
     "avatar": string;
     "banner": string;
-    "nsfw": string;
+    "displayOfSensitiveMedia": string;
     "whenServerDisconnected": string;
     "disconnectedFromServer": string;
     "reload": string;
@@ -1112,6 +1118,9 @@ export interface Locale {
     "branding": string;
     "hideFromSupporterPage": string;
     "hideFromSupporterPageDescription": string;
+    "enableServerMachineStats": string;
+    "enableIdenticonGeneration": string;
+    "turnOffToImprovePerformance": string;
     "createInviteCode": string;
     "createWithOptions": string;
     "createCount": string;
@@ -1123,6 +1132,7 @@ export interface Locale {
     "noExpirationDate": string;
     "inviteCodeUsedAt": string;
     "registeredUserUsingInviteCode": string;
+    "waitingForMailAuth": string;
     "inviteCodeCreator": string;
     "usedAt": string;
     "unused": string;
@@ -1603,6 +1613,7 @@ export interface Locale {
         "back": string;
         "reduceFrequencyOfThisAd": string;
         "hide": string;
+        "timezoneinfo": string;
     };
     "_forgotPassword": {
         "enterEmail": string;
@@ -1666,7 +1677,7 @@ export interface Locale {
         "morePatrons": string;
         "patrons": string;
     };
-    "_nsfw": {
+    "_displayOfSensitiveMedia": {
         "respect": string;
         "ignore": string;
         "force": string;
@@ -2258,4 +2269,4 @@ export interface Locale {
 declare const locales: {
     [lang: string]: Locale;
 };
-export = locales;
+export default locales;

@@ -228,7 +228,7 @@ const translating = ref(false);
 const showTicker = (defaultStore.state.instanceTicker === 'always') || (defaultStore.state.instanceTicker === 'remote' && appearNote.user.instance);
 const tickerStyle = defaultStore.state.instanceTickerStyle;
 const canRenote = computed(() => ['public', 'home'].includes(appearNote.visibility) || appearNote.userId === $i.id);
-let renoteCollapsed = $ref(isRenote && checkCollapseRenote(appearNote, $i));
+let renoteCollapsed = $ref(isRenote && checkCollapseRenote(appearNote, note, $i));
 
 const keymap = {
 	'r': () => reply(true),

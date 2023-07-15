@@ -7,7 +7,7 @@
 本家との相違点は[こちら](DIFFERENCE.md)をご覧ください。
 	
 **🌎 **[Misskey](https://misskey-hub.net/)** is an open source, decentralized social media platform that's free forever! 🚀**
-	
+
 ---
 
 <a href="https://misskey-hub.net/instances.html">
@@ -24,7 +24,7 @@
 
 <a href="https://www.patreon.com/syuilo">
 		<img src="https://custom-icon-badges.herokuapp.com/badge/become_a-patron-F96854?logoColor=F96854&style=for-the-badge&logo=patreon&labelColor=363B40" alt="become a patron"/></a>
-	
+
 ---
 
 [![codecov](https://codecov.io/gh/misskey-dev/misskey/branch/develop/graph/badge.svg?token=R6IQZ3QJOL)](https://codecov.io/gh/misskey-dev/misskey)

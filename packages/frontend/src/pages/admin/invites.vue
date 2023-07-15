@@ -3,30 +3,33 @@
 	<template #header><XHeader :actions="headerActions" :tabs="headerTabs"/></template>
 	<MkSpacer :contentMax="800">
 		<div class="_gaps_m">
-			<MkFoldableSection :expanded="false">
-				<template #header>{{ i18n.ts.createInviteCode }}</template>
+			<MkFolder :expanded="false">
+				<template #icon><i class="ti ti-plus"></i></template>
+				<template #label>{{ i18n.ts.createInviteCode }}</template>
+
 				<div class="_gaps_m">
-					<MkInput v-model="expiresAt" type="datetime-local">
-						<template #label>{{ i18n.ts.expirationDate }}</template>
-					</MkInput>
 					<MkSwitch v-model="noExpirationDate">
 						<template #label>{{ i18n.ts.noExpirationDate }}</template>
 					</MkSwitch>
+					<MkInput v-if="!noExpirationDate" v-model="expiresAt" type="datetime-local">
+						<template #label>{{ i18n.ts.expirationDate }}</template>
+					</MkInput>
 					<MkInput v-model="createCount" type="number">
 						<template #label>{{ i18n.ts.createCount }}</template>
 					</MkInput>
 					<MkButton primary rounded @click="createWithOptions">{{ i18n.ts.create }}</MkButton>
 				</div>
-			</MkFoldableSection>
+			</MkFolder>
+
 			<div :class="$style.inputs">
-				<MkSelect v-model="type">
+				<MkSelect v-model="type" :class="$style.input">
 					<template #label>{{ i18n.ts.state }}</template>
 					<option value="all">{{ i18n.ts.all }}</option>
 					<option value="unused">{{ i18n.ts.unused }}</option>
 					<option value="used">{{ i18n.ts.used }}</option>
 					<option value="expired">{{ i18n.ts.expired }}</option>
 				</MkSelect>
-				<MkSelect v-model="sort">
+				<MkSelect v-model="sort" :class="$style.input">
 					<template #label>{{ i18n.ts.sort }}</template>
 					<option value="+createdAt">{{ i18n.ts.createdAt }} ({{ i18n.ts.ascendingOrder }})</option>
 					<option value="-createdAt">{{ i18n.ts.createdAt }} ({{ i18n.ts.descendingOrder }})</option>
@@ -52,7 +55,7 @@ import XHeader from './_header_.vue';
 import { i18n } from '@/i18n';
 import * as os from '@/os';
 import MkButton from '@/components/MkButton.vue';
-import MkFoldableSection from '@/components/MkFoldableSection.vue';
+import MkFolder from '@/components/MkFolder.vue';
 import MkSelect from '@/components/MkSelect.vue';
 import MkInput from '@/components/MkInput.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
@@ -97,7 +100,7 @@ async function createWithOptions() {
 
 function deleted(id: string) {
 	if (pagingComponent.value) {
-		pagingComponent.value.items = pagingComponent.value.items.filter(x => x.id !== id);
+		pagingComponent.value.items.delete(id);
 	}
 }
 
@@ -115,13 +118,9 @@ definePageMetadata({
 	display: flex;
 	gap: 8px;
 	flex-wrap: wrap;
-
-	> * {
-		flex: 1;
-	}
 }
 
-p {
-	margin: 0;
+.input {
+	flex: 1;
 }
 </style>
