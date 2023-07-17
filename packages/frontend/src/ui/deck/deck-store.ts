@@ -54,6 +54,10 @@ export const deckStore = markRaw(new Storage('deck', {
 		where: 'deviceAccount',
 		default: true,
 	},
+	useSimpleUiForNonRootPages: {
+		where: 'deviceAccount',
+		default: true,
+	},
 }));
 
 export const loadDeck = async () => {
