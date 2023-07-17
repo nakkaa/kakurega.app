@@ -201,6 +201,18 @@ function getMenu() {
 						default: props.column.filter?.excludeKeywords?.join(' '),
 						description: i18n.ts._filter.splitDescription,
 					},
+					includeInstances: {
+						type: 'string',
+						label: i18n.ts._filter.includeInstances,
+						default: props.column.filter?.includeInstances?.join(' '),
+						description: i18n.ts._filter.splitDescription,
+					},
+					excludeInstances: {
+						type: 'string',
+						label: i18n.ts._filter.excludeInstances,
+						default: props.column.filter?.excludeInstances?.join(' '),
+						description: i18n.ts._filter.splitDescription,
+					},
 					excludeRenotes: {
 						type: 'boolean',
 						label: i18n.ts._filter.excludeRenotes,
@@ -221,7 +233,7 @@ function getMenu() {
 
 				for (const k in result) {
 					if (result[k] === null) result[k] = undefined;
-					if (['includeKeywords', 'includeKeywordsAll', 'excludeKeywords'].includes(k)) {
+					if (['includeKeywords', 'includeKeywordsAll', 'excludeKeywords', 'includeInstances', 'excludeInstances'].includes(k)) {
 						result[k] = result[k]?.split(' ').filter(x => x);
 						if (result[k] && !result[k].length) result[k] = undefined;
 					}

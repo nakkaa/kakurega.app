@@ -39,6 +39,8 @@ export type Filter = {
 	includeKeywords?: string[];
 	includeKeywordsAll?: string[];
 	excludeKeywords?: string[];
+	includeInstances?: string[];
+	excludeInstances?: string[];
 	excludeRenotes?: boolean;
 	excludeReplies?: boolean;
 	mediaOnly?: boolean;
@@ -63,6 +65,9 @@ const isFilteredNote = (note: Note) => {
 	if (filter.excludeRenotes && note.renote) return true;
 	if (filter.excludeReplies && note.reply) return true;
 	if (filter.mediaOnly && !note.fileIds?.length && !note.renote?.fileIds?.length) return true;
+
+	if (filter.excludeInstances?.some(instance => note.user.host === instance)) return true;
+	if (filter.includeInstances && !filter.includeInstances.some(instance => note.user.host === instance)) return true;
 
 	if (filter.excludeKeywords?.some(keyword => note.text?.includes(keyword))) return true;
 	if (filter.includeKeywords && !filter.includeKeywords.some(keyword => note.text?.includes(keyword))) return true;
