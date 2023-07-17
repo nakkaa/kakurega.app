@@ -1648,6 +1648,8 @@ _filter:
   includeKeywords: "以下のキーワードを含む"
   includeKeywordsAll: "以下のキーワードすべてを含む"
   excludeKeywords: "以下のキーワードを含まない"
+  includeInstances: "以下のサーバーからの投稿を含む"
+  excludeInstances: "以下のサーバーからの投稿を含まない"
   excludeRenotes: "Renoteを除外"
   excludeReplies: "返信を除外"
   mediaOnly: "メディアが添付されているノートのみ"
