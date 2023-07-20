@@ -37,6 +37,8 @@ jobs:
           else
               echo "exists=false"
           fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: create pull request
         if: steps.check-tag.outputs.exists == 'false' && steps.check-pr.outputs.exists == 'false'
