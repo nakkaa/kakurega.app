@@ -2,12 +2,12 @@ import { defaultStore } from '@/store';
 
 const seenNotes: string[] = [];
 
-export function checkCollapseRenote(note: Record<string, any>, me: Record<string, any> | null | undefined): boolean {
+export function checkCollapseRenote(appearNote: Record<string, any>, note: Record<string, any>, me: Record<string, any> | null | undefined): boolean {
 	if (!defaultStore.state.collapseRenotes) return false;
 
 	switch (defaultStore.state.collapseRenotesTrigger) {
 		case 'action': {
-			return (me && (me.id === note.userId)) || (note.myReaction != null);
+			return (me && (me.id === note.userId || me.id === appearNote.userId)) || (appearNote.myReaction != null);
 		}
 
 		case 'all': {

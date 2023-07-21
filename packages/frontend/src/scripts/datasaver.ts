@@ -1,5 +1,9 @@
 import { defaultStore } from '@/store';
 
+function isEnableDataSaver(type: string): boolean {
+	return ['cellular', 'unknown'].includes(type);
+}
+
 export function isSupportNavigatorConnection(): boolean {
 	const connection = (navigator as any).connection;
 	return connection && connection.type && ('onchange' in connection);
@@ -8,7 +12,7 @@ export function isSupportNavigatorConnection(): boolean {
 export function isMobileData(): boolean {
 	const connection = (navigator as any).connection;
 	if (!isSupportNavigatorConnection()) return false;
-	return connection.type === 'cellular';
+	return isEnableDataSaver(connection.type);
 }
 
 export function initializeDetectNetworkChange(): void {
@@ -17,6 +21,6 @@ export function initializeDetectNetworkChange(): void {
 
 	connection.addEventListener('change', () => {
 		if (!connection || !connection.type) return;
-		defaultStore.set('enableDataSaverMode', connection.type === 'cellular');
+		defaultStore.set('enableDataSaverMode', isEnableDataSaver(connection.type));
 	});
 }
