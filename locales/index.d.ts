@@ -1730,6 +1730,8 @@ export interface Locale {
         "includeKeywords": string;
         "includeKeywordsAll": string;
         "excludeKeywords": string;
+        "includeInstances": string;
+        "excludeInstances": string;
         "excludeRenotes": string;
         "excludeReplies": string;
         "mediaOnly": string;
