@@ -33,9 +33,9 @@ jobs:
         run: |
           COUNT=$(gh pr list -S 'release in:title' --json title --jq '.[].title' | grep '${{ steps.package-version.outputs.current-version }}' | wc -l)
           if [ $((COUNT)) -gt 0 ]; then
-              echo "exists=true"
+              echo "exists=true" >> $GITHUB_OUTPUT
           else
-              echo "exists=false"
+              echo "exists=false" >> $GITHUB_OUTPUT
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
