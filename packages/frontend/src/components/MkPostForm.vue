@@ -545,7 +545,7 @@ function onCompositionEnd(ev: CompositionEvent) {
 }
 
 async function onPaste(ev: ClipboardEvent) {
-	for (const { item, i } of Array.from(ev.clipboardData.items).map((item, i) => ({ item, i }))) {
+	for (const { item, i } of Array.from(ev.clipboardData.items, (item, i) => ({ item, i }))) {
 		if (item.kind === 'file') {
 			const file = item.getAsFile();
 			const lio = file.name.lastIndexOf('.');
@@ -912,7 +912,6 @@ defineExpose({
 	display: flex;
 	flex-wrap: nowrap;
 	gap: 4px;
-	margin-bottom: -10px;
 }
 
 .headerLeft {
@@ -1030,7 +1029,7 @@ defineExpose({
 }
 
 .targetNote {
-	padding: 10px 20px 16px 20px;
+	padding: 0 20px 16px 20px;
 }
 
 .withQuote {
