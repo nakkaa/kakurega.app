@@ -295,6 +295,7 @@ watch([
 	instanceTickerStyle,
 	overridedDeviceKind,
 	hideNsfwNote,
+	mediaListWithOneImageAppearance,
 ], async () => {
 	await reloadAsk();
 });
