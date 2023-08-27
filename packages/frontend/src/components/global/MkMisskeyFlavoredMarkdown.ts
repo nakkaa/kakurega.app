@@ -1,8 +1,3 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { VNode, h } from 'vue';
 import * as mfm from 'mfm-js';
 import * as Misskey from 'misskey-js';
@@ -175,13 +170,8 @@ export default function(props: {
 						}, genEl(token.children, scale));
 					}
 					case 'rainbow': {
-						if (!useAnim) {
-							return h('span', {
-								class: '_mfm_rainbow_fallback_',
-							}, genEl(token.children, scale));
-						}
 						const speed = validTime(token.props.args.speed) ?? '1s';
-						style = `animation: mfm-rainbow ${speed} linear infinite;`;
+						style = useAnim ? `animation: mfm-rainbow ${speed} linear infinite;` : '';
 						break;
 					}
 					case 'sparkle': {

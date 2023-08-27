@@ -1,8 +1,3 @@
-<!--
-SPDX-FileCopyrightText: syuilo and other misskey contributors
-SPDX-License-Identifier: AGPL-3.0-only
--->
-
 <template>
 <div class="_panel">
 	<div :class="$style.container" :style="{ backgroundImage: instance.bannerUrl ? `url(${ instance.bannerUrl })` : null }">

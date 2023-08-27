@@ -1,16 +1,11 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { randomUUID } from 'node:crypto';
 import * as fs from 'node:fs';
 import * as stream from 'node:stream/promises';
 import { Inject, Injectable } from '@nestjs/common';
 import { DI } from '@/di-symbols.js';
 import { getIpHash } from '@/misc/get-ip-hash.js';
-import type { MiLocalUser, MiUser } from '@/models/entities/User.js';
-import type { MiAccessToken } from '@/models/entities/AccessToken.js';
+import type { LocalUser, User } from '@/models/entities/User.js';
+import type { AccessToken } from '@/models/entities/AccessToken.js';
 import type Logger from '@/logger.js';
 import type { UserIpsRepository } from '@/models/index.js';
 import { MetaService } from '@/core/MetaService.js';
@@ -34,7 +29,7 @@ const accessDenied = {
 @Injectable()
 export class ApiCallService implements OnApplicationShutdown {
 	private logger: Logger;
-	private userIpHistories: Map<MiUser['id'], Set<string>>;
+	private userIpHistories: Map<User['id'], Set<string>>;
 	private userIpHistoriesClearIntervalId: NodeJS.Timer;
 
 	constructor(
@@ -48,7 +43,7 @@ export class ApiCallService implements OnApplicationShutdown {
 		private apiLoggerService: ApiLoggerService,
 	) {
 		this.logger = this.apiLoggerService.logger;
-		this.userIpHistories = new Map<MiUser['id'], Set<string>>();
+		this.userIpHistories = new Map<User['id'], Set<string>>();
 
 		this.userIpHistoriesClearIntervalId = setInterval(() => {
 			this.userIpHistories.clear();
@@ -196,7 +191,7 @@ export class ApiCallService implements OnApplicationShutdown {
 	}
 
 	@bindThis
-	private async logIp(request: FastifyRequest, user: MiLocalUser) {
+	private async logIp(request: FastifyRequest, user: LocalUser) {
 		const meta = await this.metaService.fetch();
 		if (!meta.enableIpLogging) return;
 		const ip = request.ip;
@@ -222,8 +217,8 @@ export class ApiCallService implements OnApplicationShutdown {
 	@bindThis
 	private async call(
 		ep: IEndpoint & { exec: any },
-		user: MiLocalUser | null | undefined,
-		token: MiAccessToken | null | undefined,
+		user: LocalUser | null | undefined,
+		token: AccessToken | null | undefined,
 		data: any,
 		file: {
 			name: string;

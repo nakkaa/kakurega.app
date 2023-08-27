@@ -1,8 +1,3 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { markRaw, ref } from 'vue';
 import { Storage } from './pizzax';
 
@@ -145,10 +140,6 @@ export const defaultStore = markRaw(new Storage('base', {
 	},
 	localOnly: {
 		where: 'deviceAccount',
-		default: false,
-	},
-	showPreview: {
-		where: 'device',
 		default: false,
 	},
 	statusbars: {

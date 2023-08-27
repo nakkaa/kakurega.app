@@ -1,14 +1,9 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { PrimaryColumn, Entity, Index, Column, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
 import { id } from '../id.js';
-import { MiUser } from './User.js';
+import { User } from './User.js';
 
-@Entity('registration_ticket')
-export class MiRegistrationTicket {
+@Entity()
+export class RegistrationTicket {
 	@PrimaryColumn(id())
 	public id: string;
 
@@ -26,31 +21,31 @@ export class MiRegistrationTicket {
 	@Column('timestamp with time zone')
 	public createdAt: Date;
 
-	@ManyToOne(type => MiUser, {
+	@ManyToOne(type => User, {
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn()
-	public createdBy: MiUser | null;
+	public createdBy: User | null;
 
 	@Index()
 	@Column({
 		...id(),
 		nullable: true,
 	})
-	public createdById: MiUser['id'] | null;
+	public createdById: User['id'] | null;
 
-	@OneToOne(type => MiUser, {
+	@OneToOne(type => User, {
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn()
-	public usedBy: MiUser | null;
+	public usedBy: User | null;
 
 	@Index()
 	@Column({
 		...id(),
 		nullable: true,
 	})
-	public usedById: MiUser['id'] | null;
+	public usedById: User['id'] | null;
 
 	@Column('timestamp with time zone', {
 		nullable: true,

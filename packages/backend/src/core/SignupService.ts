@@ -1,19 +1,15 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { generateKeyPair } from 'node:crypto';
 import { Inject, Injectable } from '@nestjs/common';
 import bcrypt from 'bcryptjs';
 import { DataSource, IsNull } from 'typeorm';
 import { DI } from '@/di-symbols.js';
 import type { UsedUsernamesRepository, UsersRepository } from '@/models/index.js';
-import { MiUser } from '@/models/entities/User.js';
-import { MiUserProfile } from '@/models/entities/UserProfile.js';
+import type { Config } from '@/config.js';
+import { User } from '@/models/entities/User.js';
+import { UserProfile } from '@/models/entities/UserProfile.js';
 import { IdService } from '@/core/IdService.js';
-import { MiUserKeypair } from '@/models/entities/UserKeypair.js';
-import { MiUsedUsername } from '@/models/entities/UsedUsername.js';
+import { UserKeypair } from '@/models/entities/UserKeypair.js';
+import { UsedUsername } from '@/models/entities/UsedUsername.js';
 import generateUserToken from '@/misc/generate-native-user-token.js';
 import { UserEntityService } from '@/core/entities/UserEntityService.js';
 import { bindThis } from '@/decorators.js';
@@ -26,6 +22,9 @@ export class SignupService {
 	constructor(
 		@Inject(DI.db)
 		private db: DataSource,
+
+		@Inject(DI.config)
+		private config: Config,
 
 		@Inject(DI.usersRepository)
 		private usersRepository: UsersRepository,
@@ -43,9 +42,9 @@ export class SignupService {
 
 	@bindThis
 	public async signup(opts: {
-		username: MiUser['username'];
+		username: User['username'];
 		password?: string | null;
-		passwordHash?: MiUserProfile['password'] | null;
+		passwordHash?: UserProfile['password'] | null;
 		host?: string | null;
 		ignorePreservedUsernames?: boolean;
 	}) {
@@ -108,18 +107,18 @@ export class SignupService {
 				err ? rej(err) : res([publicKey, privateKey]),
 			));
 
-		let account!: MiUser;
+		let account!: User;
 
 		// Start transaction
 		await this.db.transaction(async transactionalEntityManager => {
-			const exist = await transactionalEntityManager.findOneBy(MiUser, {
+			const exist = await transactionalEntityManager.findOneBy(User, {
 				usernameLower: username.toLowerCase(),
 				host: IsNull(),
 			});
 
 			if (exist) throw new Error(' the username is already used');
 
-			account = await transactionalEntityManager.save(new MiUser({
+			account = await transactionalEntityManager.save(new User({
 				id: this.idService.genId(),
 				createdAt: new Date(),
 				username: username,
@@ -129,19 +128,19 @@ export class SignupService {
 				isRoot: isTheFirstUser,
 			}));
 
-			await transactionalEntityManager.save(new MiUserKeypair({
+			await transactionalEntityManager.save(new UserKeypair({
 				publicKey: keyPair[0],
 				privateKey: keyPair[1],
 				userId: account.id,
 			}));
 
-			await transactionalEntityManager.save(new MiUserProfile({
+			await transactionalEntityManager.save(new UserProfile({
 				userId: account.id,
 				autoAcceptFollowed: true,
 				password: hash,
 			}));
 
-			await transactionalEntityManager.save(new MiUsedUsername({
+			await transactionalEntityManager.save(new UsedUsername({
 				createdAt: new Date(),
 				username: username.toLowerCase(),
 			}));

@@ -1,8 +1,3 @@
-<!--
-SPDX-FileCopyrightText: syuilo and other misskey contributors
-SPDX-License-Identifier: AGPL-3.0-only
--->
-
 <template>
 <Transition
 	:enterActiveClass="defaultStore.state.animation ? $style.transition_popup_enterActive : ''"
@@ -86,8 +81,7 @@ let top = $ref(0);
 let left = $ref(0);
 
 function showMenu(ev: MouseEvent) {
-	const { menu, cleanup } = getUserMenu(user);
-	os.popupMenu(menu, ev.currentTarget ?? ev.target).finally(cleanup);
+	os.popupMenu(getUserMenu(user), ev.currentTarget ?? ev.target);
 }
 
 onMounted(() => {

@@ -1,8 +1,3 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { StoryObj } from '@storybook/vue3';
 import { rest } from 'msw';
@@ -53,13 +48,13 @@ export const Default = {
 export const Used = {
 	...Default,
 	args: {
-		invite: inviteCode(true) as any,
+		invite: inviteCode(true) as any
 	},
 } satisfies StoryObj<typeof MkInviteCode>;
 
 export const Expired = {
 	...Default,
 	args: {
-		invite: inviteCode(false, true, true) as any,
+		invite: inviteCode(false, true, true) as any
 	},
 } satisfies StoryObj<typeof MkInviteCode>;

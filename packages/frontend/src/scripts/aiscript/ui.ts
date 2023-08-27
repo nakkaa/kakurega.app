@@ -1,8 +1,3 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { utils, values } from '@syuilo/aiscript';
 import { v4 as uuid } from 'uuid';
 import { ref, Ref } from 'vue';

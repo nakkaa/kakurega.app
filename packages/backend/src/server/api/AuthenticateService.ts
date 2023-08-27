@@ -1,15 +1,10 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { Inject, Injectable, OnApplicationShutdown } from '@nestjs/common';
 import { DI } from '@/di-symbols.js';
 import type { AccessTokensRepository, AppsRepository, UsersRepository } from '@/models/index.js';
-import type { MiLocalUser } from '@/models/entities/User.js';
-import type { MiAccessToken } from '@/models/entities/AccessToken.js';
+import type { LocalUser } from '@/models/entities/User.js';
+import type { AccessToken } from '@/models/entities/AccessToken.js';
 import { MemoryKVCache } from '@/misc/cache.js';
-import type { MiApp } from '@/models/entities/App.js';
+import type { App } from '@/models/entities/App.js';
 import { CacheService } from '@/core/CacheService.js';
 import isNativeToken from '@/misc/is-native-token.js';
 import { bindThis } from '@/decorators.js';
@@ -23,7 +18,7 @@ export class AuthenticationError extends Error {
 
 @Injectable()
 export class AuthenticateService implements OnApplicationShutdown {
-	private appCache: MemoryKVCache<MiApp>;
+	private appCache: MemoryKVCache<App>;
 
 	constructor(
 		@Inject(DI.usersRepository)
@@ -37,18 +32,18 @@ export class AuthenticateService implements OnApplicationShutdown {
 
 		private cacheService: CacheService,
 	) {
-		this.appCache = new MemoryKVCache<MiApp>(Infinity);
+		this.appCache = new MemoryKVCache<App>(Infinity);
 	}
 
 	@bindThis
-	public async authenticate(token: string | null | undefined): Promise<[MiLocalUser | null, MiAccessToken | null]> {
+	public async authenticate(token: string | null | undefined): Promise<[LocalUser | null, AccessToken | null]> {
 		if (token == null) {
 			return [null, null];
 		}
 
 		if (isNativeToken(token)) {
 			const user = await this.cacheService.localUserByNativeTokenCache.fetch(token,
-				() => this.usersRepository.findOneBy({ token }) as Promise<MiLocalUser | null>);
+				() => this.usersRepository.findOneBy({ token }) as Promise<LocalUser | null>);
 
 			if (user == null) {
 				throw new AuthenticationError('user not found');
@@ -75,7 +70,7 @@ export class AuthenticateService implements OnApplicationShutdown {
 			const user = await this.cacheService.localUserByIdCache.fetch(accessToken.userId,
 				() => this.usersRepository.findOneBy({
 					id: accessToken.userId,
-				}) as Promise<MiLocalUser>);
+				}) as Promise<LocalUser>);
 
 			if (accessToken.appId) {
 				const app = await this.appCache.fetch(accessToken.appId,
@@ -84,7 +79,7 @@ export class AuthenticateService implements OnApplicationShutdown {
 				return [user, {
 					id: accessToken.id,
 					permission: app.permission,
-				} as MiAccessToken];
+				} as AccessToken];
 			} else {
 				return [user, accessToken];
 			}

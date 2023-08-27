@@ -18,11 +18,6 @@ export type Acct = {
 type Ad = TODO_2;
 
 // @public (undocumented)
-type AdminInstanceMetadata = DetailedInstanceMetadata & {
-    blockedHosts: string[];
-};
-
-// @public (undocumented)
 type Announcement = {
     id: ID;
     createdAt: DateString;
@@ -30,10 +25,6 @@ type Announcement = {
     text: string;
     title: string;
     imageUrl: string | null;
-    display: 'normal' | 'banner' | 'dialog';
-    icon: 'info' | 'warning' | 'error' | 'success';
-    needConfirmationToRead: boolean;
-    forYou: boolean;
     isRead?: boolean;
 };
 
@@ -338,8 +329,8 @@ export type Endpoints = {
         res: TODO;
     };
     'admin/meta': {
-        req: NoParams;
-        res: AdminInstanceMetadata;
+        req: TODO;
+        res: TODO;
     };
     'admin/reset-password': {
         req: TODO;
@@ -2235,7 +2226,6 @@ declare namespace entities {
         LiteInstanceMetadata,
         DetailedInstanceMetadata,
         InstanceMetadata,
-        AdminInstanceMetadata,
         ServerInfo,
         Stats,
         Page,
@@ -2327,7 +2317,7 @@ type ID = string;
 // @public (undocumented)
 type Instance = {
     id: ID;
-    firstRetrievedAt: DateString;
+    caughtAt: DateString;
     host: string;
     usersCount: number;
     notesCount: number;
@@ -2341,7 +2331,6 @@ type Instance = {
     lastCommunicatedAt: DateString;
     isNotResponding: boolean;
     isSuspended: boolean;
-    isBlocked: boolean;
     softwareName: string | null;
     softwareVersion: string | null;
     openRegistrations: boolean | null;
@@ -2457,7 +2446,6 @@ type MeDetailed = UserDetailed & {
     noCrawle: boolean;
     receiveAnnouncementEmail: boolean;
     usePasswordLessLogin: boolean;
-    unreadAnnouncements: Announcement[];
     [other: string]: any;
 };
 

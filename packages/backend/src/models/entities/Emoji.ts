@@ -1,14 +1,9 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { PrimaryColumn, Entity, Index, Column } from 'typeorm';
 import { id } from '../id.js';
 
-@Entity('emoji')
+@Entity()
 @Index(['name', 'host'], { unique: true })
-export class MiEmoji {
+export class Emoji {
 	@PrimaryColumn(id())
 	public id: string;
 

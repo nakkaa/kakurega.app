@@ -1,15 +1,10 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { Inject, Injectable } from '@nestjs/common';
 import { In, IsNull } from 'typeorm';
 import { Feed } from 'feed';
 import { DI } from '@/di-symbols.js';
-import type { DriveFilesRepository, NotesRepository, UserProfilesRepository } from '@/models/index.js';
+import type { DriveFilesRepository, NotesRepository, UserProfilesRepository, UsersRepository } from '@/models/index.js';
 import type { Config } from '@/config.js';
-import type { MiUser } from '@/models/entities/User.js';
+import type { User } from '@/models/entities/User.js';
 import { UserEntityService } from '@/core/entities/UserEntityService.js';
 import { DriveFileEntityService } from '@/core/entities/DriveFileEntityService.js';
 import { bindThis } from '@/decorators.js';
@@ -19,6 +14,9 @@ export class FeedService {
 	constructor(
 		@Inject(DI.config)
 		private config: Config,
+
+		@Inject(DI.usersRepository)
+		private usersRepository: UsersRepository,
 
 		@Inject(DI.userProfilesRepository)
 		private userProfilesRepository: UserProfilesRepository,
@@ -35,7 +33,7 @@ export class FeedService {
 	}
 
 	@bindThis
-	public async packFeed(user: MiUser) {
+	public async packFeed(user: User) {
 		const author = {
 			link: `${this.config.url}/@${user.username}`,
 			name: user.name ?? user.username,

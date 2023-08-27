@@ -1,8 +1,3 @@
-<!--
-SPDX-FileCopyrightText: syuilo and other misskey contributors
-SPDX-License-Identifier: AGPL-3.0-only
--->
-
 <template>
 <div
 	:class="[$style.root, { [$style.modal]: modal, _popup: modal }]"
@@ -171,8 +166,7 @@ let poll = $ref<{
 	expiredAfter: string | null;
 } | null>(null);
 let useCw = $ref(false);
-let showPreview = $ref(defaultStore.state.showPreview);
-watch($$(showPreview), () => defaultStore.set('showPreview', showPreview));
+let showPreview = $ref(false);
 let cw = $ref<string | null>(null);
 let localOnly = $ref<boolean>(props.initialLocalOnly ?? defaultStore.state.rememberNoteVisibility ? defaultStore.state.localOnly : defaultStore.state.defaultNoteLocalOnly);
 let visibility = $ref(props.initialVisibility ?? (defaultStore.state.rememberNoteVisibility ? defaultStore.state.visibility : defaultStore.state.defaultNoteVisibility) as typeof misskey.noteVisibilities[number]);
@@ -757,25 +751,18 @@ async function post(ev?: MouseEvent) {
 				claimAchievement('notes1');
 			}
 
-			const text = postData.text ?? '';
-			const lowerCase = text.toLowerCase();
-			if ((lowerCase.includes('love') || lowerCase.includes('❤')) && lowerCase.includes('misskey')) {
+			const text = postData.text?.toLowerCase() ?? '';
+			if ((text.includes('love') || text.includes('❤')) && text.includes('misskey')) {
 				claimAchievement('iLoveMisskey');
 			}
-			if ([
-				'https://youtu.be/Efrlqw8ytg4',
-				'https://www.youtube.com/watch?v=Efrlqw8ytg4',
-				'https://m.youtube.com/watch?v=Efrlqw8ytg4',
-			
-				'https://youtu.be/XVCwzwxdHuA',
-				'https://www.youtube.com/watch?v=XVCwzwxdHuA',
-				'https://m.youtube.com/watch?v=XVCwzwxdHuA',
-
-				'https://open.spotify.com/track/3Cuj0mZrlLoXx9nydNi7RB',
-				'https://open.spotify.com/track/7anfcaNPQWlWCwyCHmZqNy',
-				'https://open.spotify.com/track/5Odr16TvEN4my22K9nbH7l',
-				'https://open.spotify.com/album/5bOlxyl4igOrp2DwVQxBco',
-			].some(url => text.includes(url))) {
+			if (
+				text.includes('https://youtu.be/Efrlqw8ytg4'.toLowerCase()) ||
+				text.includes('https://www.youtube.com/watch?v=Efrlqw8ytg4'.toLowerCase()) ||
+				text.includes('https://m.youtube.com/watch?v=Efrlqw8ytg4'.toLowerCase()) ||
+				text.includes('https://youtu.be/XVCwzwxdHuA'.toLowerCase()) ||
+				text.includes('https://www.youtube.com/watch?v=XVCwzwxdHuA'.toLowerCase()) ||
+				text.includes('https://m.youtube.com/watch?v=XVCwzwxdHuA'.toLowerCase())
+			) {
 				claimAchievement('brainDiver');
 			}
 

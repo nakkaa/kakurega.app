@@ -1,18 +1,13 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { Inject, Injectable, OnApplicationShutdown } from '@nestjs/common';
 import { DI } from '@/di-symbols.js';
 import type { NotesRepository, UserPublickeysRepository, UsersRepository } from '@/models/index.js';
 import type { Config } from '@/config.js';
 import { MemoryKVCache } from '@/misc/cache.js';
-import type { MiUserPublickey } from '@/models/entities/UserPublickey.js';
+import type { UserPublickey } from '@/models/entities/UserPublickey.js';
 import { CacheService } from '@/core/CacheService.js';
-import type { MiNote } from '@/models/entities/Note.js';
+import type { Note } from '@/models/entities/Note.js';
 import { bindThis } from '@/decorators.js';
-import { MiLocalUser, MiRemoteUser } from '@/models/entities/User.js';
+import { LocalUser, RemoteUser } from '@/models/entities/User.js';
 import { getApId } from './type.js';
 import { ApPersonService } from './models/ApPersonService.js';
 import type { IObject } from './type.js';
@@ -35,8 +30,8 @@ export type UriParseResult = {
 
 @Injectable()
 export class ApDbResolverService implements OnApplicationShutdown {
-	private publicKeyCache: MemoryKVCache<MiUserPublickey | null>;
-	private publicKeyByUserIdCache: MemoryKVCache<MiUserPublickey | null>;
+	private publicKeyCache: MemoryKVCache<UserPublickey | null>;
+	private publicKeyByUserIdCache: MemoryKVCache<UserPublickey | null>;
 
 	constructor(
 		@Inject(DI.config)
@@ -54,8 +49,8 @@ export class ApDbResolverService implements OnApplicationShutdown {
 		private cacheService: CacheService,
 		private apPersonService: ApPersonService,
 	) {
-		this.publicKeyCache = new MemoryKVCache<MiUserPublickey | null>(Infinity);
-		this.publicKeyByUserIdCache = new MemoryKVCache<MiUserPublickey | null>(Infinity);
+		this.publicKeyCache = new MemoryKVCache<UserPublickey | null>(Infinity);
+		this.publicKeyByUserIdCache = new MemoryKVCache<UserPublickey | null>(Infinity);
 	}
 
 	@bindThis
@@ -78,7 +73,7 @@ export class ApDbResolverService implements OnApplicationShutdown {
 	 * AP Note => Misskey Note in DB
 	 */
 	@bindThis
-	public async getNoteFromApId(value: string | IObject): Promise<MiNote | null> {
+	public async getNoteFromApId(value: string | IObject): Promise<Note | null> {
 		const parsed = this.parseUri(value);
 
 		if (parsed.local) {
@@ -98,7 +93,7 @@ export class ApDbResolverService implements OnApplicationShutdown {
 	 * AP Person => Misskey User in DB
 	 */
 	@bindThis
-	public async getUserFromApId(value: string | IObject): Promise<MiLocalUser | MiRemoteUser | null> {
+	public async getUserFromApId(value: string | IObject): Promise<LocalUser | RemoteUser | null> {
 		const parsed = this.parseUri(value);
 
 		if (parsed.local) {
@@ -107,12 +102,12 @@ export class ApDbResolverService implements OnApplicationShutdown {
 			return await this.cacheService.userByIdCache.fetchMaybe(
 				parsed.id,
 				() => this.usersRepository.findOneBy({ id: parsed.id }).then(x => x ?? undefined),
-			) as MiLocalUser | undefined ?? null;
+			) as LocalUser | undefined ?? null;
 		} else {
 			return await this.cacheService.uriPersonCache.fetch(
 				parsed.uri,
 				() => this.usersRepository.findOneBy({ uri: parsed.uri }),
-			) as MiRemoteUser | null;
+			) as RemoteUser | null;
 		}
 	}
 
@@ -121,8 +116,8 @@ export class ApDbResolverService implements OnApplicationShutdown {
 	 */
 	@bindThis
 	public async getAuthUserFromKeyId(keyId: string): Promise<{
-		user: MiRemoteUser;
-		key: MiUserPublickey;
+		user: RemoteUser;
+		key: UserPublickey;
 	} | null> {
 		const key = await this.publicKeyCache.fetch(keyId, async () => {
 			const key = await this.userPublickeysRepository.findOneBy({
@@ -137,7 +132,7 @@ export class ApDbResolverService implements OnApplicationShutdown {
 		if (key == null) return null;
 
 		return {
-			user: await this.cacheService.findUserById(key.userId) as MiRemoteUser,
+			user: await this.cacheService.findUserById(key.userId) as RemoteUser,
 			key,
 		};
 	}
@@ -147,10 +142,10 @@ export class ApDbResolverService implements OnApplicationShutdown {
 	 */
 	@bindThis
 	public async getAuthUserFromApId(uri: string): Promise<{
-		user: MiRemoteUser;
-		key: MiUserPublickey | null;
+		user: RemoteUser;
+		key: UserPublickey | null;
 	} | null> {
-		const user = await this.apPersonService.resolvePerson(uri) as MiRemoteUser;
+		const user = await this.apPersonService.resolvePerson(uri) as RemoteUser;
 
 		const key = await this.publicKeyByUserIdCache.fetch(
 			user.id,

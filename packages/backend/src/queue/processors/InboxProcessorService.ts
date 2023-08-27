@@ -1,22 +1,20 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { URL } from 'node:url';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import httpSignature from '@peertube/http-signature';
 import * as Bull from 'bullmq';
+import { DI } from '@/di-symbols.js';
+import type { Config } from '@/config.js';
 import type Logger from '@/logger.js';
 import { MetaService } from '@/core/MetaService.js';
+import { ApRequestService } from '@/core/activitypub/ApRequestService.js';
 import { FederatedInstanceService } from '@/core/FederatedInstanceService.js';
 import { FetchInstanceMetadataService } from '@/core/FetchInstanceMetadataService.js';
 import InstanceChart from '@/core/chart/charts/instance.js';
 import ApRequestChart from '@/core/chart/charts/ap-request.js';
 import FederationChart from '@/core/chart/charts/federation.js';
 import { getApId } from '@/core/activitypub/type.js';
-import type { MiRemoteUser } from '@/models/entities/User.js';
-import type { MiUserPublickey } from '@/models/entities/UserPublickey.js';
+import type { RemoteUser } from '@/models/entities/User.js';
+import type { UserPublickey } from '@/models/entities/UserPublickey.js';
 import { ApDbResolverService } from '@/core/activitypub/ApDbResolverService.js';
 import { StatusError } from '@/misc/status-error.js';
 import { UtilityService } from '@/core/UtilityService.js';
@@ -32,12 +30,16 @@ export class InboxProcessorService {
 	private logger: Logger;
 
 	constructor(
+		@Inject(DI.config)
+		private config: Config,
+
 		private utilityService: UtilityService,
 		private metaService: MetaService,
 		private apInboxService: ApInboxService,
 		private federatedInstanceService: FederatedInstanceService,
 		private fetchInstanceMetadataService: FetchInstanceMetadataService,
 		private ldSignatureService: LdSignatureService,
+		private apRequestService: ApRequestService,
 		private apPersonService: ApPersonService,
 		private apDbResolverService: ApDbResolverService,
 		private instanceChart: InstanceChart,
@@ -74,8 +76,8 @@ export class InboxProcessorService {
 
 		// HTTP-Signature keyIdを元にDBから取得
 		let authUser: {
-			user: MiRemoteUser;
-			key: MiUserPublickey | null;
+			user: RemoteUser;
+			key: UserPublickey | null;
 		} | null = await this.apDbResolverService.getAuthUserFromKeyId(signature.keyId);
 
 		// keyIdでわからなければ、activity.actorを元にDBから取得 || activity.actorを元にリモートから取得

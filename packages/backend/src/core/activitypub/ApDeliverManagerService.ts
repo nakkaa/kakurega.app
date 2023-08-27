@@ -1,13 +1,9 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { Inject, Injectable } from '@nestjs/common';
 import { IsNull, Not } from 'typeorm';
 import { DI } from '@/di-symbols.js';
-import type { FollowingsRepository } from '@/models/index.js';
-import type { MiLocalUser, MiRemoteUser, MiUser } from '@/models/entities/User.js';
+import type { FollowingsRepository, UsersRepository } from '@/models/index.js';
+import type { Config } from '@/config.js';
+import type { LocalUser, RemoteUser, User } from '@/models/entities/User.js';
 import { QueueService } from '@/core/QueueService.js';
 import { UserEntityService } from '@/core/entities/UserEntityService.js';
 import { bindThis } from '@/decorators.js';
@@ -24,7 +20,7 @@ interface IFollowersRecipe extends IRecipe {
 
 interface IDirectRecipe extends IRecipe {
 	type: 'Direct';
-	to: MiRemoteUser;
+	to: RemoteUser;
 }
 
 const isFollowers = (recipe: IRecipe): recipe is IFollowersRecipe =>
@@ -51,7 +47,7 @@ class DeliverManager {
 		private followingsRepository: FollowingsRepository,
 		private queueService: QueueService,
 
-		actor: { id: MiUser['id']; host: null; },
+		actor: { id: User['id']; host: null; },
 		activity: IActivity | null,
 	) {
 		// 型で弾いてはいるが一応ローカルユーザーかチェック
@@ -82,7 +78,7 @@ class DeliverManager {
 	 * @param to To
 	 */
 	@bindThis
-	public addDirectRecipe(to: MiRemoteUser): void {
+	public addDirectRecipe(to: RemoteUser): void {
 		const recipe: IDirectRecipe = {
 			type: 'Direct',
 			to,
@@ -151,6 +147,12 @@ class DeliverManager {
 @Injectable()
 export class ApDeliverManagerService {
 	constructor(
+		@Inject(DI.config)
+		private config: Config,
+
+		@Inject(DI.usersRepository)
+		private usersRepository: UsersRepository,
+
 		@Inject(DI.followingsRepository)
 		private followingsRepository: FollowingsRepository,
 
@@ -165,7 +167,7 @@ export class ApDeliverManagerService {
 	 * @param activity Activity
 	 */
 	@bindThis
-	public async deliverToFollowers(actor: { id: MiLocalUser['id']; host: null; }, activity: IActivity): Promise<void> {
+	public async deliverToFollowers(actor: { id: LocalUser['id']; host: null; }, activity: IActivity): Promise<void> {
 		const manager = new DeliverManager(
 			this.userEntityService,
 			this.followingsRepository,
@@ -184,7 +186,7 @@ export class ApDeliverManagerService {
 	 * @param to Target user
 	 */
 	@bindThis
-	public async deliverToUser(actor: { id: MiLocalUser['id']; host: null; }, activity: IActivity, to: MiRemoteUser): Promise<void> {
+	public async deliverToUser(actor: { id: LocalUser['id']; host: null; }, activity: IActivity, to: RemoteUser): Promise<void> {
 		const manager = new DeliverManager(
 			this.userEntityService,
 			this.followingsRepository,
@@ -197,7 +199,7 @@ export class ApDeliverManagerService {
 	}
 
 	@bindThis
-	public createDeliverManager(actor: { id: MiUser['id']; host: null; }, activity: IActivity | null): DeliverManager {
+	public createDeliverManager(actor: { id: User['id']; host: null; }, activity: IActivity | null): DeliverManager {
 		return new DeliverManager(
 			this.userEntityService,
 			this.followingsRepository,

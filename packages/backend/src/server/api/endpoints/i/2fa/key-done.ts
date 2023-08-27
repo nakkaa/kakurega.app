@@ -1,8 +1,3 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { promisify } from 'node:util';
 import bcrypt from 'bcryptjs';
 import cbor from 'cbor';
@@ -35,8 +30,9 @@ export const paramDef = {
 	required: ['clientDataJSON', 'attestationObject', 'password', 'challengeId', 'name'],
 } as const;
 
+// eslint-disable-next-line import/no-default-export
 @Injectable()
-export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-disable-line import/no-default-export
+export default class extends Endpoint<typeof meta, typeof paramDef> {
 	constructor(
 		@Inject(DI.config)
 		private config: Config,

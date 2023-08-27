@@ -1,8 +1,3 @@
-<!--
-SPDX-FileCopyrightText: syuilo and other misskey contributors
-SPDX-License-Identifier: AGPL-3.0-only
--->
-
 <template>
 <div class="omfetrab" :class="['s' + size, 'w' + width, 'h' + height, { asDrawer, asWindow }]" :style="{ maxHeight: maxHeight ? maxHeight + 'px' : undefined }">
 	<input ref="searchEl" :value="q" class="search" data-prevent-emoji-insert :class="{ filled: q != null && q != '' }" :placeholder="i18n.ts.search" type="search" @input="input()" @paste.stop="paste" @keydown.stop.prevent.enter="onEnter">
@@ -156,7 +151,7 @@ watch(q, () => {
 	const newQ = q.value.replace(/:/g, '').toLowerCase();
 
 	const searchCustom = () => {
-		const max = 100;
+		const max = 8;
 		const emojis = customEmojis.value;
 		const matches = new Set<Misskey.entities.CustomEmoji>();
 
@@ -219,7 +214,7 @@ watch(q, () => {
 	};
 
 	const searchUnicode = () => {
-		const max = 100;
+		const max = 8;
 		const emojis = emojilist;
 		const matches = new Set<UnicodeEmojiDef>();
 

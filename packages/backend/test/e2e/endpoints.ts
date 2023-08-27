@@ -1,15 +1,10 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 process.env.NODE_ENV = 'test';
 
 import * as assert from 'assert';
 // node-fetch only supports it's own Blob yet
 // https://github.com/node-fetch/node-fetch/pull/1664
 import { Blob } from 'node-fetch';
-import { MiUser } from '@/models/index.js';
+import { User } from '@/models/index.js';
 import { startServer, signup, post, api, uploadFile, simpleGet, initTestDb } from '../utils.js';
 import type { INestApplicationContext } from '@nestjs/common';
 import type * as misskey from 'misskey-js';
@@ -298,7 +293,7 @@ describe('Endpoints', () => {
 			assert.strictEqual(res.status, 200);
 
 			const connection = await initTestDb(true);
-			const Users = connection.getRepository(MiUser);
+			const Users = connection.getRepository(User);
 			const newBob = await Users.findOneByOrFail({ id: bob.id });
 			assert.strictEqual(newBob.followersCount, 0);
 			assert.strictEqual(newBob.followingCount, 1);
@@ -360,7 +355,7 @@ describe('Endpoints', () => {
 			assert.strictEqual(res.status, 200);
 
 			const connection = await initTestDb(true);
-			const Users = connection.getRepository(MiUser);
+			const Users = connection.getRepository(User);
 			const newBob = await Users.findOneByOrFail({ id: bob.id });
 			assert.strictEqual(newBob.followersCount, 0);
 			assert.strictEqual(newBob.followingCount, 0);

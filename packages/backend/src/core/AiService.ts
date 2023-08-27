@@ -1,15 +1,12 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import * as fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import * as nsfw from 'nsfwjs';
 import si from 'systeminformation';
 import { Mutex } from 'async-mutex';
+import type { Config } from '@/config.js';
+import { DI } from '@/di-symbols.js';
 import { bindThis } from '@/decorators.js';
 
 const _filename = fileURLToPath(import.meta.url);
@@ -24,6 +21,8 @@ export class AiService {
 	private modelLoadMutex: Mutex = new Mutex();
 
 	constructor(
+		@Inject(DI.config)
+		private config: Config,
 	) {
 	}
 

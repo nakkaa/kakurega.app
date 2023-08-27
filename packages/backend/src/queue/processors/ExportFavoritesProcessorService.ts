@@ -1,19 +1,15 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import * as fs from 'node:fs';
 import { Inject, Injectable } from '@nestjs/common';
 import { MoreThan } from 'typeorm';
 import { format as dateFormat } from 'date-fns';
 import { DI } from '@/di-symbols.js';
-import type { MiNoteFavorite, NoteFavoritesRepository, PollsRepository, MiUser, UsersRepository } from '@/models/index.js';
+import type { NoteFavorite, NoteFavoritesRepository, NotesRepository, PollsRepository, User, UsersRepository } from '@/models/index.js';
+import type { Config } from '@/config.js';
 import type Logger from '@/logger.js';
 import { DriveService } from '@/core/DriveService.js';
 import { createTemp } from '@/misc/create-temp.js';
-import type { MiPoll } from '@/models/entities/Poll.js';
-import type { MiNote } from '@/models/entities/Note.js';
+import type { Poll } from '@/models/entities/Poll.js';
+import type { Note } from '@/models/entities/Note.js';
 import { bindThis } from '@/decorators.js';
 import { QueueLoggerService } from '../QueueLoggerService.js';
 import type * as Bull from 'bullmq';
@@ -24,11 +20,17 @@ export class ExportFavoritesProcessorService {
 	private logger: Logger;
 
 	constructor(
+		@Inject(DI.config)
+		private config: Config,
+
 		@Inject(DI.usersRepository)
 		private usersRepository: UsersRepository,
 
 		@Inject(DI.pollsRepository)
 		private pollsRepository: PollsRepository,
+
+		@Inject(DI.notesRepository)
+		private notesRepository: NotesRepository,
 
 		@Inject(DI.noteFavoritesRepository)
 		private noteFavoritesRepository: NoteFavoritesRepository,
@@ -72,7 +74,7 @@ export class ExportFavoritesProcessorService {
 			await write('[');
 
 			let exportedFavoritesCount = 0;
-			let cursor: MiNoteFavorite['id'] | null = null;
+			let cursor: NoteFavorite['id'] | null = null;
 
 			while (true) {
 				const favorites = await this.noteFavoritesRepository.find({
@@ -85,7 +87,7 @@ export class ExportFavoritesProcessorService {
 						id: 1,
 					},
 					relations: ['note', 'note.user'],
-				}) as (MiNoteFavorite & { note: MiNote & { user: MiUser } })[];
+				}) as (NoteFavorite & { note: Note & { user: User } })[];
 
 				if (favorites.length === 0) {
 					job.updateProgress(100);
@@ -95,7 +97,7 @@ export class ExportFavoritesProcessorService {
 				cursor = favorites.at(-1)?.id ?? null;
 
 				for (const favorite of favorites) {
-					let poll: MiPoll | undefined;
+					let poll: Poll | undefined;
 					if (favorite.note.hasPoll) {
 						poll = await this.pollsRepository.findOneByOrFail({ noteId: favorite.note.id });
 					}
@@ -127,7 +129,7 @@ export class ExportFavoritesProcessorService {
 	}
 }
 
-function serialize(favorite: MiNoteFavorite & { note: MiNote & { user: MiUser } }, poll: MiPoll | null = null): Record<string, unknown> {
+function serialize(favorite: NoteFavorite & { note: Note & { user: User } }, poll: Poll | null = null): Record<string, unknown> {
 	return {
 		id: favorite.id,
 		createdAt: favorite.createdAt,

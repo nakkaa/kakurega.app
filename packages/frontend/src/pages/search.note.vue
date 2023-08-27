@@ -1,8 +1,3 @@
-<!--
-SPDX-FileCopyrightText: syuilo and other misskey contributors
-SPDX-License-Identifier: AGPL-3.0-only
--->
-
 <template>
 <div class="_gaps">
 	<div class="_gaps">
@@ -12,22 +7,18 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<MkFolder>
 			<template #label>{{ i18n.ts.options }}</template>
 
-			<div class="_gaps_m">
-				<MkSwitch v-model="isLocalOnly">{{ i18n.ts.localOnly }}</MkSwitch>
+			<MkFolder>
+				<template #label>{{ i18n.ts.specifyUser }}</template>
+				<template v-if="user" #suffix>@{{ user.username }}</template>
 
-				<MkFolder>
-					<template #label>{{ i18n.ts.specifyUser }}</template>
-					<template v-if="user" #suffix>@{{ user.username }}</template>
-
-					<div style="text-align: center;" class="_gaps">
-						<div v-if="user">@{{ user.username }}</div>
-						<div>
-							<MkButton v-if="user == null" primary rounded inline @click="selectUser">{{ i18n.ts.selectUser }}</MkButton>
-							<MkButton v-else danger rounded inline @click="user = null">{{ i18n.ts.remove }}</MkButton>
-						</div>
+				<div style="text-align: center;" class="_gaps">
+					<div v-if="user">@{{ user.username }}</div>
+					<div>
+						<MkButton v-if="user == null" primary rounded inline @click="selectUser">{{ i18n.ts.selectUser }}</MkButton>
+						<MkButton v-else danger rounded inline @click="user = null">{{ i18n.ts.remove }}</MkButton>
 					</div>
-				</MkFolder>
-			</div>
+				</div>
+			</MkFolder>
 		</MkFolder>
 		<div>
 			<MkButton large primary gradate rounded style="margin: 0 auto;" @click="search">{{ i18n.ts.search }}</MkButton>
@@ -47,7 +38,6 @@ import MkNotes from '@/components/MkNotes.vue';
 import MkInput from '@/components/MkInput.vue';
 import MkRadios from '@/components/MkRadios.vue';
 import MkButton from '@/components/MkButton.vue';
-import MkSwitch from '@/components/MkSwitch.vue';
 import { i18n } from '@/i18n';
 import * as os from '@/os';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';
@@ -64,7 +54,6 @@ let searchQuery = $ref('');
 let searchOrigin = $ref('combined');
 let notePagination = $ref();
 let user = $ref(null);
-let isLocalOnly = $ref(false);
 
 function selectUser() {
 	os.selectUser().then(_user => {
@@ -103,8 +92,6 @@ async function search() {
 			userId: user ? user.id : null,
 		},
 	};
-
-	if (isLocalOnly) notePagination.params.host = '.';
 
 	key++;
 }

@@ -1,8 +1,3 @@
-<!--
-SPDX-FileCopyrightText: syuilo and other misskey contributors
-SPDX-License-Identifier: AGPL-3.0-only
--->
-
 <template>
 <div
 	v-if="!muted"
@@ -172,6 +167,7 @@ import { showMovedDialog } from '@/scripts/show-moved-dialog';
 
 const props = defineProps<{
 	note: misskey.entities.Note;
+	pinned?: boolean;
 }>();
 
 const inChannel = inject('inChannel', null);
@@ -384,16 +380,14 @@ function onContextmenu(ev: MouseEvent): void {
 		ev.preventDefault();
 		react();
 	} else {
-		const { menu, cleanup } = getNoteMenu({ note: note, translating, translation, menuButton, isDeleted });
-		os.contextMenu(menu, ev).then(focus).finally(cleanup);
+		os.contextMenu(getNoteMenu({ note: note, translating, translation, menuButton, isDeleted }), ev).then(focus);
 	}
 }
 
 function menu(viaKeyboard = false): void {
-	const { menu, cleanup } = getNoteMenu({ note: note, translating, translation, menuButton, isDeleted });
-	os.popupMenu(menu, menuButton.value, {
+	os.popupMenu(getNoteMenu({ note: note, translating, translation, menuButton, isDeleted }), menuButton.value, {
 		viaKeyboard,
-	}).then(focus).finally(cleanup);
+	}).then(focus);
 }
 
 async function clip() {

@@ -1,12 +1,7 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { Inject, Injectable, OnApplicationShutdown } from '@nestjs/common';
 import * as Redis from 'ioredis';
 import type { InstancesRepository } from '@/models/index.js';
-import type { MiInstance } from '@/models/entities/Instance.js';
+import type { Instance } from '@/models/entities/Instance.js';
 import { MemoryKVCache, RedisKVCache } from '@/misc/cache.js';
 import { IdService } from '@/core/IdService.js';
 import { DI } from '@/di-symbols.js';
@@ -15,7 +10,7 @@ import { bindThis } from '@/decorators.js';
 
 @Injectable()
 export class FederatedInstanceService implements OnApplicationShutdown {
-	public federatedInstanceCache: RedisKVCache<MiInstance | null>;
+	public federatedInstanceCache: RedisKVCache<Instance | null>;
 
 	constructor(
 		@Inject(DI.redis)
@@ -27,7 +22,7 @@ export class FederatedInstanceService implements OnApplicationShutdown {
 		private utilityService: UtilityService,
 		private idService: IdService,
 	) {
-		this.federatedInstanceCache = new RedisKVCache<MiInstance | null>(this.redisClient, 'federatedInstance', {
+		this.federatedInstanceCache = new RedisKVCache<Instance | null>(this.redisClient, 'federatedInstance', {
 			lifetime: 1000 * 60 * 30, // 30m
 			memoryCacheLifetime: 1000 * 60 * 3, // 3m
 			fetcher: (key) => this.instancesRepository.findOneBy({ host: key }),
@@ -46,7 +41,7 @@ export class FederatedInstanceService implements OnApplicationShutdown {
 	}
 
 	@bindThis
-	public async fetch(host: string): Promise<MiInstance> {
+	public async fetch(host: string): Promise<Instance> {
 		host = this.utilityService.toPuny(host);
 
 		const cached = await this.federatedInstanceCache.get(host);
@@ -70,7 +65,7 @@ export class FederatedInstanceService implements OnApplicationShutdown {
 	}
 
 	@bindThis
-	public async update(id: MiInstance['id'], data: Partial<MiInstance>): Promise<void> {
+	public async update(id: Instance['id'], data: Partial<Instance>): Promise<void> {
 		const result = await this.instancesRepository.createQueryBuilder().update()
 			.set(data)
 			.where('id = :id', { id })

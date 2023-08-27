@@ -1,10 +1,5 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { toUnicode } from 'punycode';
-import { defineAsyncComponent, ref, watch } from 'vue';
+import { defineAsyncComponent } from 'vue';
 import * as misskey from 'misskey-js';
 import { i18n } from '@/i18n';
 import copyToClipboard from '@/scripts/copy-to-clipboard';
@@ -18,8 +13,6 @@ import { antennasCache, rolesCache, userListsCache } from '@/cache';
 
 export function getUserMenu(user: misskey.entities.UserDetailed, router: Router = mainRouter) {
 	const meId = $i ? $i.id : null;
-
-	const cleanups = [] as (() => void)[];
 
 	async function toggleMute() {
 		if (user.isMuted) {
@@ -184,13 +177,13 @@ export function getUserMenu(user: misskey.entities.UserDetailed, router: Router 
 		action: () => {
 			copyToClipboard(`@${user.username}@${user.host ?? host}`);
 		},
-	}, ...(iAmModerator ? [{
-		icon: 'ti ti-user-exclamation',
-		text: i18n.ts.moderation,
+	}, {
+		icon: 'ti ti-info-circle',
+		text: i18n.ts.info,
 		action: () => {
-			router.push(`/admin/user/${user.id}`);
+			router.push(`/user-info/${user.id}`);
 		},
-	}] : []), {
+	}, {
 		icon: 'ti ti-rss',
 		text: i18n.ts.copyRSS,
 		action: () => {
@@ -207,8 +200,7 @@ export function getUserMenu(user: misskey.entities.UserDetailed, router: Router 
 		icon: 'ti ti-mail',
 		text: i18n.ts.sendMessage,
 		action: () => {
-			const canonical = user.host === null ? `@${user.username}` : `@${user.username}@${user.host}`;
-			os.post({ specified: user, initialText: `${canonical} ` });
+			os.post({ specified: user, initialText: `@${user.username} ` });
 		},
 	}, null, {
 		icon: 'ti ti-pencil',
@@ -222,32 +214,17 @@ export function getUserMenu(user: misskey.entities.UserDetailed, router: Router 
 		text: i18n.ts.addToList,
 		children: async () => {
 			const lists = await userListsCache.fetch(() => os.api('users/lists/list'));
-			return lists.map(list => {
-				const isListed = ref(list.userIds.includes(user.id));
-				cleanups.push(watch(isListed, () => {
-					if (isListed.value) {
-						os.apiWithDialog('users/lists/push', {
-							listId: list.id,
-							userId: user.id,
-						}).then(() => {
-							list.userIds.push(user.id);
-						});
-					} else {
-						os.apiWithDialog('users/lists/pull', {
-							listId: list.id,
-							userId: user.id,
-						}).then(() => {
-							list.userIds.splice(list.userIds.indexOf(user.id), 1);
-						});
-					}
-				}));
 
-				return {
-					type: 'switch',
-					text: list.name,
-					ref: isListed,
-				};
-			});
+			return lists.map(list => ({
+				text: list.name,
+				action: async () => {
+					await os.apiWithDialog('users/lists/push', {
+						listId: list.id,
+						userId: user.id,
+					});
+					userListsCache.delete();
+				},
+			}));
 		},
 	}, {
 		type: 'parent',
@@ -392,15 +369,5 @@ export function getUserMenu(user: misskey.entities.UserDetailed, router: Router 
 		}))]);
 	}
 
-	const cleanup = () => {
-		if (_DEV_) console.log('user menu cleanup', cleanups);
-		for (const cl of cleanups) {
-			cl();
-		}
-	};
-
-	return {
-		menu,
-		cleanup,
-	};
+	return menu;
 }

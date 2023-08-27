@@ -1,8 +1,3 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { Inject, Injectable } from '@nestjs/common';
 import promiseLimit from 'promise-limit';
 import { DataSource } from 'typeorm';
@@ -10,26 +5,26 @@ import { ModuleRef } from '@nestjs/core';
 import { DI } from '@/di-symbols.js';
 import type { FollowingsRepository, InstancesRepository, UserProfilesRepository, UserPublickeysRepository, UsersRepository } from '@/models/index.js';
 import type { Config } from '@/config.js';
-import type { MiLocalUser, MiRemoteUser } from '@/models/entities/User.js';
-import { MiUser } from '@/models/entities/User.js';
+import type { LocalUser, RemoteUser } from '@/models/entities/User.js';
+import { User } from '@/models/entities/User.js';
 import { truncate } from '@/misc/truncate.js';
 import type { CacheService } from '@/core/CacheService.js';
 import { normalizeForSearch } from '@/misc/normalize-for-search.js';
 import { isDuplicateKeyValueError } from '@/misc/is-duplicate-key-value-error.js';
 import type Logger from '@/logger.js';
-import type { MiNote } from '@/models/entities/Note.js';
+import type { Note } from '@/models/entities/Note.js';
 import type { IdService } from '@/core/IdService.js';
 import type { MfmService } from '@/core/MfmService.js';
 import { toArray } from '@/misc/prelude/array.js';
 import type { GlobalEventService } from '@/core/GlobalEventService.js';
 import type { FederatedInstanceService } from '@/core/FederatedInstanceService.js';
 import type { FetchInstanceMetadataService } from '@/core/FetchInstanceMetadataService.js';
-import { MiUserProfile } from '@/models/entities/UserProfile.js';
-import { MiUserPublickey } from '@/models/entities/UserPublickey.js';
+import { UserProfile } from '@/models/entities/UserProfile.js';
+import { UserPublickey } from '@/models/entities/UserPublickey.js';
 import type UsersChart from '@/core/chart/charts/users.js';
 import type InstanceChart from '@/core/chart/charts/instance.js';
 import type { HashtagService } from '@/core/HashtagService.js';
-import { MiUserNotePining } from '@/models/entities/UserNotePining.js';
+import { UserNotePining } from '@/models/entities/UserNotePining.js';
 import { StatusError } from '@/misc/status-error.js';
 import type { UtilityService } from '@/core/UtilityService.js';
 import type { UserEntityService } from '@/core/entities/UserEntityService.js';
@@ -201,20 +196,20 @@ export class ApPersonService implements OnModuleInit {
 	 * Misskeyに対象のPersonが登録されていればそれを返し、登録がなければnullを返します。
 	 */
 	@bindThis
-	public async fetchPerson(uri: string): Promise<MiLocalUser | MiRemoteUser | null> {
-		const cached = this.cacheService.uriPersonCache.get(uri) as MiLocalUser | MiRemoteUser | null | undefined;
+	public async fetchPerson(uri: string): Promise<LocalUser | RemoteUser | null> {
+		const cached = this.cacheService.uriPersonCache.get(uri) as LocalUser | RemoteUser | null | undefined;
 		if (cached) return cached;
 
 		// URIがこのサーバーを指しているならデータベースからフェッチ
 		if (uri.startsWith(`${this.config.url}/`)) {
 			const id = uri.split('/').pop();
-			const u = await this.usersRepository.findOneBy({ id }) as MiLocalUser | null;
+			const u = await this.usersRepository.findOneBy({ id }) as LocalUser | null;
 			if (u) this.cacheService.uriPersonCache.set(uri, u);
 			return u;
 		}
 
 		//#region このサーバーに既に登録されていたらそれを返す
-		const exist = await this.usersRepository.findOneBy({ uri }) as MiLocalUser | MiRemoteUser | null;
+		const exist = await this.usersRepository.findOneBy({ uri }) as LocalUser | RemoteUser | null;
 
 		if (exist) {
 			this.cacheService.uriPersonCache.set(uri, exist);
@@ -225,7 +220,7 @@ export class ApPersonService implements OnModuleInit {
 		return null;
 	}
 
-	private async resolveAvatarAndBanner(user: MiRemoteUser, icon: any, image: any): Promise<Pick<MiRemoteUser, 'avatarId' | 'bannerId' | 'avatarUrl' | 'bannerUrl' | 'avatarBlurhash' | 'bannerBlurhash'>> {
+	private async resolveAvatarAndBanner(user: RemoteUser, icon: any, image: any): Promise<Pick<RemoteUser, 'avatarId' | 'bannerId' | 'avatarUrl' | 'bannerUrl' | 'avatarBlurhash' | 'bannerBlurhash'>> {
 		const [avatar, banner] = await Promise.all([icon, image].map(img => {
 			if (img == null) return null;
 			if (user == null) throw new Error('failed to create user: user is null');
@@ -246,7 +241,7 @@ export class ApPersonService implements OnModuleInit {
 	 * Personを作成します。
 	 */
 	@bindThis
-	public async createPerson(uri: string, resolver?: Resolver): Promise<MiRemoteUser> {
+	public async createPerson(uri: string, resolver?: Resolver): Promise<RemoteUser> {
 		if (typeof uri !== 'string') throw new Error('uri is not string');
 
 		if (uri.startsWith(this.config.url)) {
@@ -280,13 +275,13 @@ export class ApPersonService implements OnModuleInit {
 		}
 
 		// Create user
-		let user: MiRemoteUser | null = null;
+		let user: RemoteUser | null = null;
 
 		//#region カスタム絵文字取得
 		const emojis = await this.apNoteService.extractEmojis(person.tag ?? [], host)
 			.then(_emojis => _emojis.map(emoji => emoji.name))
 			.catch(err => {
-				this.logger.error('error occurred while fetching user emojis', { stack: err });
+				this.logger.error(`error occured while fetching user emojis`, { stack: err });
 				return [];
 			});
 		//#endregion
@@ -294,7 +289,7 @@ export class ApPersonService implements OnModuleInit {
 		try {
 			// Start transaction
 			await this.db.transaction(async transactionalEntityManager => {
-				user = await transactionalEntityManager.save(new MiUser({
+				user = await transactionalEntityManager.save(new User({
 					id: this.idService.genId(),
 					avatarId: null,
 					bannerId: null,
@@ -318,9 +313,9 @@ export class ApPersonService implements OnModuleInit {
 					isBot,
 					isCat: (person as any).isCat === true,
 					emojis,
-				})) as MiRemoteUser;
+				})) as RemoteUser;
 
-				await transactionalEntityManager.save(new MiUserProfile({
+				await transactionalEntityManager.save(new UserProfile({
 					userId: user.id,
 					description: person.summary ? this.apMfmService.htmlToMfm(truncate(person.summary, summaryLength), person.tag) : null,
 					url,
@@ -331,7 +326,7 @@ export class ApPersonService implements OnModuleInit {
 				}));
 
 				if (person.publicKey) {
-					await transactionalEntityManager.save(new MiUserPublickey({
+					await transactionalEntityManager.save(new UserPublickey({
 						userId: user.id,
 						keyId: person.publicKey.id,
 						keyPem: person.publicKey.publicKeyPem,
@@ -345,7 +340,7 @@ export class ApPersonService implements OnModuleInit {
 				const u = await this.usersRepository.findOneBy({ uri: person.id });
 				if (u == null) throw new Error('already registered');
 
-				user = u as MiRemoteUser;
+				user = u as RemoteUser;
 			} else {
 				this.logger.error(e instanceof Error ? e : new Error(e as string));
 				throw e;
@@ -380,7 +375,7 @@ export class ApPersonService implements OnModuleInit {
 			// Register to the cache
 			this.cacheService.uriPersonCache.set(user.uri, user);
 		} catch (err) {
-			this.logger.error('error occurred while fetching user avatar/banner', { stack: err });
+			this.logger.error('error occured while fetching user avatar/banner', { stack: err });
 		}
 		//#endregion
 
@@ -407,7 +402,7 @@ export class ApPersonService implements OnModuleInit {
 		if (uri.startsWith(`${this.config.url}/`)) return;
 
 		//#region このサーバーに既に登録されているか
-		const exist = await this.fetchPerson(uri) as MiRemoteUser | null;
+		const exist = await this.fetchPerson(uri) as RemoteUser | null;
 		if (exist === null) return;
 		//#endregion
 
@@ -456,7 +451,7 @@ export class ApPersonService implements OnModuleInit {
 			alsoKnownAs: person.alsoKnownAs ?? null,
 			isExplorable: person.discoverable,
 			...(await this.resolveAvatarAndBanner(exist, person.icon, person.image).catch(() => ({}))),
-		} as Partial<MiRemoteUser> & Pick<MiRemoteUser, 'isBot' | 'isCat' | 'isLocked' | 'movedToUri' | 'alsoKnownAs' | 'isExplorable'>;
+		} as Partial<RemoteUser> & Pick<RemoteUser, 'isBot' | 'isCat' | 'isLocked' | 'movedToUri' | 'alsoKnownAs' | 'isExplorable'>;
 
 		const moving = ((): boolean => {
 			// 移行先がない→ある
@@ -542,7 +537,7 @@ export class ApPersonService implements OnModuleInit {
 	 * リモートサーバーからフェッチしてMisskeyに登録しそれを返します。
 	 */
 	@bindThis
-	public async resolvePerson(uri: string, resolver?: Resolver): Promise<MiLocalUser | MiRemoteUser> {
+	public async resolvePerson(uri: string, resolver?: Resolver): Promise<LocalUser | RemoteUser> {
 		//#region このサーバーに既に登録されていたらそれを返す
 		const exist = await this.fetchPerson(uri);
 		if (exist) return exist;
@@ -572,7 +567,7 @@ export class ApPersonService implements OnModuleInit {
 	}
 
 	@bindThis
-	public async updateFeatured(userId: MiUser['id'], resolver?: Resolver): Promise<void> {
+	public async updateFeatured(userId: User['id'], resolver?: Resolver): Promise<void> {
 		const user = await this.usersRepository.findOneByOrFail({ id: userId });
 		if (!this.userEntityService.isRemoteUser(user)) return;
 		if (!user.featured) return;
@@ -590,7 +585,7 @@ export class ApPersonService implements OnModuleInit {
 		const items = await Promise.all(toArray(unresolvedItems).map(x => _resolver.resolve(x)));
 
 		// Resolve and regist Notes
-		const limit = promiseLimit<MiNote | null>(2);
+		const limit = promiseLimit<Note | null>(2);
 		const featuredNotes = await Promise.all(items
 			.filter(item => getApType(item) === 'Note')	// TODO: Noteでなくてもいいかも
 			.slice(0, 5)
@@ -600,13 +595,13 @@ export class ApPersonService implements OnModuleInit {
 			}))));
 
 		await this.db.transaction(async transactionalEntityManager => {
-			await transactionalEntityManager.delete(MiUserNotePining, { userId: user.id });
+			await transactionalEntityManager.delete(UserNotePining, { userId: user.id });
 
 			// とりあえずidを別の時間で生成して順番を維持
 			let td = 0;
-			for (const note of featuredNotes.filter((note): note is MiNote => note != null)) {
+			for (const note of featuredNotes.filter((note): note is Note => note != null)) {
 				td -= 1000;
-				transactionalEntityManager.insert(MiUserNotePining, {
+				transactionalEntityManager.insert(UserNotePining, {
 					id: this.idService.genId(new Date(Date.now() + td)),
 					createdAt: new Date(),
 					userId: user.id,
@@ -622,7 +617,7 @@ export class ApPersonService implements OnModuleInit {
 	 * @param movePreventUris ここに列挙されたURIにsrc.movedToUriが含まれる場合、移行処理はしない（無限ループ防止）
 	 */
 	@bindThis
-	private async processRemoteMove(src: MiRemoteUser, movePreventUris: string[] = []): Promise<string> {
+	private async processRemoteMove(src: RemoteUser, movePreventUris: string[] = []): Promise<string> {
 		if (!src.movedToUri) return 'skip: no movedToUri';
 		if (src.uri === src.movedToUri) return 'skip: movedTo itself (src)'; // ？？？
 		if (movePreventUris.length > 10) return 'skip: too many moves';
@@ -632,7 +627,7 @@ export class ApPersonService implements OnModuleInit {
 
 		if (dst && this.userEntityService.isLocalUser(dst)) {
 			// targetがローカルユーザーだった場合データベースから引っ張ってくる
-			dst = await this.usersRepository.findOneByOrFail({ uri: src.movedToUri }) as MiLocalUser;
+			dst = await this.usersRepository.findOneByOrFail({ uri: src.movedToUri }) as LocalUser;
 		} else if (dst) {
 			if (movePreventUris.includes(src.movedToUri)) return 'skip: circular move';
 

@@ -1,8 +1,3 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { Inject, Injectable, OnApplicationShutdown } from '@nestjs/common';
 import push from 'web-push';
 import * as Redis from 'ioredis';
@@ -10,7 +5,7 @@ import { DI } from '@/di-symbols.js';
 import type { Config } from '@/config.js';
 import type { Packed } from '@/misc/json-schema.js';
 import { getNoteSummary } from '@/misc/get-note-summary.js';
-import type { MiSwSubscription, SwSubscriptionsRepository } from '@/models/index.js';
+import type { SwSubscription, SwSubscriptionsRepository } from '@/models/index.js';
 import { MetaService } from '@/core/MetaService.js';
 import { bindThis } from '@/decorators.js';
 import { RedisKVCache } from '@/misc/cache.js';
@@ -48,7 +43,7 @@ function truncateBody<T extends keyof PushNotificationsTypes>(type: T, body: Pus
 
 @Injectable()
 export class PushNotificationService implements OnApplicationShutdown {
-	private subscriptionsCache: RedisKVCache<MiSwSubscription[]>;
+	private subscriptionsCache: RedisKVCache<SwSubscription[]>;
 
 	constructor(
 		@Inject(DI.config)
@@ -62,7 +57,7 @@ export class PushNotificationService implements OnApplicationShutdown {
 
 		private metaService: MetaService,
 	) {
-		this.subscriptionsCache = new RedisKVCache<MiSwSubscription[]>(this.redisClient, 'userSwSubscriptions', {
+		this.subscriptionsCache = new RedisKVCache<SwSubscription[]>(this.redisClient, 'userSwSubscriptions', {
 			lifetime: 1000 * 60 * 60 * 1, // 1h
 			memoryCacheLifetime: 1000 * 60 * 3, // 3m
 			fetcher: (key) => this.swSubscriptionsRepository.findBy({ userId: key }),

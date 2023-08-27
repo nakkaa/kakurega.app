@@ -1,18 +1,13 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { randomUUID } from 'node:crypto';
 import { Inject, Injectable } from '@nestjs/common';
 import bcrypt from 'bcryptjs';
 import { IsNull, DataSource } from 'typeorm';
 import { genRsaKeyPair } from '@/misc/gen-key-pair.js';
-import { MiUser } from '@/models/entities/User.js';
-import { MiUserProfile } from '@/models/entities/UserProfile.js';
+import { User } from '@/models/entities/User.js';
+import { UserProfile } from '@/models/entities/UserProfile.js';
 import { IdService } from '@/core/IdService.js';
-import { MiUserKeypair } from '@/models/entities/UserKeypair.js';
-import { MiUsedUsername } from '@/models/entities/UsedUsername.js';
+import { UserKeypair } from '@/models/entities/UserKeypair.js';
+import { UsedUsername } from '@/models/entities/UsedUsername.js';
 import { DI } from '@/di-symbols.js';
 import generateNativeUserToken from '@/misc/generate-native-user-token.js';
 import { bindThis } from '@/decorators.js';
@@ -28,7 +23,7 @@ export class CreateSystemUserService {
 	}
 
 	@bindThis
-	public async createSystemUser(username: string): Promise<MiUser> {
+	public async createSystemUser(username: string): Promise<User> {
 		const password = randomUUID();
 
 		// Generate hash of password
@@ -40,18 +35,18 @@ export class CreateSystemUserService {
 
 		const keyPair = await genRsaKeyPair();
 
-		let account!: MiUser;
+		let account!: User;
 
 		// Start transaction
 		await this.db.transaction(async transactionalEntityManager => {
-			const exist = await transactionalEntityManager.findOneBy(MiUser, {
+			const exist = await transactionalEntityManager.findOneBy(User, {
 				usernameLower: username.toLowerCase(),
 				host: IsNull(),
 			});
 
 			if (exist) throw new Error('the user is already exists');
 
-			account = await transactionalEntityManager.insert(MiUser, {
+			account = await transactionalEntityManager.insert(User, {
 				id: this.idService.genId(),
 				createdAt: new Date(),
 				username: username,
@@ -62,21 +57,21 @@ export class CreateSystemUserService {
 				isLocked: true,
 				isExplorable: false,
 				isBot: true,
-			}).then(x => transactionalEntityManager.findOneByOrFail(MiUser, x.identifiers[0]));
+			}).then(x => transactionalEntityManager.findOneByOrFail(User, x.identifiers[0]));
 
-			await transactionalEntityManager.insert(MiUserKeypair, {
+			await transactionalEntityManager.insert(UserKeypair, {
 				publicKey: keyPair.publicKey,
 				privateKey: keyPair.privateKey,
 				userId: account.id,
 			});
 
-			await transactionalEntityManager.insert(MiUserProfile, {
+			await transactionalEntityManager.insert(UserProfile, {
 				userId: account.id,
 				autoAcceptFollowed: false,
 				password: hash,
 			});
 
-			await transactionalEntityManager.insert(MiUsedUsername, {
+			await transactionalEntityManager.insert(UsedUsername, {
 				createdAt: new Date(),
 				username: username.toLowerCase(),
 			});

@@ -1,8 +1,3 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 export const packedChannelSchema = {
 	type: 'object',
 	properties: {
@@ -70,10 +65,6 @@ export const packedChannelSchema = {
 		},
 		color: {
 			type: 'string',
-			optional: false, nullable: false,
-		},
-		isSensitive: {
-			type: 'boolean',
 			optional: false, nullable: false,
 		},
 	},

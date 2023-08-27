@@ -1,12 +1,7 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 process.env.NODE_ENV = 'test';
 
 import * as assert from 'assert';
-import { MiFollowing } from '@/models/entities/Following.js';
+import { Following } from '@/models/entities/Following.js';
 import { connectStream, signup, api, post, startServer, initTestDb, waitFire } from '../utils.js';
 import type { INestApplicationContext } from '@nestjs/common';
 import type * as misskey from 'misskey-js';
@@ -46,7 +41,7 @@ describe('Streaming', () => {
 		beforeAll(async () => {
 			app = await startServer();
 			const connection = await initTestDb(true);
-			Followings = connection.getRepository(MiFollowing);
+			Followings = connection.getRepository(Following);
 
 			ayano = await signup({ username: 'ayano' });
 			kyoko = await signup({ username: 'kyoko' });

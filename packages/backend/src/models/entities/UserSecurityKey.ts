@@ -1,14 +1,9 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { PrimaryColumn, Entity, JoinColumn, Column, ManyToOne, Index } from 'typeorm';
 import { id } from '../id.js';
-import { MiUser } from './User.js';
+import { User } from './User.js';
 
-@Entity('user_security_key')
-export class MiUserSecurityKey {
+@Entity()
+export class UserSecurityKey {
 	@PrimaryColumn('varchar', {
 		comment: 'Variable-length id given to navigator.credentials.get()',
 	})
@@ -16,13 +11,13 @@ export class MiUserSecurityKey {
 
 	@Index()
 	@Column(id())
-	public userId: MiUser['id'];
+	public userId: User['id'];
 
-	@ManyToOne(type => MiUser, {
+	@ManyToOne(type => User, {
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn()
-	public user: MiUser | null;
+	public user: User | null;
 
 	@Index()
 	@Column('varchar', {
@@ -43,7 +38,7 @@ export class MiUserSecurityKey {
 	})
 	public name: string;
 
-	constructor(data: Partial<MiUserSecurityKey>) {
+	constructor(data: Partial<UserSecurityKey>) {
 		if (data == null) return;
 
 		for (const [k, v] of Object.entries(data)) {

@@ -1,8 +1,3 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import RE2 from 're2';
 import * as mfm from 'mfm-js';
 import { Inject, Injectable } from '@nestjs/common';
@@ -10,9 +5,9 @@ import { extractCustomEmojisFromMfm } from '@/misc/extract-custom-emojis-from-mf
 import { extractHashtags } from '@/misc/extract-hashtags.js';
 import * as Acct from '@/misc/acct.js';
 import type { UsersRepository, DriveFilesRepository, UserProfilesRepository, PagesRepository } from '@/models/index.js';
-import type { MiUser } from '@/models/entities/User.js';
+import type { User } from '@/models/entities/User.js';
 import { birthdaySchema, descriptionSchema, locationSchema, nameSchema } from '@/models/entities/User.js';
-import type { MiUserProfile } from '@/models/entities/UserProfile.js';
+import type { UserProfile } from '@/models/entities/UserProfile.js';
 import { notificationTypes } from '@/types.js';
 import { normalizeForSearch } from '@/misc/normalize-for-search.js';
 import { langmap } from '@/misc/langmap.js';
@@ -25,6 +20,7 @@ import { HashtagService } from '@/core/HashtagService.js';
 import { DI } from '@/di-symbols.js';
 import { RoleService } from '@/core/RoleService.js';
 import { CacheService } from '@/core/CacheService.js';
+import { AccountMoveService } from '@/core/AccountMoveService.js';
 import { RemoteUserResolveService } from '@/core/RemoteUserResolveService.js';
 import { DriveFileEntityService } from '@/core/entities/DriveFileEntityService.js';
 import { ApiLoggerService } from '../../ApiLoggerService.js';
@@ -173,8 +169,9 @@ export const paramDef = {
 	},
 } as const;
 
+// eslint-disable-next-line import/no-default-export
 @Injectable()
-export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-disable-line import/no-default-export
+export default class extends Endpoint<typeof meta, typeof paramDef> {
 	constructor(
 		@Inject(DI.usersRepository)
 		private usersRepository: UsersRepository,
@@ -193,6 +190,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 		private globalEventService: GlobalEventService,
 		private userFollowingService: UserFollowingService,
 		private accountUpdateService: AccountUpdateService,
+		private accountMoveService: AccountMoveService,
 		private remoteUserResolveService: RemoteUserResolveService,
 		private apiLoggerService: ApiLoggerService,
 		private hashtagService: HashtagService,
@@ -203,8 +201,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			const user = await this.usersRepository.findOneByOrFail({ id: _user.id });
 			const isSecure = token == null;
 
-			const updates = {} as Partial<MiUser>;
-			const profileUpdates = {} as Partial<MiUserProfile>;
+			const updates = {} as Partial<User>;
+			const profileUpdates = {} as Partial<UserProfile>;
 
 			const profile = await this.userProfilesRepository.findOneByOrFail({ userId: user.id });
 

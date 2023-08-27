@@ -1,15 +1,10 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { URL } from 'node:url';
 import { Inject, Injectable } from '@nestjs/common';
 import chalk from 'chalk';
 import { IsNull } from 'typeorm';
 import { DI } from '@/di-symbols.js';
 import type { UsersRepository } from '@/models/index.js';
-import type { MiLocalUser, MiRemoteUser } from '@/models/entities/User.js';
+import type { LocalUser, RemoteUser } from '@/models/entities/User.js';
 import type { Config } from '@/config.js';
 import type Logger from '@/logger.js';
 import { UtilityService } from '@/core/UtilityService.js';
@@ -40,7 +35,7 @@ export class RemoteUserResolveService {
 	}
 
 	@bindThis
-	public async resolveUser(username: string, host: string | null): Promise<MiLocalUser | MiRemoteUser> {
+	public async resolveUser(username: string, host: string | null): Promise<LocalUser | RemoteUser> {
 		const usernameLower = username.toLowerCase();
 
 		if (host == null) {
@@ -51,7 +46,7 @@ export class RemoteUserResolveService {
 				} else {
 					return u;
 				}
-			}) as MiLocalUser;
+			}) as LocalUser;
 		}
 
 		host = this.utilityService.toPuny(host);
@@ -64,10 +59,10 @@ export class RemoteUserResolveService {
 				} else {
 					return u;
 				}
-			}) as MiLocalUser;
+			}) as LocalUser;
 		}
 
-		const user = await this.usersRepository.findOneBy({ usernameLower, host }) as MiRemoteUser | null;
+		const user = await this.usersRepository.findOneBy({ usernameLower, host }) as RemoteUser | null;
 
 		const acctLower = `${usernameLower}@${host}`;
 
@@ -86,7 +81,7 @@ export class RemoteUserResolveService {
 							} else {
 								return u;
 							}
-						})) as MiLocalUser;
+						})) as LocalUser;
 				}
 			}
 
@@ -132,7 +127,7 @@ export class RemoteUserResolveService {
 				if (u == null) {
 					throw new Error('user not found');
 				} else {
-					return u as MiLocalUser | MiRemoteUser;
+					return u as LocalUser | RemoteUser;
 				}
 			});
 		}

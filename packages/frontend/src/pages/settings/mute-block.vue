@@ -1,8 +1,3 @@
-<!--
-SPDX-FileCopyrightText: syuilo and other misskey contributors
-SPDX-License-Identifier: AGPL-3.0-only
--->
-
 <template>
 <div class="_gaps_m">
 	<MkTab v-model="tab">
@@ -24,7 +19,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<div class="_gaps_s">
 					<div v-for="item in items" :key="item.mutee.id" :class="[$style.userItem, { [$style.userItemOpend]: expandedRenoteMuteItems.includes(item.id) }]">
 						<div :class="$style.userItemMain">
-							<MkA :class="$style.userItemMainBody" :to="userPage(item.mutee)">
+							<MkA :class="$style.userItemMainBody" :to="`/user-info/${item.mutee.id}`">
 								<MkUserCardMini :user="item.mutee"/>
 							</MkA>
 							<button class="_button" :class="$style.userToggle" @click="toggleRenoteMuteItem(item)"><i :class="$style.chevron" class="ti ti-chevron-down"></i></button>
@@ -52,7 +47,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<div class="_gaps_s">
 					<div v-for="item in items" :key="item.mutee.id" :class="[$style.userItem, { [$style.userItemOpend]: expandedMuteItems.includes(item.id) }]">
 						<div :class="$style.userItemMain">
-							<MkA :class="$style.userItemMainBody" :to="userPage(item.mutee)">
+							<MkA :class="$style.userItemMainBody" :to="`/user-info/${item.mutee.id}`">
 								<MkUserCardMini :user="item.mutee"/>
 							</MkA>
 							<button class="_button" :class="$style.userToggle" @click="toggleMuteItem(item)"><i :class="$style.chevron" class="ti ti-chevron-down"></i></button>
@@ -82,7 +77,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<div class="_gaps_s">
 					<div v-for="item in items" :key="item.blockee.id" :class="[$style.userItem, { [$style.userItemOpend]: expandedBlockItems.includes(item.id) }]">
 						<div :class="$style.userItemMain">
-							<MkA :class="$style.userItemMainBody" :to="userPage(item.blockee)">
+							<MkA :class="$style.userItemMainBody" :to="`/user-info/${item.blockee.id}`">
 								<MkUserCardMini :user="item.blockee"/>
 							</MkA>
 							<button class="_button" :class="$style.userToggle" @click="toggleBlockItem(item)"><i :class="$style.chevron" class="ti ti-chevron-down"></i></button>

@@ -1,12 +1,7 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { In, IsNull } from 'typeorm';
 import { Inject, Injectable } from '@nestjs/common';
 import type { UsersRepository } from '@/models/index.js';
-import type { MiUser } from '@/models/entities/User.js';
+import type { User } from '@/models/entities/User.js';
 import { Endpoint } from '@/server/api/endpoint-base.js';
 import { UserEntityService } from '@/core/entities/UserEntityService.js';
 import { RemoteUserResolveService } from '@/core/RemoteUserResolveService.js';
@@ -79,8 +74,9 @@ export const paramDef = {
 	],
 } as const;
 
+// eslint-disable-next-line import/no-default-export
 @Injectable()
-export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-disable-line import/no-default-export
+export default class extends Endpoint<typeof meta, typeof paramDef> {
 	constructor(
 		@Inject(DI.usersRepository)
 		private usersRepository: UsersRepository,
@@ -110,7 +106,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				});
 
 				// リクエストされた通りに並べ替え
-				const _users: MiUser[] = [];
+				const _users: User[] = [];
 				for (const id of ps.userIds) {
 					_users.push(users.find(x => x.id === id)!);
 				}
@@ -126,7 +122,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 						throw new ApiError(meta.errors.failedToResolveRemoteUser);
 					});
 				} else {
-					const q: FindOptionsWhere<MiUser> = ps.userId != null
+					const q: FindOptionsWhere<User> = ps.userId != null
 						? { id: ps.userId }
 						: { usernameLower: ps.username!.toLowerCase(), host: IsNull() };
 

@@ -1,9 +1,9 @@
 import { Entity, Index, JoinColumn, Column, ManyToOne, PrimaryColumn } from 'typeorm';
 import { id } from '../id.js';
-import { MiUser } from './User.js';
+import { User } from './User.js';
 
 @Entity()
-export class MiNoteNotification {
+export class NoteNotification {
 	@PrimaryColumn(id())
 	public id: string;
 
@@ -12,21 +12,21 @@ export class MiNoteNotification {
 
 	@Index()
 	@Column(id())
-	public userId: MiUser['id'];
+	public userId: User['id'];
 
-	@ManyToOne(type => MiUser, {
+	@ManyToOne(type => User, {
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn()
-	public user: MiUser | null;
+	public user: User | null;
 
 	@Index()
 	@Column(id())
-	public targetUserId: MiUser['id'];
+	public targetUserId: User['id'];
 
-	@ManyToOne(type => MiUser, {
+	@ManyToOne(type => User, {
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn()
-	public targetUser: MiUser | null;
+	public targetUser: User | null;
 }

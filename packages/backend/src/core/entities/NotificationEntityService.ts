@@ -1,16 +1,11 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { Inject, Injectable } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { In } from 'typeorm';
 import { DI } from '@/di-symbols.js';
-import type { AccessTokensRepository, FollowRequestsRepository, NotesRepository, MiUser, UsersRepository } from '@/models/index.js';
+import type { AccessTokensRepository, FollowRequestsRepository, NoteReactionsRepository, NotesRepository, User, UsersRepository } from '@/models/index.js';
 import { awaitAll } from '@/misc/prelude/await-all.js';
-import type { MiNotification } from '@/models/entities/Notification.js';
-import type { MiNote } from '@/models/entities/Note.js';
+import type { Notification } from '@/models/entities/Notification.js';
+import type { Note } from '@/models/entities/Note.js';
 import type { Packed } from '@/misc/json-schema.js';
 import { bindThis } from '@/decorators.js';
 import { isNotNull } from '@/misc/is-not-null.js';
@@ -37,6 +32,9 @@ export class NotificationEntityService implements OnModuleInit {
 		@Inject(DI.usersRepository)
 		private usersRepository: UsersRepository,
 
+		@Inject(DI.noteReactionsRepository)
+		private noteReactionsRepository: NoteReactionsRepository,
+
 		@Inject(DI.followRequestsRepository)
 		private followRequestsRepository: FollowRequestsRepository,
 
@@ -57,15 +55,15 @@ export class NotificationEntityService implements OnModuleInit {
 
 	@bindThis
 	public async pack(
-		src: MiNotification,
-		meId: MiUser['id'],
+		src: Notification,
+		meId: User['id'],
 		// eslint-disable-next-line @typescript-eslint/ban-types
 		options: {
 
 		},
 		hint?: {
-			packedNotes: Map<MiNote['id'], Packed<'Note'>>;
-			packedUsers: Map<MiUser['id'], Packed<'User'>>;
+			packedNotes: Map<Note['id'], Packed<'Note'>>;
+			packedUsers: Map<User['id'], Packed<'User'>>;
 		},
 	): Promise<Packed<'Notification'>> {
 		const notification = src;
@@ -108,8 +106,8 @@ export class NotificationEntityService implements OnModuleInit {
 
 	@bindThis
 	public async packMany(
-		notifications: MiNotification[],
-		meId: MiUser['id'],
+		notifications: Notification[],
+		meId: User['id'],
 	) {
 		if (notifications.length === 0) return [];
 

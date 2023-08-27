@@ -1,8 +1,3 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { Entity, Column, PrimaryColumn } from 'typeorm';
 import { id } from '../id.js';
 
@@ -95,8 +90,8 @@ export type RoleCondFormulaValue =
 	CondFormulaValueNotesLessThanOrEq |
 	CondFormulaValueNotesMoreThanOrEq;
 
-@Entity('role')
-export class MiRole {
+@Entity()
+export class Role {
 	@PrimaryColumn(id())
 	public id: string;
 

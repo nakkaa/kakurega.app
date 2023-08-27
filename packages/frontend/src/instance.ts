@@ -1,8 +1,3 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { computed, reactive } from 'vue';
 import * as Misskey from 'misskey-js';
 import { api } from './os';

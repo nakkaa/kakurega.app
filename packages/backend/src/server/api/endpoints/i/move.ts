@@ -1,15 +1,13 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import ms from 'ms';
+
+import type { Config } from '@/config.js';
+import { DI } from '@/di-symbols.js';
 
 import { Endpoint } from '@/server/api/endpoint-base.js';
 import { ApiError } from '@/server/api/error.js';
 
-import { MiLocalUser, MiRemoteUser } from '@/models/entities/User.js';
+import { LocalUser, RemoteUser } from '@/models/entities/User.js';
 
 import { AccountMoveService } from '@/core/AccountMoveService.js';
 import { RemoteUserResolveService } from '@/core/RemoteUserResolveService.js';
@@ -74,9 +72,13 @@ export const paramDef = {
 	required: ['moveToAccount'],
 } as const;
 
+// eslint-disable-next-line import/no-default-export
 @Injectable()
-export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-disable-line import/no-default-export
+export default class extends Endpoint<typeof meta, typeof paramDef> {
 	constructor(
+		@Inject(DI.config)
+		private config: Config,
+
 		private remoteUserResolveService: RemoteUserResolveService,
 		private apiLoggerService: ApiLoggerService,
 		private accountMoveService: AccountMoveService,
@@ -99,7 +101,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				this.apiLoggerService.logger.warn(`failed to resolve remote user: ${e}`);
 				throw new ApiError(meta.errors.noSuchUser);
 			});
-			const destination = await this.getterService.getUser(moveTo.id) as MiLocalUser | MiRemoteUser;
+			const destination = await this.getterService.getUser(moveTo.id) as LocalUser | RemoteUser;
 			const newUri = this.userEntityService.getUserUri(destination);
 
 			// update local db

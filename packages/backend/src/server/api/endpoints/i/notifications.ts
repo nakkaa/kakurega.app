@@ -1,20 +1,16 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { Brackets, In } from 'typeorm';
 import * as Redis from 'ioredis';
 import { Inject, Injectable } from '@nestjs/common';
-import type { NotesRepository } from '@/models/index.js';
+import type { UsersRepository, FollowingsRepository, MutingsRepository, UserProfilesRepository, NotesRepository } from '@/models/index.js';
 import { obsoleteNotificationTypes, notificationTypes } from '@/types.js';
 import { Endpoint } from '@/server/api/endpoint-base.js';
+import { QueryService } from '@/core/QueryService.js';
 import { NoteReadService } from '@/core/NoteReadService.js';
 import { NotificationEntityService } from '@/core/entities/NotificationEntityService.js';
 import { NotificationService } from '@/core/NotificationService.js';
 import { DI } from '@/di-symbols.js';
 import { IdService } from '@/core/IdService.js';
-import { MiNotification } from '@/models/entities/Notification.js';
+import { Notification } from '@/models/entities/Notification.js';
 
 export const meta = {
 	tags: ['account', 'notifications'],
@@ -57,11 +53,21 @@ export const paramDef = {
 	required: [],
 } as const;
 
+// eslint-disable-next-line import/no-default-export
 @Injectable()
-export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-disable-line import/no-default-export
+export default class extends Endpoint<typeof meta, typeof paramDef> {
 	constructor(
 		@Inject(DI.redis)
 		private redisClient: Redis.Redis,
+
+		@Inject(DI.usersRepository)
+		private usersRepository: UsersRepository,
+
+		@Inject(DI.mutingsRepository)
+		private mutingsRepository: MutingsRepository,
+
+		@Inject(DI.userProfilesRepository)
+		private userProfilesRepository: UserProfilesRepository,
 
 		@Inject(DI.notesRepository)
 		private notesRepository: NotesRepository,
@@ -69,6 +75,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 		private idService: IdService,
 		private notificationEntityService: NotificationEntityService,
 		private notificationService: NotificationService,
+		private queryService: QueryService,
 		private noteReadService: NoteReadService,
 	) {
 		super(meta, paramDef, async (ps, me) => {
@@ -95,7 +102,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				return [];
 			}
 
-			let notifications = notificationsRes.map(x => JSON.parse(x[1][1])).filter(x => x.id !== ps.untilId && x !== ps.sinceId) as MiNotification[];
+			let notifications = notificationsRes.map(x => JSON.parse(x[1][1])).filter(x => x.id !== ps.untilId && x !== ps.sinceId) as Notification[];
 
 			if (includeTypes && includeTypes.length > 0) {
 				notifications = notifications.filter(notification => includeTypes.includes(notification.type));

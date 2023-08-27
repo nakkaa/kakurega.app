@@ -1,14 +1,9 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { Inject, Injectable } from '@nestjs/common';
 import * as Redis from 'ioredis';
 import { In } from 'typeorm';
-import type { MiRole, MiRoleAssignment, RoleAssignmentsRepository, RolesRepository, UsersRepository } from '@/models/index.js';
+import type { Role, RoleAssignment, RoleAssignmentsRepository, RolesRepository, UsersRepository } from '@/models/index.js';
 import { MemoryKVCache, MemorySingleCache } from '@/misc/cache.js';
-import type { MiUser } from '@/models/entities/User.js';
+import type { User } from '@/models/entities/User.js';
 import { DI } from '@/di-symbols.js';
 import { bindThis } from '@/decorators.js';
 import { MetaService } from '@/core/MetaService.js';
@@ -72,8 +67,8 @@ export const DEFAULT_POLICIES: RolePolicies = {
 
 @Injectable()
 export class RoleService implements OnApplicationShutdown {
-	private rolesCache: MemorySingleCache<MiRole[]>;
-	private roleAssignmentByUserIdCache: MemoryKVCache<MiRoleAssignment[]>;
+	private rolesCache: MemorySingleCache<Role[]>;
+	private roleAssignmentByUserIdCache: MemoryKVCache<RoleAssignment[]>;
 
 	public static AlreadyAssignedError = class extends Error {};
 	public static NotAssignedError = class extends Error {};
@@ -103,8 +98,8 @@ export class RoleService implements OnApplicationShutdown {
 	) {
 		//this.onMessage = this.onMessage.bind(this);
 
-		this.rolesCache = new MemorySingleCache<MiRole[]>(1000 * 60 * 60 * 1);
-		this.roleAssignmentByUserIdCache = new MemoryKVCache<MiRoleAssignment[]>(1000 * 60 * 60 * 1);
+		this.rolesCache = new MemorySingleCache<Role[]>(1000 * 60 * 60 * 1);
+		this.roleAssignmentByUserIdCache = new MemoryKVCache<RoleAssignment[]>(1000 * 60 * 60 * 1);
 
 		this.redisForSub.on('message', this.onMessage);
 	}
@@ -175,7 +170,7 @@ export class RoleService implements OnApplicationShutdown {
 	}
 
 	@bindThis
-	private evalCond(user: MiUser, value: RoleCondFormulaValue): boolean {
+	private evalCond(user: User, value: RoleCondFormulaValue): boolean {
 		try {
 			switch (value.type) {
 				case 'and': {
@@ -235,7 +230,7 @@ export class RoleService implements OnApplicationShutdown {
 	}
 
 	@bindThis
-	public async getUserAssigns(userId: MiUser['id']) {
+	public async getUserAssigns(userId: User['id']) {
 		const now = Date.now();
 		let assigns = await this.roleAssignmentByUserIdCache.fetch(userId, () => this.roleAssignmentsRepository.findBy({ userId }));
 		// 期限切れのロールを除外
@@ -244,7 +239,7 @@ export class RoleService implements OnApplicationShutdown {
 	}
 
 	@bindThis
-	public async getUserRoles(userId: MiUser['id']) {
+	public async getUserRoles(userId: User['id']) {
 		const roles = await this.rolesCache.fetch(() => this.rolesRepository.findBy({}));
 		const assigns = await this.getUserAssigns(userId);
 		const assignedRoles = roles.filter(r => assigns.map(x => x.roleId).includes(r.id));
@@ -257,7 +252,7 @@ export class RoleService implements OnApplicationShutdown {
 	 * 指定ユーザーのバッジロール一覧取得
 	 */
 	@bindThis
-	public async getUserBadgeRoles(userId: MiUser['id']) {
+	public async getUserBadgeRoles(userId: User['id']) {
 		const now = Date.now();
 		let assigns = await this.roleAssignmentByUserIdCache.fetch(userId, () => this.roleAssignmentsRepository.findBy({ userId }));
 		// 期限切れのロールを除外
@@ -276,7 +271,7 @@ export class RoleService implements OnApplicationShutdown {
 	}
 
 	@bindThis
-	public async getUserPolicies(userId: MiUser['id'] | null, overridePolicies?: Partial<RolePolicies>): Promise<RolePolicies> {
+	public async getUserPolicies(userId: User['id'] | null, overridePolicies?: Partial<RolePolicies>): Promise<RolePolicies> {
 		const meta = await this.metaService.fetch();
 		const basePolicies = { ...DEFAULT_POLICIES, ...meta.policies };
 
@@ -324,19 +319,19 @@ export class RoleService implements OnApplicationShutdown {
 	}
 
 	@bindThis
-	public async isModerator(user: { id: MiUser['id']; isRoot: MiUser['isRoot'] } | null): Promise<boolean> {
+	public async isModerator(user: { id: User['id']; isRoot: User['isRoot'] } | null): Promise<boolean> {
 		if (user == null) return false;
 		return user.isRoot || (await this.getUserRoles(user.id)).some(r => r.isModerator || r.isAdministrator);
 	}
 
 	@bindThis
-	public async isAdministrator(user: { id: MiUser['id']; isRoot: MiUser['isRoot'] } | null): Promise<boolean> {
+	public async isAdministrator(user: { id: User['id']; isRoot: User['isRoot'] } | null): Promise<boolean> {
 		if (user == null) return false;
 		return user.isRoot || (await this.getUserRoles(user.id)).some(r => r.isAdministrator);
 	}
 
 	@bindThis
-	public async isExplorable(role: { id: MiRole['id']} | null): Promise<boolean> {
+	public async isExplorable(role: { id: Role['id']} | null): Promise<boolean> {
 		if (role == null) return false;
 		const check = await this.rolesRepository.findOneBy({ id: role.id });
 		if (check == null) return false;
@@ -344,7 +339,7 @@ export class RoleService implements OnApplicationShutdown {
 	}
 
 	@bindThis
-	public async getModeratorIds(includeAdmins = true): Promise<MiUser['id'][]> {
+	public async getModeratorIds(includeAdmins = true): Promise<User['id'][]> {
 		const roles = await this.rolesCache.fetch(() => this.rolesRepository.findBy({}));
 		const moderatorRoles = includeAdmins ? roles.filter(r => r.isModerator || r.isAdministrator) : roles.filter(r => r.isModerator);
 		const assigns = moderatorRoles.length > 0 ? await this.roleAssignmentsRepository.findBy({
@@ -355,7 +350,7 @@ export class RoleService implements OnApplicationShutdown {
 	}
 
 	@bindThis
-	public async getModerators(includeAdmins = true): Promise<MiUser[]> {
+	public async getModerators(includeAdmins = true): Promise<User[]> {
 		const ids = await this.getModeratorIds(includeAdmins);
 		const users = ids.length > 0 ? await this.usersRepository.findBy({
 			id: In(ids),
@@ -364,7 +359,7 @@ export class RoleService implements OnApplicationShutdown {
 	}
 
 	@bindThis
-	public async getAdministratorIds(): Promise<MiUser['id'][]> {
+	public async getAdministratorIds(): Promise<User['id'][]> {
 		const roles = await this.rolesCache.fetch(() => this.rolesRepository.findBy({}));
 		const administratorRoles = roles.filter(r => r.isAdministrator);
 		const assigns = administratorRoles.length > 0 ? await this.roleAssignmentsRepository.findBy({
@@ -375,7 +370,7 @@ export class RoleService implements OnApplicationShutdown {
 	}
 
 	@bindThis
-	public async getAdministrators(): Promise<MiUser[]> {
+	public async getAdministrators(): Promise<User[]> {
 		const ids = await this.getAdministratorIds();
 		const users = ids.length > 0 ? await this.usersRepository.findBy({
 			id: In(ids),
@@ -384,7 +379,7 @@ export class RoleService implements OnApplicationShutdown {
 	}
 
 	@bindThis
-	public async assign(userId: MiUser['id'], roleId: MiRole['id'], expiresAt: Date | null = null): Promise<void> {
+	public async assign(userId: User['id'], roleId: Role['id'], expiresAt: Date | null = null): Promise<void> {
 		const now = new Date();
 
 		const existing = await this.roleAssignmentsRepository.findOneBy({
@@ -419,7 +414,7 @@ export class RoleService implements OnApplicationShutdown {
 	}
 
 	@bindThis
-	public async unassign(userId: MiUser['id'], roleId: MiRole['id']): Promise<void> {
+	public async unassign(userId: User['id'], roleId: Role['id']): Promise<void> {
 		const now = new Date();
 
 		const existing = await this.roleAssignmentsRepository.findOneBy({ roleId, userId });

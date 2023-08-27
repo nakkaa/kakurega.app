@@ -1,21 +1,16 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { AhoCorasick } from 'slacc';
 import RE2 from 're2';
-import type { MiNote } from '@/models/entities/Note.js';
-import type { MiUser } from '@/models/entities/User.js';
+import type { Note } from '@/models/entities/Note.js';
+import type { User } from '@/models/entities/User.js';
 
 type NoteLike = {
-	userId: MiNote['userId'];
-	text: MiNote['text'];
-	cw?: MiNote['cw'];
+	userId: Note['userId'];
+	text: Note['text'];
+	cw?: Note['cw'];
 };
 
 type UserLike = {
-	id: MiUser['id'];
+	id: User['id'];
 };
 
 const acCache = new Map<string, AhoCorasick>();

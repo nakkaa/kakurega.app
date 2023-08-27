@@ -1,16 +1,11 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { PrimaryColumn, Entity, Index, JoinColumn, Column, ManyToOne } from 'typeorm';
 import { id } from '../id.js';
-import { MiUser } from './User.js';
-import { MiUserList } from './UserList.js';
+import { User } from './User.js';
+import { UserList } from './UserList.js';
 
-@Entity('user_list_favorite')
+@Entity()
 @Index(['userId', 'userListId'], { unique: true })
-export class MiUserListFavorite {
+export class UserListFavorite {
 	@PrimaryColumn(id())
 	public id: string;
 
@@ -19,20 +14,20 @@ export class MiUserListFavorite {
 
 	@Index()
 	@Column(id())
-	public userId: MiUser['id'];
+	public userId: User['id'];
 
-	@ManyToOne(type => MiUser, {
+	@ManyToOne(type => User, {
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn()
-	public user: MiUser | null;
+	public user: User | null;
 
 	@Column(id())
-	public userListId: MiUserList['id'];
+	public userListId: UserList['id'];
 
-	@ManyToOne(type => MiUserList, {
+	@ManyToOne(type => UserList, {
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn()
-	public userList: MiUserList | null;
+	public userList: UserList | null;
 }

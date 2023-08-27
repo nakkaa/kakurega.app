@@ -1,8 +1,3 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { Injectable, Inject } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import type { FollowingsRepository, InstancesRepository } from '@/models/index.js';
@@ -18,8 +13,9 @@ import type { KVs } from '../core.js';
 /**
  * フェデレーションに関するチャート
  */
+// eslint-disable-next-line import/no-default-export
 @Injectable()
-export default class FederationChart extends Chart<typeof schema> { // eslint-disable-line import/no-default-export
+export default class FederationChart extends Chart<typeof schema> {
 	constructor(
 		@Inject(DI.db)
 		private db: DataSource,

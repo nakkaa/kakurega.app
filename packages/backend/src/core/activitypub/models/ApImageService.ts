@@ -1,13 +1,8 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { Inject, Injectable } from '@nestjs/common';
 import { DI } from '@/di-symbols.js';
 import type { DriveFilesRepository } from '@/models/index.js';
-import type { MiRemoteUser } from '@/models/entities/User.js';
-import type { MiDriveFile } from '@/models/entities/DriveFile.js';
+import type { RemoteUser } from '@/models/entities/User.js';
+import type { DriveFile } from '@/models/entities/DriveFile.js';
 import { MetaService } from '@/core/MetaService.js';
 import { truncate } from '@/misc/truncate.js';
 import { DB_MAX_IMAGE_COMMENT_LENGTH } from '@/const.js';
@@ -39,7 +34,7 @@ export class ApImageService {
 	 * Imageを作成します。
 	 */
 	@bindThis
-	public async createImage(actor: MiRemoteUser, value: string | IObject): Promise<MiDriveFile> {
+	public async createImage(actor: RemoteUser, value: string | IObject): Promise<DriveFile> {
 		// 投稿者が凍結されていたらスキップ
 		if (actor.isSuspended) {
 			throw new Error('actor has been suspended');
@@ -90,7 +85,7 @@ export class ApImageService {
 	 * リモートサーバーからフェッチしてMisskeyに登録しそれを返します。
 	 */
 	@bindThis
-	public async resolveImage(actor: MiRemoteUser, value: string | IObject): Promise<MiDriveFile> {
+	public async resolveImage(actor: RemoteUser, value: string | IObject): Promise<DriveFile> {
 		// TODO
 
 		// リモートサーバーからフェッチしてきて登録

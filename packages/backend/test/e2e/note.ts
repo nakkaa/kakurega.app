@@ -1,16 +1,11 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 process.env.NODE_ENV = 'test';
 
 import * as assert from 'assert';
-import { MiNote } from '@/models/entities/Note.js';
-import { MAX_NOTE_TEXT_LENGTH } from '@/const.js';
+import { Note } from '@/models/entities/Note.js';
 import { signup, post, uploadUrl, startServer, initTestDb, api, uploadFile } from '../utils.js';
 import type { INestApplicationContext } from '@nestjs/common';
 import type * as misskey from 'misskey-js';
+import { MAX_NOTE_TEXT_LENGTH } from '@/const.js';
 
 describe('Note', () => {
 	let app: INestApplicationContext;
@@ -22,7 +17,7 @@ describe('Note', () => {
 	beforeAll(async () => {
 		app = await startServer();
 		const connection = await initTestDb(true);
-		Notes = connection.getRepository(MiNote);
+		Notes = connection.getRepository(Note);
 		alice = await signup({ username: 'alice' });
 		bob = await signup({ username: 'bob' });
 	}, 1000 * 60 * 2);
@@ -552,8 +547,8 @@ describe('Note', () => {
 		test('センシティブな投稿はhomeになる (単語指定)', async () => {
 			const sensitive = await api('admin/update-meta', {
 				sensitiveWords: [
-					'test',
-				],
+					"test",
+				]
 			}, alice);
 
 			assert.strictEqual(sensitive.status, 204);
@@ -566,13 +561,14 @@ describe('Note', () => {
 
 			assert.strictEqual(note1.status, 200);
 			assert.strictEqual(note1.body.createdNote.visibility, 'home');
+
 		});
 
 		test('センシティブな投稿はhomeになる (正規表現)', async () => {
 			const sensitive = await api('admin/update-meta', {
 				sensitiveWords: [
-					'/Test/i',
-				],
+					"/Test/i",
+				]
 			}, alice);
 
 			assert.strictEqual(sensitive.status, 204);
@@ -588,8 +584,8 @@ describe('Note', () => {
 		test('センシティブな投稿はhomeになる (スペースアンド)', async () => {
 			const sensitive = await api('admin/update-meta', {
 				sensitiveWords: [
-					'Test hoge',
-				],
+					"Test hoge"
+				]
 			}, alice);
 
 			assert.strictEqual(sensitive.status, 204);
@@ -600,6 +596,7 @@ describe('Note', () => {
 
 			assert.strictEqual(note2.status, 200);
 			assert.strictEqual(note2.body.createdNote.visibility, 'home');
+
 		});
 	});
 

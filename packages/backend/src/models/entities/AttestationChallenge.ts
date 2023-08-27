@@ -1,26 +1,21 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 import { PrimaryColumn, Entity, JoinColumn, Column, ManyToOne, Index } from 'typeorm';
 import { id } from '../id.js';
-import { MiUser } from './User.js';
+import { User } from './User.js';
 
-@Entity('attestation_challenge')
-export class MiAttestationChallenge {
+@Entity()
+export class AttestationChallenge {
 	@PrimaryColumn(id())
 	public id: string;
 
 	@Index()
 	@PrimaryColumn(id())
-	public userId: MiUser['id'];
+	public userId: User['id'];
 
-	@ManyToOne(type => MiUser, {
+	@ManyToOne(type => User, {
 		onDelete: 'CASCADE',
 	})
 	@JoinColumn()
-	public user: MiUser | null;
+	public user: User | null;
 
 	@Index()
 	@Column('varchar', {
@@ -41,7 +36,7 @@ export class MiAttestationChallenge {
 	})
 	public registrationChallenge: boolean;
 
-	constructor(data: Partial<MiAttestationChallenge>) {
+	constructor(data: Partial<AttestationChallenge>) {
 		if (data == null) return;
 
 		for (const [k, v] of Object.entries(data)) {

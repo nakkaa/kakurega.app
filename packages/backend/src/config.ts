@@ -1,8 +1,3 @@
-/*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- */
-
 /**
  * Config loader
  */
@@ -76,7 +71,6 @@ export type Source = {
 
 	id: string;
 
-	outgoingAddress?: string;
 	outgoingAddressFamily?: 'ipv4' | 'ipv6' | 'dual';
 
 	deliverJobConcurrency?: number;
@@ -198,7 +192,7 @@ function convertRedisOptions(options: RedisOptionsSource, host: string): RedisOp
 		...options,
 		password: options.pass,
 		prefix: options.prefix ?? host,
-		family: options.family ?? 0,
+		family: options.family == null ? 0 : options.family,
 		keyPrefix: `${options.prefix ?? host}:`,
 		db: options.db ?? 0,
 	};
