@@ -62,7 +62,7 @@ jobs:
           echo "Creating PR"
           COMMAND_ARGS=(-B "master-kakurega" -H "dev-kakurega" -t "release: v${{ steps.package-version.outputs.current-version }}" -b "Automated pr by github actions")
 
-          if git log "$TAG" -1 --pretty=%B | grep "^Merge tag '.+-(alpha|beta|rc).+'"; then
+          if git log "$TAG" -1 --pretty=%B | grep -E "^Merge tag '.+-(alpha|beta|rc).+'"; then
             COMMAND_ARGS+=(--draft)
           fi
 
