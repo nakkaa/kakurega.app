@@ -33,7 +33,7 @@ import { MiMutedNote } from '@/models/entities/MutedNote.js';
 import { MiMuting } from '@/models/entities/Muting.js';
 import { MiRenoteMuting } from '@/models/entities/RenoteMuting.js';
 import { MiNote } from '@/models/entities/Note.js';
-import { MiNoteNotification } from './entities/NoteNotification.js';
+import { MiNoteNotification } from '@/models/entities/NoteNotification.js';
 import { MiNoteFavorite } from '@/models/entities/NoteFavorite.js';
 import { MiNoteReaction } from '@/models/entities/NoteReaction.js';
 import { MiNoteThreadMuting } from '@/models/entities/NoteThreadMuting.js';
