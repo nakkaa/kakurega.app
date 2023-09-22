@@ -80,11 +80,12 @@ export function getUserMenu(user: Misskey.entities.UserDetailed, router: Router 
 		});
 	}
 
-	async function toggleNoteSubscribe() {
-		os.apiWithDialog(user.isNoteSubscribing ? 'note-notification/delete' : 'note-notification/create', {
+	async function toggleNotify() {
+		os.apiWithDialog('following/update', {
 			userId: user.id,
+			notify: user.notify === 'normal' ? 'none' : 'normal',
 		}).then(() => {
-			user.isNoteSubscribing = !user.isNoteSubscribing;
+			user.notify = user.notify === 'normal' ? 'none' : 'normal';
 		});
 	}
 
@@ -331,10 +332,6 @@ export function getUserMenu(user: Misskey.entities.UserDetailed, router: Router 
 		//}
 
 		menu = menu.concat([null, {
-			icon: user.isNoteSubscribing ? 'ti ti-bell-off' : 'ti ti-bell',
-			text: user.isNoteSubscribing ? i18n.ts.noteUnsubscribe : i18n.ts.noteSubscribe,
-			action: toggleNoteSubscribe,
-		}, null, {
 			icon: user.isMuted ? 'ti ti-eye' : 'ti ti-eye-off',
 			text: user.isMuted ? i18n.ts.unmute : i18n.ts.mute,
 			action: toggleMute,

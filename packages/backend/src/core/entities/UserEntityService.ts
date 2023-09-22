@@ -499,7 +499,10 @@ export class UserEntityService implements OnModuleInit {
 				isBlocked: relation.isBlocked,
 				isMuted: relation.isMuted,
 				isRenoteMuted: relation.isRenoteMuted,
-				notify: relation.following?.notify ?? 'none',
+				isNoteSubscribing: relation.isNoteSubscribing,
+				//純正Misskeyとの互換性を持たせるため
+				//純正通知: https://github.com/misskey-dev/misskey/commit/e3f151e2307e4c0d7b9cdfc7deba2ff028adce03
+				notify: relation.isNoteSubscribing ? 'normal' : 'none',
 			} : {}),
 		} as Promiseable<Packed<'User'>> as Promiseable<IsMeAndIsUserDetailed<ExpectsMe, D>>;
 
