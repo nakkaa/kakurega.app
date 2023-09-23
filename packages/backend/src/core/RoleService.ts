@@ -19,6 +19,7 @@ import { PatreonManagementService } from '@/core/integrations/PatreonManagementS
 import { StreamMessages } from '@/server/api/stream/types.js';
 import { IdService } from '@/core/IdService.js';
 import { GlobalEventService } from '@/core/GlobalEventService.js';
+import { ModerationLogService } from '@/core/ModerationLogService.js';
 import type { Packed } from '@/misc/json-schema.js';
 import type { OnApplicationShutdown } from '@nestjs/common';
 
@@ -100,6 +101,7 @@ export class RoleService implements OnApplicationShutdown {
 		private patreonManagementService: PatreonManagementService,
 		private globalEventService: GlobalEventService,
 		private idService: IdService,
+		private moderationLogService: ModerationLogService,
 	) {
 		//this.onMessage = this.onMessage.bind(this);
 
@@ -384,8 +386,10 @@ export class RoleService implements OnApplicationShutdown {
 	}
 
 	@bindThis
-	public async assign(userId: MiUser['id'], roleId: MiRole['id'], expiresAt: Date | null = null): Promise<void> {
+	public async assign(userId: MiUser['id'], roleId: MiRole['id'], expiresAt: Date | null = null, moderator?: MiUser): Promise<void> {
 		const now = new Date();
+
+		const role = await this.rolesRepository.findOneByOrFail({ id: roleId });
 
 		const existing = await this.roleAssignmentsRepository.findOneBy({
 			roleId: roleId,
@@ -416,10 +420,19 @@ export class RoleService implements OnApplicationShutdown {
 		});
 
 		this.globalEventService.publishInternalEvent('userRoleAssigned', created);
+
+		if (moderator) {
+			this.moderationLogService.log(moderator, 'assignRole', {
+				roleId: roleId,
+				roleName: role.name,
+				userId: userId,
+				expiresAt: expiresAt ? expiresAt.toISOString() : null,
+			});
+		}
 	}
 
 	@bindThis
-	public async unassign(userId: MiUser['id'], roleId: MiRole['id']): Promise<void> {
+	public async unassign(userId: MiUser['id'], roleId: MiRole['id'], moderator?: MiUser): Promise<void> {
 		const now = new Date();
 
 		const existing = await this.roleAssignmentsRepository.findOneBy({ roleId, userId });
@@ -440,6 +453,15 @@ export class RoleService implements OnApplicationShutdown {
 		});
 
 		this.globalEventService.publishInternalEvent('userRoleUnassigned', existing);
+
+		if (moderator) {
+			const role = await this.rolesRepository.findOneByOrFail({ id: roleId });
+			this.moderationLogService.log(moderator, 'unassignRole', {
+				roleId: roleId,
+				roleName: role.name,
+				userId: userId,
+			});
+		}
 	}
 
 	@bindThis
@@ -459,6 +481,26 @@ export class RoleService implements OnApplicationShutdown {
 		}
 
 		redisPipeline.exec();
+	}
+
+	@bindThis
+	public async update(role: MiRole, params: Partial<MiRole>, moderator?: MiUser): Promise<void> {
+		const date = new Date();
+		await this.rolesRepository.update(role.id, {
+			updatedAt: date,
+			...params,
+		});
+
+		const updated = await this.rolesRepository.findOneByOrFail({ id: role.id });
+		this.globalEventService.publishInternalEvent('roleUpdated', updated);
+
+		if (moderator) {
+			this.moderationLogService.log(moderator, 'updateRole', {
+				roleId: role.id,
+				before: role,
+				after: updated,
+			});
+		}
 	}
 
 	@bindThis
