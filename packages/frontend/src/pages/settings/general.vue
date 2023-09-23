@@ -132,6 +132,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<MkSwitch v-model="useBlurEffect">{{ i18n.ts.useBlurEffect }}</MkSwitch>
 				<MkSwitch v-model="useBlurEffectForModal">{{ i18n.ts.useBlurEffectForModal }}</MkSwitch>
 				<MkSwitch v-model="disableShowingAnimatedImages">{{ i18n.ts.disableShowingAnimatedImages }}</MkSwitch>
+				<MkSwitch v-model="highlightSensitiveMedia">{{ i18n.ts.highlightSensitiveMedia }}</MkSwitch>
 				<MkSwitch v-model="squareAvatars">{{ i18n.ts.squareAvatars }}</MkSwitch>
 				<MkSwitch v-model="useSystemFont">{{ i18n.ts.useSystemFont }}</MkSwitch>
 				<MkSwitch v-model="disableDrawer">{{ i18n.ts.disableDrawer }}</MkSwitch>
@@ -228,6 +229,7 @@ import { unisonReload } from '@/scripts/unison-reload.js';
 import { i18n } from '@/i18n.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
 import { fontList } from '@/scripts/font.js';
+import { isSupportNavigatorConnection } from '@/scripts/datasaver.js';
 import { miLocalStorage } from '@/local-storage.js';
 import { globalEvents } from '@/events.js';
 import { claimAchievement } from '@/scripts/achievements.js';
@@ -265,6 +267,7 @@ const customFont = computed(defaultStore.makeGetterSetter('customFont'));
 const disableShowingAnimatedImages = computed(defaultStore.makeGetterSetter('disableShowingAnimatedImages'));
 const forceShowAds = computed(defaultStore.makeGetterSetter('forceShowAds'));
 const loadRawImages = computed(defaultStore.makeGetterSetter('loadRawImages'));
+const highlightSensitiveMedia = computed(defaultStore.makeGetterSetter('highlightSensitiveMedia'));
 const enableDataSaverMode = computed(defaultStore.makeGetterSetter('enableDataSaverMode'));
 const autoDataSaver = computed(defaultStore.makeGetterSetter('autoDataSaver'));
 const imageNewTab = computed(defaultStore.makeGetterSetter('imageNewTab'));
@@ -319,6 +322,7 @@ watch([
 	hideNsfwNote,
 	mediaListWithOneImageAppearance,
 	reactionsDisplaySize,
+	highlightSensitiveMedia,
 	keepScreenOn,
 ], async () => {
 	await reloadAsk();

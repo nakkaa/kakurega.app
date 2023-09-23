@@ -107,7 +107,6 @@ async function reloadAsk() {
 	unisonReload();
 }
 
-
 const installedThemes = ref(getThemes());
 const builtinThemes = getBuiltinThemesRef();
 
