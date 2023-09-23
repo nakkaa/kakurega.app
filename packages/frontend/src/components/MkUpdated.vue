@@ -23,10 +23,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
+import * as os from '@/os.js';
 import MkButton from '@/components/MkButton.vue';
-import { version } from '@/config';
-import { i18n } from '@/i18n';
-import * as os from '@/os';
+import { version } from '@/config.js';
+import { i18n } from '@/i18n.js';
 
 const emit = defineEmits<{
 	(ev: 'closed'): void;
