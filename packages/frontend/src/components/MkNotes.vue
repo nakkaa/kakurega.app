@@ -4,7 +4,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<MkPagination ref="pagingComponent" :pagination="pagination" :suppress-infinity-fetch="isNeedSuppressInfinityFetch()">
+<MkPagination ref="pagingComponent" :pagination="pagination" :disableAutoLoad="disableAutoLoad" :suppressInfinityFetch="isNeedSuppressInfinityFetch()">
 	<template #empty>
 		<div class="_fullinfo">
 			<img :src="infoImageUrl" class="_ghost"/>
@@ -55,6 +55,7 @@ const props = defineProps<{
 	pagination: Paging;
 	noGap?: boolean;
 	filter?: Filter;
+	disableAutoLoad?: boolean;
 }>();
 
 const pagingComponent = shallowRef<InstanceType<typeof MkPagination>>();
