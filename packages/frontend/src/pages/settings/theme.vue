@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: syuilo and other misskey contributors
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
 <template>
 <div class="_gaps_m rsljpzjq">
 	<div v-adaptive-border class="rfqxtzch _panel">
@@ -73,24 +78,24 @@
 <script lang="ts" setup>
 import { computed, onActivated, ref, watch } from 'vue';
 import JSON5 from 'json5';
+import * as os from '@/os.js';
 import MkSwitch from '@/components/MkSwitch.vue';
 import MkSelect from '@/components/MkSelect.vue';
 import FormSection from '@/components/form/section.vue';
 import FormLink from '@/components/form/link.vue';
 import MkButton from '@/components/MkButton.vue';
-import { getBuiltinThemesRef } from '@/scripts/theme';
-import { selectFile } from '@/scripts/select-file';
-import { isDeviceDarkmode } from '@/scripts/is-device-darkmode';
-import { isTimeDarkmode } from '@/scripts/is-time-darkmode';
-import { ColdDeviceStorage, defaultStore } from '@/store';
-import { i18n } from '@/i18n';
-import { instance } from '@/instance';
-import { uniqueBy } from '@/scripts/array';
-import { fetchThemes, getThemes } from '@/theme-store';
-import { definePageMetadata } from '@/scripts/page-metadata';
-import * as os from '@/os';
-import { unisonReload } from '@/scripts/unison-reload';
-import { miLocalStorage } from '@/local-storage';
+import { getBuiltinThemesRef } from '@/scripts/theme.js';
+import { selectFile } from '@/scripts/select-file.js';
+import { isDeviceDarkmode } from '@/scripts/is-device-darkmode.js';
+import { isTimeDarkmode } from '@/scripts/is-time-darkmode.js';
+import { ColdDeviceStorage, defaultStore } from '@/store.js';
+import { i18n } from '@/i18n.js';
+import { instance } from '@/instance.js';
+import { uniqueBy } from '@/scripts/array.js';
+import { fetchThemes, getThemes } from '@/theme-store.js';
+import { definePageMetadata } from '@/scripts/page-metadata.js';
+import { unisonReload } from '@/scripts/unison-reload.js';
+import { miLocalStorage } from '@/local-storage.js';
 
 async function reloadAsk() {
 	const { canceled } = await os.confirm({
@@ -101,7 +106,6 @@ async function reloadAsk() {
 
 	unisonReload();
 }
-
 
 const installedThemes = ref(getThemes());
 const builtinThemes = getBuiltinThemesRef();

@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: syuilo and other misskey contributors
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
+
 import { Inject, Injectable } from '@nestjs/common';
 import { Endpoint } from '@/server/api/endpoint-base.js';
 import { MetaService } from '@/core/MetaService.js';
@@ -77,6 +82,14 @@ export const meta = {
 				optional: false, nullable: true,
 			},
 			iconUrl: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
+			app192IconUrl: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
+			app512IconUrl: {
 				type: 'string',
 				optional: false, nullable: true,
 			},
@@ -293,6 +306,10 @@ export const meta = {
 				type: 'boolean',
 				optional: false, nullable: false,
 			},
+			manifestJsonOverride: {
+				type: 'string',
+				optional: true, nullable: false,
+			},
 			policies: {
 				type: 'object',
 				optional: false, nullable: false,
@@ -328,9 +345,8 @@ export const paramDef = {
 	required: [],
 } as const;
 
-// eslint-disable-next-line import/no-default-export
 @Injectable()
-export default class extends Endpoint<typeof meta, typeof paramDef> {
+export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-disable-line import/no-default-export
 	constructor(
 		@Inject(DI.config)
 		private config: Config,
@@ -345,6 +361,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				maintainerEmail: instance.maintainerEmail,
 				version: this.config.version,
 				name: instance.name,
+				shortName: instance.shortName,
 				uri: this.config.url,
 				description: instance.description,
 				langs: instance.langs,
@@ -367,6 +384,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				notFoundImageUrl: instance.notFoundImageUrl,
 				infoImageUrl: instance.infoImageUrl,
 				iconUrl: instance.iconUrl,
+				app192IconUrl: instance.app192IconUrl,
+				app512IconUrl: instance.app512IconUrl,
 				backgroundImageUrl: instance.backgroundImageUrl,
 				logoImageUrl: instance.logoImageUrl,
 				defaultLightTheme: instance.defaultLightTheme,
@@ -428,6 +447,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				supporterRoles: instance.supporterRoles,
 				supporterNameThreshold: instance.supporterNameThreshold,
 				supporterNameWithIconThreshold: instance.supporterNameWithIconThreshold,
+				manifestJsonOverride: instance.manifestJsonOverride,
 			};
 		});
 	}

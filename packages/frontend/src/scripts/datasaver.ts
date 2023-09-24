@@ -1,4 +1,4 @@
-import { defaultStore } from '@/store';
+import { defaultStore } from '@/store.js';
 
 function isEnableDataSaver(type: string): boolean {
 	return ['cellular', 'unknown'].includes(type);
