@@ -1,10 +1,10 @@
+import { randomUUID } from 'crypto';
 import { Inject, Injectable } from '@nestjs/common';
 import * as Redis from 'ioredis';
 import { OAuth2 } from 'oauth';
-import { randomUUID } from 'crypto';
 import { IsNull } from 'typeorm';
 import type { Config } from '@/config.js';
-import type { UserProfilesRepository, UsersRepository } from '@/models/index.js';
+import type { UserProfilesRepository, UsersRepository } from '@/models/_.js';
 import { DI } from '@/di-symbols.js';
 import { HttpRequestService } from '@/core/HttpRequestService.js';
 import { GlobalEventService } from '@/core/GlobalEventService.js';
