@@ -12,7 +12,7 @@
 				<div class="_gaps_s">
 					<div v-for="item in items" :key="item.id" :class="[$style.userItem, { [$style.userItemOpend]: expandedNoteNotificationItems.includes(item.id) }]">
 						<div :class="$style.userItemMain">
-							<MkA :class="$style.userItemMainBody" :to="`/user-info/${item.userId}`">
+							<MkA :class="$style.userItemMainBody" :to="userPage(item.user)">
 								<MkUserCardMini :user="item.user"/>
 							</MkA>
 							<button class="_button" :class="$style.userToggle" @click="toggleNoteNotificationItem(item)"><i :class="$style.chevron" class="ti ti-chevron-down"></i></button>
@@ -32,12 +32,12 @@
 </template>
 
 <script lang="ts" setup>
-import { } from 'vue';
 import MkPagination from '@/components/MkPagination.vue';
-import { i18n } from '@/i18n';
-import { definePageMetadata } from '@/scripts/page-metadata';
+import { i18n } from '@/i18n.js';
+import { definePageMetadata } from '@/scripts/page-metadata.js';
 import MkUserCardMini from '@/components/MkUserCardMini.vue';
-import * as os from '@/os';
+import { userPage } from '@/filters/user.js';
+import * as os from '@/os.js';
 
 const noteNotificationPagination = {
 	endpoint: 'note-notification/list' as const,
