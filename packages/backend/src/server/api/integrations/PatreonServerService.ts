@@ -163,6 +163,11 @@ export class PatreonServerService {
 					throw new FastifyReplyError(400, 'invalid session (code: 4)');
 				}
 
+				const aleadyConnectedUser = await this.userProfilesRepository.findOneBy({ integrations: { patreon: { id: email } } });
+				if (aleadyConnectedUser) {
+					throw new FastifyReplyError(403, 'このPatreonアカウントは既に他のアカウントに接続されているため、接続できません。');
+				}
+
 				const user = await this.usersRepository.findOneByOrFail({
 					host: IsNull(),
 					token: userToken,
