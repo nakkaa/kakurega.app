@@ -6,8 +6,8 @@
 </template>
 
 <script lang="ts" setup>
-import { instance as Instance } from '@/instance';
-import { getProxiedImageUrlNullable } from '@/scripts/media-proxy';
+import { instance as Instance } from '@/instance.js';
+import { getProxiedImageUrlNullable } from '@/scripts/media-proxy.js';
 
 const props = defineProps<{
 	instance?: {
@@ -16,7 +16,7 @@ const props = defineProps<{
 	}
 }>();
 
-const faviconUrl = $computed(() => props.instance ? getProxiedImageUrlNullable(props.instance.faviconUrl, 'preview') : getProxiedImageUrlNullable(Instance.iconUrl, 'preview') ?? getProxiedImageUrlNullable(Instance.faviconUrl, 'preview') ?? '/favicon.ico');
+const faviconUrl = $computed(() => props.instance ? getProxiedImageUrlNullable(props.instance.faviconUrl, 'preview') : getProxiedImageUrlNullable(Instance.iconUrl, 'preview') ?? getProxiedImageUrlNullable(Instance.iconUrl, 'preview') ?? '/favicon.ico');
 </script>
 
 <style lang="scss" module>
