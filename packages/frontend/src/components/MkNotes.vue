@@ -33,7 +33,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts" setup>
 import { shallowRef } from 'vue';
-import type { Note } from 'misskey-js/built/entities';
+import * as Misskey from 'misskey-js';
 import MkNote from '@/components/MkNote.vue';
 import MkDateSeparatedList from '@/components/MkDateSeparatedList.vue';
 import MkPagination, { Paging } from '@/components/MkPagination.vue';
@@ -64,7 +64,7 @@ const isNeedSuppressInfinityFetch = () => {
 	return props.filter && Object.values(props.filter).some(x => x);
 };
 
-const isFilteredNote = (note: Note) => {
+const isFilteredNote = (note: Misskey.entities.Note) => {
 	if (!props.filter) return false;
 	const filter = props.filter;
 

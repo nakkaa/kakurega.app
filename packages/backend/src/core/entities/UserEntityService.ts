@@ -466,7 +466,7 @@ export class UserEntityService implements OnModuleInit {
 				integrations: profile!.integrations,
 				mutedWords: profile!.mutedWords,
 				mutedInstances: profile!.mutedInstances,
-				mutingNotificationTypes: profile!.mutingNotificationTypes,
+				notificationRecieveConfig: profile!.notificationRecieveConfig,
 				emailNotificationTypes: profile!.emailNotificationTypes,
 				achievements: profile!.achievements,
 				loggedInDays: profile!.loggedInDates.length,
