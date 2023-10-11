@@ -27,7 +27,6 @@ import * as os from '@/os.js';
 import { $i } from '@/account.js';
 import { defaultStore } from '@/store.js';
 import { i18n } from '@/i18n.js';
-import { definePageMetadata } from '@/scripts/page-metadata.js';
 
 const instanceMutes = ref($i!.mutedInstances.join('\n'));
 const changed = ref(false);
@@ -72,14 +71,5 @@ watch(instanceMutes, () => {
 watch(instanceMutesGtl, () => {
 	changedInstanceMutesGtl = true;
 	changed.value = true;
-});
-
-const headerActions = $computed(() => []);
-
-const headerTabs = $computed(() => []);
-
-definePageMetadata({
-	title: i18n.ts.instanceMute,
-	icon: 'ti ti-planet-off',
 });
 </script>
