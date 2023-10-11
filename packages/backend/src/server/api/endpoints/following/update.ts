@@ -84,8 +84,9 @@ export const paramDef = {
 	properties: {
 		userId: { type: 'string', format: 'misskey:id' },
 		notify: { type: 'string', enum: ['normal', 'none'] },
+		withReplies: { type: 'boolean' },
 	},
-	required: ['userId', 'notify'],
+	required: ['userId'],
 } as const;
 
 @Injectable()

@@ -33,7 +33,6 @@ export type Column = {
 	tl?: 'home' | 'local' | 'social' | 'global';
 	filter?: NoteFiler;
 	withRenotes?: boolean;
-	withReplies?: boolean;
 	onlyFiles?: boolean;
 };
 
