@@ -1181,6 +1181,9 @@ impressumDescription: "ドイツなどの一部の国と地域では表示が義
 privacyPolicy: "プライバシーポリシー"
 privacyPolicyUrl: "プライバシーポリシーURL"
 tosAndPrivacyPolicy: "利用規約・プライバシーポリシー"
+showOldMuteWords: "ソフトワードミュートに設定していた情報を表示する"
+showMutedInfo: "「○○が何か言いました」を表示する"
+showMutedInfoDescription: "オンにすると以前のソフトミュートと同様の挙動になります。オフで以前のハードミュートの挙動になります。"
 
 _announcement:
   forExistingUsers: "既存ユーザーのみ"
