@@ -1184,6 +1184,9 @@ export interface Locale {
     "privacyPolicy": string;
     "privacyPolicyUrl": string;
     "tosAndPrivacyPolicy": string;
+    "showOldMuteWords": string;
+    "showMutedInfo": string;
+    "showMutedInfoDescription": string;
     "_announcement": {
         "forExistingUsers": string;
         "forExistingUsersDescription": string;

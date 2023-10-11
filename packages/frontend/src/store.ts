@@ -172,9 +172,17 @@ export const defaultStore = markRaw(new Storage('base', {
 			userList: null as Misskey.entities.UserList | null,
 		},
 	},
+	mutedWords: {
+		where: 'account',
+		default: [],
+	},
 	mutedInstancesGtl: {
 		where: 'account',
 		default: [] as string[],
+	},
+	showMutedInfo: {
+		where: 'account',
+		default: true,
 	},
 	pinnedUserLists: {
 		where: 'deviceAccount',

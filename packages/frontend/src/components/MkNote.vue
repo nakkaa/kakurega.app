@@ -125,7 +125,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</div>
 	</article>
 </div>
-<div v-else :class="$style.muted" @click="hideNote = false">
+<div v-else-if="!muted || showMutedInfo" :class="$style.muted" @click="hideNote = false">
 	<I18n :src="i18n.ts.userSaysSomething" tag="small">
 		<template #name>
 			<MkA v-user-preview="appearNote.userId" :to="userPage(appearNote.user)">
@@ -221,6 +221,7 @@ const translation = ref<any>(null);
 const translating = ref(false);
 const showTicker = (defaultStore.state.instanceTicker === 'always') || (defaultStore.state.instanceTicker === 'remote' && appearNote.user.instance);
 const tickerStyle = defaultStore.state.instanceTickerStyle;
+const showMutedInfo = defaultStore.state.showMutedInfo;
 const canRenote = computed(() => ['public', 'home'].includes(appearNote.visibility) || (appearNote.visibility === 'followers' && appearNote.userId === $i.id));
 let renoteCollapsed = $ref(isRenote && checkCollapseRenote(appearNote, note, $i));
 
