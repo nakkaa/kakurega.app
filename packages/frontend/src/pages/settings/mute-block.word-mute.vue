@@ -14,7 +14,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	</div>
 	<MkButton primary inline :disabled="!changed" @click="save()"><i class="ti ti-device-floppy"></i> {{ i18n.ts.save }}</MkButton>
 	<MkSwitch v-model="showMutedInfo">
-		<template #label>{{ i18n.ts.showMutedInfo }}</template>
+		<template #label>{{ i18n.ts.showMutedInfo }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></template>
 		<template #caption>{{ i18n.ts.showMutedInfoDescription }}</template>
 	</MkSwitch>
 </div>
