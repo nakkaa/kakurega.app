@@ -25,9 +25,11 @@ const props = withDefaults(defineProps<{
 	sound?: boolean;
 	filter?: NoteFilter;
 	withRenotes?: boolean;
+	withReplies?: boolean;
 	onlyFiles?: boolean;
 }>(), {
 	withRenotes: true,
+	withReplies: false,
 	onlyFiles: false,
 });
 
@@ -93,10 +95,12 @@ if (props.src === 'antenna') {
 	endpoint = 'notes/local-timeline';
 	query = {
 		withRenotes: props.withRenotes,
+		withReplies: props.withReplies,
 		withFiles: props.onlyFiles ? true : undefined,
 	};
 	connection = stream.useChannel('localTimeline', {
 		withRenotes: props.withRenotes,
+		withReplies: props.withReplies,
 		withFiles: props.onlyFiles ? true : undefined,
 	});
 	connection.on('note', prepend);
@@ -104,10 +108,12 @@ if (props.src === 'antenna') {
 	endpoint = 'notes/hybrid-timeline';
 	query = {
 		withRenotes: props.withRenotes,
+		withReplies: props.withReplies,
 		withFiles: props.onlyFiles ? true : undefined,
 	};
 	connection = stream.useChannel('hybridTimeline', {
 		withRenotes: props.withRenotes,
+		withReplies: props.withReplies,
 		withFiles: props.onlyFiles ? true : undefined,
 	});
 	connection.on('note', prepend);
