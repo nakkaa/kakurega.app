@@ -118,57 +118,79 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				throw err;
 			});
 
-			// To subscribe
-			if (ps.notify === 'normal') {
-				// Check if already subscribing
-				const exist = await this.noteNotificationRepository.findOneBy({
-					userId: me.id,
-					targetUserId: target.id,
+			// フォローしているかどうかに関わらず、ノート通知の設定だけは変更できるようにする
+			if (ps.notify != null) {
+				// To subscribe
+				if (ps.notify === 'normal') {
+					// Check if already subscribing
+					const exist = await this.noteNotificationRepository.findOneBy({
+						userId: me.id,
+						targetUserId: target.id,
+					});
+
+					if (exist != null) {
+						throw new ApiError(meta.errors.alreadySubscribing);
+					}
+
+					// Check if blocking
+					if (await this.userBlockingService.checkBlocked(me.id, target.id)) {
+						throw new ApiError(meta.errors.blocking);
+					}
+
+					// Check if blocked
+					if (await this.userBlockingService.checkBlocked(target.id, me.id)) {
+						throw new ApiError(meta.errors.blocked);
+					}
+
+					// Create
+					const noteNotification = await this.noteNotificationRepository.insert({
+						id: this.idService.genId(),
+						createdAt: new Date(),
+						userId: me.id,
+						targetUserId: target.id,
+					}).then(x => this.noteNotificationRepository.findOneByOrFail(x.identifiers[0]));
+
+					// Publish event
+					this.globalEventService.publishInternalEvent('noteNotificationCreated', noteNotification);
+				} else {
+					// Check if already unsubscribed
+					const noteNotification = await this.noteNotificationRepository.findOneBy({
+						userId: me.id,
+						targetUserId: target.id,
+					});
+
+					if (!noteNotification) {
+						throw new ApiError(meta.errors.alreadyUnsubscribed);
+					}
+
+					// Delete
+					await this.noteNotificationRepository.delete({
+						userId: me.id,
+						targetUserId: target.id,
+					});
+
+					// Publish event
+					this.globalEventService.publishInternalEvent('noteNotificationDeleted', noteNotification);
+				}
+			}
+
+			// withRepliesはフォローしている場合のみ変更できる
+			if (ps.withReplies != null) {
+				// Check not following
+				const exist = await this.followingsRepository.findOneBy({
+					followerId: follower.id,
+					followeeId: target.id,
 				});
 
-				if (exist != null) {
-					throw new ApiError(meta.errors.alreadySubscribing);
+				if (exist == null) {
+					throw new ApiError(meta.errors.notFollowing);
 				}
 
-				// Check if blocking
-				if (await this.userBlockingService.checkBlocked(me.id, target.id)) {
-					throw new ApiError(meta.errors.blocking);
-				}
-
-				// Check if blocked
-				if (await this.userBlockingService.checkBlocked(target.id, me.id)) {
-					throw new ApiError(meta.errors.blocked);
-				}
-
-				// Create
-				const noteNotification = await this.noteNotificationRepository.insert({
-					id: this.idService.genId(),
-					createdAt: new Date(),
-					userId: me.id,
-					targetUserId: target.id,
-				}).then(x => this.noteNotificationRepository.findOneByOrFail(x.identifiers[0]));
-
-				// Publish event
-				this.globalEventService.publishInternalEvent('noteNotificationCreated', noteNotification);
-			} else {
-				// Check if already unsubscribed
-				const noteNotification = await this.noteNotificationRepository.findOneBy({
-					userId: me.id,
-					targetUserId: target.id,
+				await this.followingsRepository.update({
+					id: exist.id,
+				}, {
+					withReplies: ps.withReplies,
 				});
-
-				if (!noteNotification) {
-					throw new ApiError(meta.errors.alreadyUnsubscribed);
-				}
-
-				// Delete
-				await this.noteNotificationRepository.delete({
-					userId: me.id,
-					targetUserId: target.id,
-				});
-
-				// Publish event
-				this.globalEventService.publishInternalEvent('noteNotificationDeleted', noteNotification);
 			}
 
 			return await this.userEntityService.pack(follower.id, me);
