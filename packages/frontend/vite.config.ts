@@ -4,11 +4,15 @@ import pluginVue from '@vitejs/plugin-vue';
 import { type UserConfig, defineConfig } from 'vite';
 // @ts-expect-error https://github.com/sxzz/unplugin-vue-macros/issues/257#issuecomment-1410752890
 import ReactivityTransform from '@vue-macros/reactivity-transform/vite';
+import viteSentry from 'vite-plugin-sentry';
+import dotenv from 'dotenv';
 
 import locales from '../../locales';
 import meta from '../../package.json';
 import pluginUnwindCssModuleClassName from './lib/rollup-plugin-unwind-css-module-class-name';
 import pluginJson5 from './vite.json5';
+
+dotenv.config();
 
 const extensions = ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.json', '.json5', '.svg', '.sass', '.scss', '.css', '.vue'];
 
@@ -58,6 +62,17 @@ export function getConfig(): UserConfig {
 			pluginJson5(),
 			...process.env.NODE_ENV === 'production'
 				? [
+					process.env.SENTRY_AUTH_TOKEN ? viteSentry({
+						url: 'https://sentry.yukineko.dev',
+						org: 'sentry',
+						project: 'misskey-kakurega',
+						authToken: process.env.SENTRY_AUTH_TOKEN,
+						release: meta.version,
+						sourceMaps: {
+							urlPrefix: '~/vite',
+							include: ['../../built/_vite_'],
+						},
+					}) : null,
 					pluginReplace({
 						preventAssignment: true,
 						values: {
@@ -134,7 +149,7 @@ export function getConfig(): UserConfig {
 			outDir: __dirname + '/../../built/_vite_',
 			assetsDir: '.',
 			emptyOutDir: false,
-			sourcemap: process.env.NODE_ENV === 'development',
+			sourcemap: true,
 			reportCompressedSize: false,
 
 			// https://vitejs.dev/guide/dep-pre-bundling.html#monorepos-and-linked-dependencies
