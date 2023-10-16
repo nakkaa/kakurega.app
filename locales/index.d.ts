@@ -1187,6 +1187,8 @@ export interface Locale {
     "showOldMuteWords": string;
     "showMutedInfo": string;
     "showMutedInfoDescription": string;
+    "optoutStatistics": string;
+    "optoutStatisticsDescription": string;
     "_announcement": {
         "forExistingUsers": string;
         "forExistingUsersDescription": string;

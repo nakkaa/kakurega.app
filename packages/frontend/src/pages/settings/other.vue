@@ -11,9 +11,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	</MkSwitch>
 	-->
 
-	<!--
-	<MkSwitch v-model="reportError">{{ i18n.ts.sendErrorReports }}<template #caption>{{ i18n.ts.sendErrorReportsDescription }}</template></MkSwitch>
-	-->
+	<MkSwitch v-if="host === 'misskey.yukineko.me'" v-model="reportError">{{ i18n.ts.optoutStatistics }}<template #caption>{{ i18n.t('optoutStatisticsDescription', { instance: instance.name || host }) }}</template></MkSwitch>
 
 	<FormSection first>
 		<div class="_gaps_s">
@@ -88,11 +86,13 @@ import * as os from '@/os.js';
 import { defaultStore } from '@/store.js';
 import { signout, $i } from '@/account.js';
 import { i18n } from '@/i18n.js';
+import { instance } from '@/instance.js';
+import { host } from '@/config.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
 import { unisonReload } from '@/scripts/unison-reload.js';
 import FormSection from '@/components/form/section.vue';
 
-const reportError = computed(defaultStore.makeGetterSetter('reportError'));
+const reportError = computed(defaultStore.makeGetterSetter('optoutStatistics'));
 const enableCondensedLineForAcct = computed(defaultStore.makeGetterSetter('enableCondensedLineForAcct'));
 const devMode = computed(defaultStore.makeGetterSetter('devMode'));
 
