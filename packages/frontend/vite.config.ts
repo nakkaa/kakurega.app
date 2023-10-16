@@ -7,10 +7,10 @@ import ReactivityTransform from '@vue-macros/reactivity-transform/vite';
 import viteSentry from 'vite-plugin-sentry';
 import dotenv from 'dotenv';
 
-import locales from '../../locales';
+import locales from '../../locales/index.js';
 import meta from '../../package.json';
-import pluginUnwindCssModuleClassName from './lib/rollup-plugin-unwind-css-module-class-name';
-import pluginJson5 from './vite.json5';
+import pluginUnwindCssModuleClassName from './lib/rollup-plugin-unwind-css-module-class-name.js';
+import pluginJson5 from './vite.json5.js';
 
 dotenv.config();
 
@@ -58,7 +58,7 @@ export function getConfig(): UserConfig {
 				reactivityTransform: true,
 			}),
 			ReactivityTransform(),
-			pluginUnwindCssModuleClassName(),
+			process.env.SENTRY_AUTH_TOKEN ? null : pluginUnwindCssModuleClassName(),
 			pluginJson5(),
 			...process.env.NODE_ENV === 'production'
 				? [
@@ -149,7 +149,7 @@ export function getConfig(): UserConfig {
 			outDir: __dirname + '/../../built/_vite_',
 			assetsDir: '.',
 			emptyOutDir: false,
-			sourcemap: true,
+			sourcemap: process.env.NODE_ENV === 'development' ? true : 'hidden',
 			reportCompressedSize: false,
 
 			// https://vitejs.dev/guide/dep-pre-bundling.html#monorepos-and-linked-dependencies
