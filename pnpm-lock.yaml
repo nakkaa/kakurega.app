@@ -658,6 +658,9 @@ importers:
       '@rollup/pluginutils':
         specifier: 5.0.5
         version: 5.0.5(rollup@4.0.2)
+      '@sentry/vue':
+        specifier: ^7.74.0
+        version: 7.74.0(vue@3.3.4)
       '@syuilo/aiscript':
         specifier: 0.16.0
         version: 0.16.0
@@ -5361,6 +5364,73 @@ packages:
       string-argv: 0.3.1
     dev: true
 
+  /@sentry-internal/tracing@7.74.0:
+    resolution: {integrity: sha512-JK6IRGgdtZjswGfaGIHNWIThffhOHzVIIaGmglui+VFIzOsOqePjoxaDV0MEvzafxXZD7eWqGE5RGuZ0n6HFVg==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/core': 7.74.0
+      '@sentry/types': 7.74.0
+      '@sentry/utils': 7.74.0
+      tslib: 2.6.2
+    dev: false
+
+  /@sentry/browser@7.74.0:
+    resolution: {integrity: sha512-Njr8216Z1dFUcl6NqBOk20dssK9SjoVddY74Xq+Q4p3NfXBG3lkMcACXor7SFoJRZXq8CZWGS13Cc5KwViRw4g==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry-internal/tracing': 7.74.0
+      '@sentry/core': 7.74.0
+      '@sentry/replay': 7.74.0
+      '@sentry/types': 7.74.0
+      '@sentry/utils': 7.74.0
+      tslib: 2.6.2
+    dev: false
+
+  /@sentry/core@7.74.0:
+    resolution: {integrity: sha512-83NRuqn7nDZkSVBN5yJQqcpXDG4yMYiB7TkYUKrGTzBpRy6KUOrkCdybuKk0oraTIGiGSe5WEwCFySiNgR9FzA==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/types': 7.74.0
+      '@sentry/utils': 7.74.0
+      tslib: 2.6.2
+    dev: false
+
+  /@sentry/replay@7.74.0:
+    resolution: {integrity: sha512-GoYa3cHTTFVI/J1cnZ0i4X128mf/JljaswO3PWNTe2k3lSHq/LM5aV0keClRvwM0W8hlix8oOTT06nnenOUmmw==}
+    engines: {node: '>=12'}
+    dependencies:
+      '@sentry/core': 7.74.0
+      '@sentry/types': 7.74.0
+      '@sentry/utils': 7.74.0
+    dev: false
+
+  /@sentry/types@7.74.0:
+    resolution: {integrity: sha512-rI5eIRbUycWjn6s6o3yAjjWtIvYSxZDdnKv5je2EZINfLKcMPj1dkl6wQd2F4y7gLfD/N6Y0wZYIXC3DUdJQQg==}
+    engines: {node: '>=8'}
+    dev: false
+
+  /@sentry/utils@7.74.0:
+    resolution: {integrity: sha512-k3np8nuTPtx5KDODPtULfFln4UXdE56MZCcF19Jv6Ljxf+YN/Ady1+0Oi3e0XoSvFpWNyWnglauT7M65qCE6kg==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/types': 7.74.0
+      tslib: 2.6.2
+    dev: false
+
+  /@sentry/vue@7.74.0(vue@3.3.4):
+    resolution: {integrity: sha512-Yu8Zo783DlIg6PmpA8DjR4Kmh6E3nH5FiIamkzJ/OYq0LOj0VzIT8iaL+4bQvnJJrgZyWU3sNXLCHB1uVtp4rA==}
+    engines: {node: '>=8'}
+    peerDependencies:
+      vue: 2.x || 3.x
+    dependencies:
+      '@sentry/browser': 7.74.0
+      '@sentry/core': 7.74.0
+      '@sentry/types': 7.74.0
+      '@sentry/utils': 7.74.0
+      tslib: 2.6.2
+      vue: 3.3.4
+    dev: false
+
   /@sideway/address@4.1.4:
     resolution: {integrity: sha512-7vwq+rOHVWjyXxVlR76Agnvhy8I9rpzjosTESvmhNeXOXdZZB15Fl+TI9x1SiHZH5Jv2wTGduSxFDIaq0m3DUw==}
     dependencies:
@@ -6913,7 +6983,7 @@ packages:
       ts-dedent: 2.2.0
       type-fest: 2.19.0
       vue: 3.3.4
-      vue-component-type-helpers: 1.8.18
+      vue-component-type-helpers: 1.8.19
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -19171,8 +19241,8 @@ packages:
     resolution: {integrity: sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==}
     engines: {node: '>=0.10.0'}
 
-  /vue-component-type-helpers@1.8.18:
-    resolution: {integrity: sha512-SklLIg782E5Ff0qdE68AUrRBhT2YGW97edBewNEjCWCw+RSETcGOjA8m1/6T68CXkymWBSk+KDpPXqIGthqCDg==}
+  /vue-component-type-helpers@1.8.19:
+    resolution: {integrity: sha512-1OANGSZK4pzHF4uc86usWi+o5Y0zgoDtqWkPg6Am6ot+jHSAmpOah59V/4N82So5xRgivgCxGgK09lBy1XNUfQ==}
     dev: true
 
   /vue-demi@0.13.11(vue@3.3.4):

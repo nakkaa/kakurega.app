@@ -4,6 +4,7 @@
  */
 
 import { computed, createApp, watch, markRaw, version as vueVersion, defineAsyncComponent, App } from 'vue';
+import * as Sentry from '@sentry/vue';
 import { compareVersions } from 'compare-versions';
 import widgets from '@/widgets/index.js';
 import directives from '@/directives/index.js';
@@ -252,6 +253,13 @@ export async function common(createVue: () => App<Element>) {
 	} catch (err) { /* empty */ }
 
 	const app = createVue();
+
+	if (!_DEV_) {
+		Sentry.init({
+			app,
+			dsn: 'https://4787e38fa976cc8ffc3b9348fb96a2e1@sentry.yukineko.dev/2',
+		});
+	}
 
 	if (_DEV_) {
 		app.config.performance = true;
