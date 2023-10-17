@@ -87,16 +87,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			noteIds = noteIds.slice(0, ps.limit);
 
 			if (noteIds.length === 0) {
-				this.apiLoggerService.logger.warn('Redis timeline is empty.', {
-					me: me.id,
-					untilId,
-					sinceId,
-					includeMyRenotes: ps.includeMyRenotes,
-					includeRenotedMyNotes: ps.includeRenotedMyNotes,
-					includeLocalRenotes: ps.includeLocalRenotes,
-					withFiles: ps.withFiles,
-					withRenotes: ps.withRenotes,
-				});
+				this.apiLoggerService.logger.warn(`Redis timeline is empty. me: ${me.id}, untilId: ${untilId}, sinceId: ${sinceId}, includeMyRenotes: ${ps.includeMyRenotes}, includeRenotedMyNotes: ${ps.includeRenotedMyNotes}, includeLocalRenotes: ${ps.includeLocalRenotes}, withFiles: ${ps.withFiles}, withRenotes: ${ps.withRenotes}`);
 				return [];
 			}
 
@@ -135,16 +126,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			timeline.sort((a, b) => a.id > b.id ? -1 : 1);
 
 			if (timeline.length === 0) {
-				this.apiLoggerService.logger.warn('Timeline is empty.', {
-					me: me.id,
-					untilId,
-					sinceId,
-					includeMyRenotes: ps.includeMyRenotes,
-					includeRenotedMyNotes: ps.includeRenotedMyNotes,
-					includeLocalRenotes: ps.includeLocalRenotes,
-					withFiles: ps.withFiles,
-					withRenotes: ps.withRenotes,
-				});
+				this.apiLoggerService.logger.warn(`Timeline is empty. me: ${me.id}, untilId: ${untilId}, sinceId: ${sinceId}, includeMyRenotes: ${ps.includeMyRenotes}, includeRenotedMyNotes: ${ps.includeRenotedMyNotes}, includeLocalRenotes: ${ps.includeLocalRenotes}, withFiles: ${ps.withFiles}, withRenotes: ${ps.withRenotes}`);
 			}
 
 			process.nextTick(() => {
