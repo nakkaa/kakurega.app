@@ -44,6 +44,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts">
 import { computed, ComputedRef, isRef, nextTick, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, watch } from 'vue';
+import { captureMessage } from '@sentry/vue';
 import * as Misskey from 'misskey-js';
 import * as os from '@/os.js';
 import { onScrollTop, isTopVisible, getBodyScrollHeight, getScrollContainer, onScrollBottom, scrollToBottom, scroll, isBottomVisible } from '@/scripts/scroll.js';
@@ -206,6 +207,12 @@ async function init(): Promise<void> {
 		for (let i = 0; i < res.length; i++) {
 			const item = res[i];
 			if (i === 3) item._shouldInsertAd_ = true;
+		}
+
+		if (props.pagination.endpoint === 'notes/timeline' && res.length === 0) {
+			captureMessage('timeline is empty', {
+				extra: params,
+			});
 		}
 
 		if (res.length === 0 || props.pagination.noPaging) {

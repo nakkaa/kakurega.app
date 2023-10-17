@@ -16,6 +16,7 @@ import { IdService } from '@/core/IdService.js';
 import { CacheService } from '@/core/CacheService.js';
 import { isUserRelated } from '@/misc/is-user-related.js';
 import { RedisTimelineService } from '@/core/RedisTimelineService.js';
+import { ApiLoggerService } from '@/server/api/ApiLoggerService.js';
 
 export const meta = {
 	tags: ['notes'],
@@ -64,6 +65,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 		private idService: IdService,
 		private cacheService: CacheService,
 		private redisTimelineService: RedisTimelineService,
+		private apiLoggerService: ApiLoggerService,
 	) {
 		super(meta, paramDef, async (ps, me) => {
 			const untilId = ps.untilId ?? (ps.untilDate ? this.idService.genId(new Date(ps.untilDate!)) : null);
@@ -85,6 +87,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			noteIds = noteIds.slice(0, ps.limit);
 
 			if (noteIds.length === 0) {
+				this.apiLoggerService.logger.warn(`Redis timeline is empty. me: ${me.id}, untilId: ${untilId}, sinceId: ${sinceId}, includeMyRenotes: ${ps.includeMyRenotes}, includeRenotedMyNotes: ${ps.includeRenotedMyNotes}, includeLocalRenotes: ${ps.includeLocalRenotes}, withFiles: ${ps.withFiles}, withRenotes: ${ps.withRenotes}`);
 				return [];
 			}
 
@@ -121,6 +124,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			// TODO: フィルタした結果件数が足りなかった場合の対応
 
 			timeline.sort((a, b) => a.id > b.id ? -1 : 1);
+
+			if (timeline.length === 0) {
+				this.apiLoggerService.logger.warn(`Timeline is empty. me: ${me.id}, untilId: ${untilId}, sinceId: ${sinceId}, includeMyRenotes: ${ps.includeMyRenotes}, includeRenotedMyNotes: ${ps.includeRenotedMyNotes}, includeLocalRenotes: ${ps.includeLocalRenotes}, withFiles: ${ps.withFiles}, withRenotes: ${ps.withRenotes}`);
+			}
 
 			process.nextTick(() => {
 				this.activeUsersChart.read(me);
