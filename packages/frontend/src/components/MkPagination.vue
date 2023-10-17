@@ -44,9 +44,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts">
 import { computed, ComputedRef, isRef, nextTick, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, watch } from 'vue';
-import { captureMessage } from '@sentry/vue';
+import { captureMessage, captureException } from '@sentry/vue';
 import * as Misskey from 'misskey-js';
 import * as os from '@/os.js';
+import { $i } from '@/account.js';
 import { onScrollTop, isTopVisible, getBodyScrollHeight, getScrollContainer, onScrollBottom, scrollToBottom, scroll, isBottomVisible } from '@/scripts/scroll.js';
 import { useDocumentVisibility } from '@/scripts/use-document-visibility.js';
 import MkButton from '@/components/MkButton.vue';
@@ -211,7 +212,11 @@ async function init(): Promise<void> {
 
 		if (props.pagination.endpoint === 'notes/timeline' && res.length === 0) {
 			captureMessage('timeline is empty', {
-				extra: params,
+				extra: {
+					userId: $i?.id,
+					response: res,
+					...params,
+				},
 			});
 		}
 
@@ -228,6 +233,12 @@ async function init(): Promise<void> {
 		error.value = false;
 		fetching.value = false;
 	}, err => {
+		captureException(err, {
+			extra: {
+				userId: $i?.id,
+				...params,
+			},
+		});
 		error.value = true;
 		fetching.value = false;
 	});
