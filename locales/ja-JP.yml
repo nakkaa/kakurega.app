@@ -1186,6 +1186,8 @@ showMutedInfo: "「○○が何か言いました」を表示する"
 showMutedInfoDescription: "オンにすると以前のソフトミュートと同様の挙動になります。オフで以前のハードミュートの挙動になります。"
 optoutStatistics: "エラー情報の送信をやめる"
 optoutStatisticsDescription: "{instance}では、不具合の原因の特定を行えるよう、問題が発生したときにエラーの詳細情報を取得しています。ONにすることで、エラー情報の送信をしないようにします。"
+autoRejectFollowRequest: "フォローリクエストを自動で拒否する"
+autoRejectFollowRequestDescription: "フォローリクエストを自動で拒否するようにします。「フォロー中ユーザーからのフォロリクを自動承認」がONになっている場合は、フォロー中ユーザーからのフォローリクエストは自動的に承認され、それ以外のユーザーからのフォローリクエストは自動的に拒否されるようになります。"
 
 _announcement:
   forExistingUsers: "既存ユーザーのみ"

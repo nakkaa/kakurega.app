@@ -1189,6 +1189,8 @@ export interface Locale {
     "showMutedInfoDescription": string;
     "optoutStatistics": string;
     "optoutStatisticsDescription": string;
+    "autoRejectFollowRequest": string;
+    "autoRejectFollowRequestDescription": string;
     "_announcement": {
         "forExistingUsers": string;
         "forExistingUsersDescription": string;

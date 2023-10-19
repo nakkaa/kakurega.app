@@ -14,6 +14,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 	<MkSwitch v-model="isLocked" @update:modelValue="save()">{{ i18n.ts.makeFollowManuallyApprove }}<template #caption>{{ i18n.ts.lockedAccountInfo }}</template></MkSwitch>
 	<MkSwitch v-if="isLocked" v-model="autoAcceptFollowed" @update:modelValue="save()">{{ i18n.ts.autoAcceptFollowed }}</MkSwitch>
+	<MkSwitch v-if="isLocked" v-model="autoRejectFollowRequest" @update:modelValue="save()">
+		{{ i18n.ts.autoRejectFollowRequest }}<span class="_beta">{{ i18n.ts.originalFeature }}</span>
+		<template #caption>{{ i18n.ts.autoRejectFollowRequestDescription }}</template>
+	</MkSwitch>
 
 	<MkSwitch v-model="publicReactions" @update:modelValue="save()">
 		{{ i18n.ts.makeReactionsPublic }}
@@ -100,6 +104,7 @@ import { definePageMetadata } from '@/scripts/page-metadata.js';
 
 let isLocked = $ref($i.isLocked);
 let autoAcceptFollowed = $ref($i.autoAcceptFollowed);
+let autoRejectFollowRequest = $ref($i.autoRejectFollowRequest);
 let noCrawle = $ref($i.noCrawle);
 let preventAiLearning = $ref($i.preventAiLearning);
 let isExplorable = $ref($i.isExplorable);
@@ -131,6 +136,7 @@ function save() {
 	os.api('i/update', {
 		isLocked: !!isLocked,
 		autoAcceptFollowed: !!autoAcceptFollowed,
+		autoRejectFollowRequest: !!autoRejectFollowRequest,
 		noCrawle: !!noCrawle,
 		preventAiLearning: !!preventAiLearning,
 		isExplorable: !!isExplorable,
