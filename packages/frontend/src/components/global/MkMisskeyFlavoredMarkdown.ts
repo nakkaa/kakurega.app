@@ -34,10 +34,12 @@ export default function(props: {
 	author?: Misskey.entities.UserLite;
 	i?: Misskey.entities.UserLite;
 	isNote?: boolean;
+	isPage?: boolean;
 	emojiUrls?: string[];
 	rootScale?: number;
 }) {
-	const isNote = props.isNote !== undefined ? props.isNote : true;
+	const isNote = props.isNote ?? true;
+	const isPage = props.isPage ?? false;
 
 	if (props.text == null || props.text === '') return;
 
@@ -64,7 +66,28 @@ export default function(props: {
 					const res: (VNode | string)[] = [];
 					for (const t of text.split('\n')) {
 						res.push(h('br'));
-						res.push(t);
+
+						// ページならカクヨム形式のルビ振りを有効にする
+						if (isPage) {
+							const text2 = t.replace(/<ruby>(.+?)<rt>(.+?)<\/rt><\/ruby>/g, '\n<ruby>$1<rt>$2</rt></ruby>\n')
+								.replace(/《《(.+?)》》/g, (match, c1) => c1.replace(/(.)/g, '\n<ruby>$1<rt>・</rt></ruby>\n'))
+								.replace(/[\|｜](.+?)《(.+?)》/g, '\n<ruby>$1<rt>$2</rt></ruby>\n')
+								.replace(/([一-龠]+)《(.+?)》/g, '\n<ruby>$1<rt>$2</rt></ruby>\n')
+								.replace(/[\|｜]《(.+?)》/g, '《$1》');
+
+							for (const t2 of text2.split('\n')) {
+								const match = t2.match(/<ruby>(.+?)<rt>(.+?)<\/rt><\/ruby>/);
+
+								if (match !== null && match.length > 2) {
+									const [_, rb, rt] = match;
+									res.push(h('ruby', { style: rb.length < rt.length ? 'ruby-align:center' : 'ruby-align:space-around' }, [rb, h('rt', rt)]));
+								} else if (t2 !== '') {
+									res.push(t2);
+								}
+							}
+						} else {
+							res.push(t);
+						}
 					}
 					res.shift();
 					return res;
@@ -224,6 +247,28 @@ export default function(props: {
 						if (!/^[0-9a-f]{3,6}$/i.test(color)) color = 'f00';
 						style = `background-color: #${color};`;
 						break;
+					}
+					case 'ruby': {
+						token.children.forEach((t) => { if (t.type === 'text') { t.props.text = t.props.text.trim(); }});
+						let rb: string | (string | VNode)[];
+						let rt: string | (string | VNode)[];
+
+						const children = token.children.filter((t) => t.type !== 'text' || t.props.text !== '');
+						if (children.length === 1 && children[0].type === 'text') {
+							const tokens = children[0].props.text.split(' ');
+							rb = [tokens[0]];
+							rt = [tokens.slice(1).join(' ')];
+						} else if (children.length >= 2) {
+							rb = genEl([children[0]], scale);
+							rt = genEl(children.slice(1), scale);
+						} else {
+							return genEl(children, scale);
+						}
+
+						if (typeof rb[0] === 'string' && typeof rt[0] === 'string' && rt[0] === '') rt = '・'.repeat(rb[0].length);
+						const align = typeof rb[0] === 'string' ? { style: rb.length < rt.length ? 'ruby-align:center' : 'ruby-align:space-around' } : {};
+
+						return h('ruby', align, [rb, h('rt', rt)]);
 					}
 				}
 				if (style == null) {
