@@ -1,6 +1,11 @@
 name: Create PR
 on:
   workflow_dispatch:
+    inputs:
+      tags:
+        description: 'target commit hash'
+        required: false
+        type: string
   push:
     branches:
       - 'dev-kakurega'
@@ -48,6 +53,22 @@ jobs:
 
       - name: create pull request
         if: steps.check-tag.outputs.exists == 'false' && steps.check-pr.outputs.exists == 'false'
-        run: 'gh pr create -B "master-kakurega" -H "dev-kakurega" -t "release: v${{ steps.package-version.outputs.current-version }}" -b "Automated pr by github actions"'
+        shell: bash
+        run: |
+          if [ -z "${{ inputs.tags }}" ]; then
+            TAG=$(git rev-parse HEAD)
+          fi
+
+          echo "Creating PR"
+          COMMAND_ARGS=(-B "master-kakurega" -H "dev-kakurega" -t "release: v${{ steps.package-version.outputs.current-version }}" -b "Automated pr by github actions")
+
+          if git log "$TAG" -1 --pretty=%B | grep -E "^Merge tag '.+-(alpha|beta|rc).+'"; then
+            COMMAND_ARGS+=(--draft)
+          fi
+
+          gh pr create "${COMMAND_ARGS[@]}"
+
+          echo "PR created"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ inputs.tags }}

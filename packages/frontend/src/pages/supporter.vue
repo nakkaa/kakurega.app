@@ -4,7 +4,7 @@
 		<MkPageHeader :actions="headerActions" :tabs="headerTabs"/>
 	</template>
 	<div style="overflow: clip;">
-		<MkSpacer :content-max="600" :margin-min="20">
+		<MkSpacer :contentMax="600" :marginMin="20">
 			<div class="_gaps_m">
 				<p>{{ i18n.t('supporterDescription', { name: instance.name ?? host }) }}</p>
 				<FormSection :first="true">
@@ -33,12 +33,12 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue';
 import FormSection from '@/components/form/section.vue';
-import { i18n } from '@/i18n';
-import { host } from '@/config';
-import * as os from '@/os';
-import { instance } from '@/instance';
-import { userPage } from '@/filters/user';
-import { definePageMetadata } from '@/scripts/page-metadata';
+import { i18n } from '@/i18n.js';
+import { host } from '@/config.js';
+import * as os from '@/os.js';
+import { instance } from '@/instance.js';
+import { userPage } from '@/filters/user.js';
+import { definePageMetadata } from '@/scripts/page-metadata.js';
 
  type SupporterUser = {
 	username: string,

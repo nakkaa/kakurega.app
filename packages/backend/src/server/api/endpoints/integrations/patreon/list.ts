@@ -1,7 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { DI } from '@/di-symbols.js';
+import { Injectable } from '@nestjs/common';
 import { Endpoint } from '@/server/api/endpoint-base.js';
-import type { RoleAssignmentsRepository, RolesRepository, User } from '@/models/index.js';
 import { PatreonManagementService } from '@/core/integrations/PatreonManagementService.js';
 import { UserEntityService } from '@/core/entities/UserEntityService.js';
 import { MetaService } from '@/core/MetaService.js';

@@ -4,12 +4,15 @@ import pluginVue from '@vitejs/plugin-vue';
 import { type UserConfig, defineConfig } from 'vite';
 // @ts-expect-error https://github.com/sxzz/unplugin-vue-macros/issues/257#issuecomment-1410752890
 import ReactivityTransform from '@vue-macros/reactivity-transform/vite';
+import viteSentry from 'vite-plugin-sentry';
+import dotenv from 'dotenv';
 
-import locales from '../../locales';
-import generateDTS from '../../locales/generateDTS';
+import locales from '../../locales/index.js';
 import meta from '../../package.json';
-import pluginUnwindCssModuleClassName from './lib/rollup-plugin-unwind-css-module-class-name';
-import pluginJson5 from './vite.json5';
+import pluginUnwindCssModuleClassName from './lib/rollup-plugin-unwind-css-module-class-name.js';
+import pluginJson5 from './vite.json5.js';
+
+dotenv.config();
 
 const extensions = ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.json', '.json5', '.svg', '.sass', '.scss', '.css', '.vue'];
 
@@ -55,10 +58,21 @@ export function getConfig(): UserConfig {
 				reactivityTransform: true,
 			}),
 			ReactivityTransform(),
-			pluginUnwindCssModuleClassName(),
+			process.env.SENTRY_AUTH_TOKEN ? null : pluginUnwindCssModuleClassName(),
 			pluginJson5(),
 			...process.env.NODE_ENV === 'production'
 				? [
+					process.env.SENTRY_AUTH_TOKEN ? viteSentry({
+						url: 'https://sentry.yukineko.dev',
+						org: 'sentry',
+						project: 'misskey-kakurega',
+						authToken: process.env.SENTRY_AUTH_TOKEN,
+						release: meta.version,
+						sourceMaps: {
+							urlPrefix: '~/vite',
+							include: ['../../built/_vite_'],
+						},
+					}) : null,
 					pluginReplace({
 						preventAssignment: true,
 						values: {
@@ -67,10 +81,6 @@ export function getConfig(): UserConfig {
 					}),
 				]
 				: [],
-			{
-				name: 'locale:generateDTS',
-				buildStart: generateDTS,
-			},
 		],
 
 		resolve: {
@@ -117,8 +127,8 @@ export function getConfig(): UserConfig {
 
 		build: {
 			target: [
-				'chrome108',
-				'firefox109',
+				'chrome116',
+				'firefox116',
 				'safari16',
 			],
 			manifest: 'manifest.json',
@@ -139,7 +149,7 @@ export function getConfig(): UserConfig {
 			outDir: __dirname + '/../../built/_vite_',
 			assetsDir: '.',
 			emptyOutDir: false,
-			sourcemap: process.env.NODE_ENV === 'development',
+			sourcemap: process.env.NODE_ENV === 'development' ? true : 'hidden',
 			reportCompressedSize: false,
 
 			// https://vitejs.dev/guide/dep-pre-bundling.html#monorepos-and-linked-dependencies

@@ -1,5 +1,10 @@
+<!--
+SPDX-FileCopyrightText: syuilo and other misskey contributors
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
 <template>
-<MkPagination ref="pagingComponent" :pagination="pagination" :suppress-infinity-fetch="isNeedSuppressInfinityFetch()">
+<MkPagination ref="pagingComponent" :pagination="pagination" :disableAutoLoad="disableAutoLoad" :suppressInfinityFetch="isNeedSuppressInfinityFetch()">
 	<template #empty>
 		<div class="_fullinfo">
 			<img :src="infoImageUrl" class="_ghost"/>
@@ -28,12 +33,12 @@
 
 <script lang="ts" setup>
 import { shallowRef } from 'vue';
-import type { Note } from 'misskey-js/built/entities';
+import * as Misskey from 'misskey-js';
 import MkNote from '@/components/MkNote.vue';
 import MkDateSeparatedList from '@/components/MkDateSeparatedList.vue';
 import MkPagination, { Paging } from '@/components/MkPagination.vue';
-import { i18n } from '@/i18n';
-import { infoImageUrl } from '@/instance';
+import { i18n } from '@/i18n.js';
+import { infoImageUrl } from '@/instance.js';
 
 export type Filter = {
 	includeKeywords?: string[];
@@ -50,6 +55,7 @@ const props = defineProps<{
 	pagination: Paging;
 	noGap?: boolean;
 	filter?: Filter;
+	disableAutoLoad?: boolean;
 }>();
 
 const pagingComponent = shallowRef<InstanceType<typeof MkPagination>>();
@@ -58,7 +64,7 @@ const isNeedSuppressInfinityFetch = () => {
 	return props.filter && Object.values(props.filter).some(x => x);
 };
 
-const isFilteredNote = (note: Note) => {
+const isFilteredNote = (note: Misskey.entities.Note) => {
 	if (!props.filter) return false;
 	const filter = props.filter;
 

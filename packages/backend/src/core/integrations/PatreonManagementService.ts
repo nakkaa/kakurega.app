@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Not } from 'typeorm';
 import { OAuth2 } from 'oauth';
 import { MetaService } from '@/core/MetaService.js';
-import type { UserProfilesRepository, User, RoleAssignmentsRepository } from '@/models/index.js';
+import type { UserProfilesRepository, MiUser, RoleAssignmentsRepository } from '@/models/_.js';
 import { HttpRequestService } from '@/core/HttpRequestService.js';
 import { StatusError } from '@/misc/status-error.js';
 import { DI } from '@/di-symbols.js';
@@ -13,15 +13,15 @@ import type { OnApplicationShutdown } from '@nestjs/common';
 
 type PatreonMember = {
 	amounts: number,
-	user: User,
+	user: MiUser,
 	isPatreon: boolean,
 	isHideFromSupporterPage: boolean,
 }
 
 @Injectable()
 export class PatreonManagementService implements OnApplicationShutdown {
-	private intervalId: NodeJS.Timer;
-	private timeoutId: NodeJS.Timer;
+	private intervalId: NodeJS.Timeout;
+	private timeoutId: NodeJS.Timeout;
 	private logger: Logger;
 	private cache: Record<string, PatreonMember> = {};
 	private cacheLastUpdate = 0;
@@ -33,7 +33,7 @@ export class PatreonManagementService implements OnApplicationShutdown {
 
 		@Inject(DI.roleAssignmentsRepository)
 		private roleAssignmentsRepository: RoleAssignmentsRepository,
-		
+
 		private metaService: MetaService,
 		private httpRequestService: HttpRequestService,
 		private loggerService: LoggerService,
@@ -51,7 +51,7 @@ export class PatreonManagementService implements OnApplicationShutdown {
 	}
 
 	@bindThis
-	public amountsValue(user: User): number {
+	public amountsValue(user: MiUser): number {
 		const target = this.cache[user.id];
 		if (!target) return 0;
 
@@ -73,7 +73,7 @@ export class PatreonManagementService implements OnApplicationShutdown {
 			this.timeoutId = setTimeout(this.updateCache, waitTime);
 			return;
 		}
-		
+
 		this.updateCache();
 	}
 
@@ -102,7 +102,7 @@ export class PatreonManagementService implements OnApplicationShutdown {
 			if (!amounts) continue;
 			usersList[user.userId] = {
 				amounts,
-				user: user.user as User,
+				user: user.user as MiUser,
 				isPatreon: true,
 				isHideFromSupporterPage: user.hideFromSupporterPage,
 			};
@@ -125,7 +125,7 @@ export class PatreonManagementService implements OnApplicationShutdown {
 			});
 
 			targets.forEach(async assign => {
-				const user = assign.user as User;
+				const user = assign.user as MiUser;
 				const userProfile = await this.userProfilesRepository.findOneBy({ userId: user.id });
 
 				usersList[user.id] = {
@@ -230,12 +230,12 @@ export class PatreonManagementService implements OnApplicationShutdown {
 			this.logger.error(JSON.stringify(err, null, '    '));
 			return null;
 		});
-		
+
 		if (!result) {
 			this.logger.error('Failed to refresh access token');
 			return;
 		}
-		
+
 		await this.metaService.update({
 			patreonAccessToken: result.accessToken,
 			patreonRefreshToken: result.refreshToken,

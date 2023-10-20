@@ -1,28 +1,34 @@
+/*
+ * SPDX-FileCopyrightText: syuilo and other misskey contributors
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
+
 import { computed, createApp, watch, markRaw, version as vueVersion, defineAsyncComponent, App } from 'vue';
+import * as Sentry from '@sentry/vue';
 import { compareVersions } from 'compare-versions';
-import widgets from '@/widgets';
-import directives from '@/directives';
-import components from '@/components';
-import { version, ui, lang, updateLocale } from '@/config';
-import { applyTheme } from '@/scripts/theme';
-import { applyFont } from '@/scripts/font';
-import { isDeviceDarkmode } from '@/scripts/is-device-darkmode';
-import { isTimeDarkmode, initializeTimeBasedDarkmode } from '@/scripts/is-time-darkmode';
-import { isMobileData, initializeDetectNetworkChange } from '@/scripts/datasaver';
-import { i18n, updateI18n } from '@/i18n';
-import { confirm, alert, post, popup, toast } from '@/os';
-import { $i, refreshAccount, login, updateAccount, signout } from '@/account';
-import { defaultStore, ColdDeviceStorage } from '@/store';
-import { fetchInstance, instance } from '@/instance';
-import { deviceKind } from '@/scripts/device-kind';
-import { reloadChannel } from '@/scripts/unison-reload';
-import { reactionPicker } from '@/scripts/reaction-picker';
-import { getUrlWithoutLoginId } from '@/scripts/login-id';
-import { getAccountFromId } from '@/scripts/get-account-from-id';
-import { deckStore } from '@/ui/deck/deck-store';
-import { miLocalStorage } from '@/local-storage';
-import { fetchCustomEmojis } from '@/custom-emojis';
-import { mainRouter } from '@/router';
+import widgets from '@/widgets/index.js';
+import directives from '@/directives/index.js';
+import components from '@/components/index.js';
+import { version, ui, lang, updateLocale } from '@/config.js';
+import { applyTheme } from '@/scripts/theme.js';
+import { applyFont } from '@/scripts/font.js';
+import { isDeviceDarkmode } from '@/scripts/is-device-darkmode.js';
+import { isTimeDarkmode, initializeTimeBasedDarkmode } from '@/scripts/is-time-darkmode.js';
+import { isMobileData, initializeDetectNetworkChange } from '@/scripts/datasaver.js';
+import { i18n, updateI18n } from '@/i18n.js';
+import { confirm, alert, post, popup, toast } from '@/os.js';
+import { $i, refreshAccount, login, updateAccount, signout } from '@/account.js';
+import { defaultStore, ColdDeviceStorage } from '@/store.js';
+import { fetchInstance, instance } from '@/instance.js';
+import { deviceKind } from '@/scripts/device-kind.js';
+import { reloadChannel } from '@/scripts/unison-reload.js';
+import { reactionPicker } from '@/scripts/reaction-picker.js';
+import { getUrlWithoutLoginId } from '@/scripts/login-id.js';
+import { getAccountFromId } from '@/scripts/get-account-from-id.js';
+import { deckStore } from '@/ui/deck/deck-store.js';
+import { miLocalStorage } from '@/local-storage.js';
+import { fetchCustomEmojis } from '@/custom-emojis.js';
+import { mainRouter } from '@/router.js';
 
 export async function common(createVue: () => App<Element>) {
 	console.info(`Misskey v${version}`);
@@ -220,6 +226,18 @@ export async function common(createVue: () => App<Element>) {
 		}
 	}, { immediate: true });
 
+	if (defaultStore.state.keepScreenOn) {
+		if ('wakeLock' in navigator) {
+			navigator.wakeLock.request('screen');
+
+			document.addEventListener('visibilitychange', async () => {
+				if (document.visibilityState === 'visible') {
+					navigator.wakeLock.request('screen');
+				}
+			});
+		}
+	}
+
 	//#region Fetch user
 	if ($i && $i.token) {
 		if (_DEV_) {
@@ -235,6 +253,15 @@ export async function common(createVue: () => App<Element>) {
 	} catch (err) { /* empty */ }
 
 	const app = createVue();
+
+	const uri = new URL(location.href);
+	if (!_DEV_ && uri.hostname === 'misskey.yukineko.me' && !defaultStore.state.optoutStatistics) {
+		Sentry.init({
+			app,
+			dsn: 'https://4787e38fa976cc8ffc3b9348fb96a2e1@sentry.yukineko.dev/2',
+			release: version,
+		});
+	}
 
 	if (_DEV_) {
 		app.config.performance = true;

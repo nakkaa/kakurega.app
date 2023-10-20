@@ -1,10 +1,10 @@
+import { randomUUID } from 'crypto';
 import { Inject, Injectable } from '@nestjs/common';
 import * as Redis from 'ioredis';
 import { OAuth2 } from 'oauth';
-import { v4 as uuid } from 'uuid';
 import { IsNull } from 'typeorm';
 import type { Config } from '@/config.js';
-import type { UserProfilesRepository, UsersRepository } from '@/models/index.js';
+import type { UserProfilesRepository, UsersRepository } from '@/models/_.js';
 import { DI } from '@/di-symbols.js';
 import { HttpRequestService } from '@/core/HttpRequestService.js';
 import { GlobalEventService } from '@/core/GlobalEventService.js';
@@ -100,7 +100,7 @@ export class PatreonServerService {
 			const params = {
 				redirect_uri: `${this.config.url}/api/pr/cb`,
 				scope: ['identity identity[email]'],
-				state: uuid(),
+				state: randomUUID(),
 				response_type: 'code',
 			};
 
@@ -161,6 +161,11 @@ export class PatreonServerService {
 
 				if (typeof email !== 'string') {
 					throw new FastifyReplyError(400, 'invalid session (code: 4)');
+				}
+
+				const aleadyConnectedUser = await this.userProfilesRepository.findOneBy({ integrations: { patreon: { id: email } } });
+				if (aleadyConnectedUser) {
+					throw new FastifyReplyError(403, 'このPatreonアカウントは既に他のアカウントに接続されているため、接続できません。');
 				}
 
 				const user = await this.usersRepository.findOneByOrFail({

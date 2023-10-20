@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: syuilo and other misskey contributors
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
 <template>
 <div class="_gaps_m">
 	<!--
@@ -6,9 +11,7 @@
 	</MkSwitch>
 	-->
 
-	<!--
-	<MkSwitch v-model="reportError">{{ i18n.ts.sendErrorReports }}<template #caption>{{ i18n.ts.sendErrorReportsDescription }}</template></MkSwitch>
-	-->
+	<MkSwitch v-if="host === 'misskey.yukineko.me'" v-model="reportError">{{ i18n.ts.optoutStatistics }}<template #caption>{{ i18n.t('optoutStatisticsDescription', { instance: instance.name || host }) }}</template></MkSwitch>
 
 	<FormSection first>
 		<div class="_gaps_s">
@@ -79,15 +82,17 @@ import MkFolder from '@/components/MkFolder.vue';
 import FormInfo from '@/components/MkInfo.vue';
 import MkKeyValue from '@/components/MkKeyValue.vue';
 import MkButton from '@/components/MkButton.vue';
-import * as os from '@/os';
-import { defaultStore } from '@/store';
-import { signout, $i } from '@/account';
-import { i18n } from '@/i18n';
-import { definePageMetadata } from '@/scripts/page-metadata';
-import { unisonReload } from '@/scripts/unison-reload';
+import * as os from '@/os.js';
+import { defaultStore } from '@/store.js';
+import { signout, $i } from '@/account.js';
+import { i18n } from '@/i18n.js';
+import { instance } from '@/instance.js';
+import { host } from '@/config.js';
+import { definePageMetadata } from '@/scripts/page-metadata.js';
+import { unisonReload } from '@/scripts/unison-reload.js';
 import FormSection from '@/components/form/section.vue';
 
-const reportError = computed(defaultStore.makeGetterSetter('reportError'));
+const reportError = computed(defaultStore.makeGetterSetter('optoutStatistics'));
 const enableCondensedLineForAcct = computed(defaultStore.makeGetterSetter('enableCondensedLineForAcct'));
 const devMode = computed(defaultStore.makeGetterSetter('devMode'));
 
@@ -108,14 +113,12 @@ async function deleteAccount() {
 		if (canceled) return;
 	}
 
-	const { canceled, result: password } = await os.inputText({
-		title: i18n.ts.password,
-		type: 'password',
-	});
-	if (canceled) return;
+	const auth = await os.authenticateDialog();
+	if (auth.canceled) return;
 
 	await os.apiWithDialog('i/delete-account', {
-		password: password,
+		password: auth.result.password,
+		token: auth.result.token,
 	});
 
 	await os.alert({
