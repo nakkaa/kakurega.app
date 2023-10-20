@@ -20,6 +20,11 @@
 リモートの絵文字と同名の絵文字がローカルにあった場合に、リモートの絵文字を押すことでローカルの同名の絵文字を付与できるようになっています。  
 [Ebisskey様の実装](https://github.com/shrimpia/misskey/commit/e91295ff9c6f8ac90f61c8de7a891a6836e48e95)を参考にさせて頂きました。  
 
+### ルビを振れるように
+独自のMFM記法でルビを振ることができ、`$[ruby 漢字 かんじ]` → 「<ruby>漢字<rt>かんじ</rt></ruby>」のように解釈されます。  
+ページ限定の機能として、カクヨム形式でのルビを振ることも出来ます。詳しくは「[ルビや傍点を付ける（カクヨム記法を使う）](https://kakuyomu.jp/help/entry/notation)」をご覧ください。  
+[tar-bin様の実装](https://github.com/tar-bin/misskey/commit/3f8c2dda491ef9f5f1914f81c050334659f7539b)および[Yuriha様の実装](https://github.com/misskey-dev/misskey/compare/develop...yuriha-chan:misskey:mfm-ruby-fn)を参考にさせていただきました。  
+
 ### ミュートとブロックを同時に行えるように
 ノートの右クリックメニューの「ユーザー」にある「ミュート&ブロック」を押すことで、ミュートとブロックを一気に行うことができるようになっています。
 
