@@ -7,7 +7,7 @@ on:
       - 'master-kakurega'
     paths:
       - 'package.json'
-      
+
 jobs:
   createTag:
     runs-on: ubuntu-latest
@@ -18,16 +18,16 @@ jobs:
 
       - name: get package version
         id: package-version
-        uses: martinbeentjes/npm-get-version-action@master
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
 
       - name: check tag exists
-        uses: mukunku/tag-exists-action@v1.0.0
+        uses: mukunku/tag-exists-action@v1.4.0
         id: check-tag
         with:
           tag: v${{ steps.package-version.outputs.current-version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: create tag
         uses: pkgdeps/git-tag-action@v2
         if: steps.check-tag.outputs.exists == 'false'
