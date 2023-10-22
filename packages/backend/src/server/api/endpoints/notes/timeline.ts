@@ -16,7 +16,6 @@ import { CacheService } from '@/core/CacheService.js';
 import { isUserRelated } from '@/misc/is-user-related.js';
 import { FunoutTimelineService } from '@/core/FunoutTimelineService.js';
 import { UserFollowingService } from '@/core/UserFollowingService.js';
-import { ApiLoggerService } from '@/server/api/ApiLoggerService.js';
 
 export const meta = {
 	tags: ['notes'],
@@ -64,7 +63,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 		private funoutTimelineService: FunoutTimelineService,
 		private userFollowingService: UserFollowingService,
 		private queryService: QueryService,
-		private apiLoggerService: ApiLoggerService,
 	) {
 		super(meta, paramDef, async (ps, me) => {
 			const untilId = ps.untilId ?? (ps.untilDate ? this.idService.gen(ps.untilDate!) : null);
@@ -98,61 +96,33 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 					.leftJoinAndSelect('note.channel', 'channel');
 
 				redisTimeline = await query.getMany();
-			}
+				redisTimeline = redisTimeline.filter(note => {
+					if (note.userId === me.id) return true;
 
-			if (redisTimeline.length > 0) {
-				let timeline = redisTimeline;
-
-				const _debug_beforeTimelineLength = timeline.length;
-				const _debug_filter_cause: string[] = [];
-
-				timeline = timeline.filter(note => {
-					if (note.userId === me.id) {
-						return true;
-					}
-					if (isUserRelated(note, userIdsWhoBlockingMe)) {
-						_debug_filter_cause.push('blocked');
-						return false;
-					}
-					if (isUserRelated(note, userIdsWhoMeMuting)) {
-						_debug_filter_cause.push('muted');
-						return false;
-					}
+					if (isUserRelated(note, userIdsWhoBlockingMe)) return false;
+					if (isUserRelated(note, userIdsWhoMeMuting)) return false;
 					if (note.renoteId) {
 						if (note.text == null && note.fileIds.length === 0 && !note.hasPoll) {
-							if (isUserRelated(note, userIdsWhoMeMutingRenotes)) {
-								_debug_filter_cause.push('muted renote');
-								return false;
-							}
-							if (ps.withRenotes === false) {
-								_debug_filter_cause.push('with renote');
-								return false;
-							}
+							if (isUserRelated(note, userIdsWhoMeMutingRenotes)) return false;
+							if (ps.withRenotes === false) return false;
 						}
 					}
 					if (note.reply && note.reply.visibility === 'followers') {
-						if (!Object.hasOwn(followings, note.reply.userId)) {
-							_debug_filter_cause.push('followers');
-							return false;
-						}
+						if (!Object.hasOwn(followings, note.reply.userId)) return false;
 					}
 
 					return true;
 				});
 
-				// TODO: フィルタした結果件数が足りなかった場合の対応
+				redisTimeline.sort((a, b) => a.id > b.id ? -1 : 1);
+			}
 
-				timeline.sort((a, b) => a.id > b.id ? -1 : 1);
-
-				if (timeline.length === 0 && untilId == null && sinceId == null) {
-					this.apiLoggerService.logger.warn(`Timeline is empty. me: ${me.id}, noteIdsLength: ${noteIds.length}, beforeLength: ${_debug_beforeTimelineLength}, causes: [${_debug_filter_cause.join(', ')}], includeMyRenotes: ${ps.includeMyRenotes}, includeRenotedMyNotes: ${ps.includeRenotedMyNotes}, includeLocalRenotes: ${ps.includeLocalRenotes}, withFiles: ${ps.withFiles}, withRenotes: ${ps.withRenotes}`);
-				}
-
+			if (redisTimeline.length > 0) {
 				process.nextTick(() => {
 					this.activeUsersChart.read(me);
 				});
 
-				return await this.noteEntityService.packMany(timeline, me);
+				return await this.noteEntityService.packMany(redisTimeline, me);
 			} else { // fallback to db
 				const followees = await this.userFollowingService.getFollowees(me.id);
 
