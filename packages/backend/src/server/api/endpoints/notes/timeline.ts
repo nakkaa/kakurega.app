@@ -5,7 +5,7 @@
 
 import { Brackets } from 'typeorm';
 import { Inject, Injectable } from '@nestjs/common';
-import type { NotesRepository } from '@/models/_.js';
+import type { MiNote, NotesRepository } from '@/models/_.js';
 import { Endpoint } from '@/server/api/endpoint-base.js';
 import { QueryService } from '@/core/QueryService.js';
 import ActiveUsersChart from '@/core/chart/charts/active-users.js';
@@ -85,6 +85,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			let noteIds = await this.funoutTimelineService.get(ps.withFiles ? `homeTimelineWithFiles:${me.id}` : `homeTimeline:${me.id}`, untilId, sinceId);
 			noteIds = noteIds.slice(0, ps.limit);
 
+			let redisTimeline: MiNote[] = [];
+
 			if (noteIds.length > 0) {
 				const query = this.notesRepository.createQueryBuilder('note')
 					.where('note.id IN (:...noteIds)', { noteIds: noteIds })
@@ -95,7 +97,11 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 					.leftJoinAndSelect('renote.user', 'renoteUser')
 					.leftJoinAndSelect('note.channel', 'channel');
 
-				let timeline = await query.getMany();
+				redisTimeline = await query.getMany();
+			}
+
+			if (redisTimeline.length > 0) {
+				let timeline = redisTimeline;
 
 				const _debug_beforeTimelineLength = timeline.length;
 				const _debug_filter_cause: string[] = [];
@@ -139,7 +145,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				timeline.sort((a, b) => a.id > b.id ? -1 : 1);
 
 				if (timeline.length === 0 && untilId == null && sinceId == null) {
-					this.apiLoggerService.logger.warn(`Timeline is empty. me: ${me.id}, beforeLength: ${_debug_beforeTimelineLength}, causes: [${_debug_filter_cause.join(', ')}], includeMyRenotes: ${ps.includeMyRenotes}, includeRenotedMyNotes: ${ps.includeRenotedMyNotes}, includeLocalRenotes: ${ps.includeLocalRenotes}, withFiles: ${ps.withFiles}, withRenotes: ${ps.withRenotes}`);
+					this.apiLoggerService.logger.warn(`Timeline is empty. me: ${me.id}, noteIdsLength: ${noteIds.length}, beforeLength: ${_debug_beforeTimelineLength}, causes: [${_debug_filter_cause.join(', ')}], includeMyRenotes: ${ps.includeMyRenotes}, includeRenotedMyNotes: ${ps.includeRenotedMyNotes}, includeLocalRenotes: ${ps.includeLocalRenotes}, withFiles: ${ps.withFiles}, withRenotes: ${ps.withRenotes}`);
 				}
 
 				process.nextTick(() => {
