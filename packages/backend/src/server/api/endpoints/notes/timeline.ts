@@ -97,20 +97,38 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 				let timeline = await query.getMany();
 
+				const _debug_beforeTimelineLength = timeline.length;
+				const _debug_filter_cause: string[] = [];
+
 				timeline = timeline.filter(note => {
 					if (note.userId === me.id) {
 						return true;
 					}
-					if (isUserRelated(note, userIdsWhoBlockingMe)) return false;
-					if (isUserRelated(note, userIdsWhoMeMuting)) return false;
+					if (isUserRelated(note, userIdsWhoBlockingMe)) {
+						_debug_filter_cause.push('blocked');
+						return false;
+					}
+					if (isUserRelated(note, userIdsWhoMeMuting)) {
+						_debug_filter_cause.push('muted');
+						return false;
+					}
 					if (note.renoteId) {
 						if (note.text == null && note.fileIds.length === 0 && !note.hasPoll) {
-							if (isUserRelated(note, userIdsWhoMeMutingRenotes)) return false;
-							if (ps.withRenotes === false) return false;
+							if (isUserRelated(note, userIdsWhoMeMutingRenotes)) {
+								_debug_filter_cause.push('muted renote');
+								return false;
+							}
+							if (ps.withRenotes === false) {
+								_debug_filter_cause.push('with renote');
+								return false;
+							}
 						}
 					}
 					if (note.reply && note.reply.visibility === 'followers') {
-						if (!Object.hasOwn(followings, note.reply.userId)) return false;
+						if (!Object.hasOwn(followings, note.reply.userId)) {
+							_debug_filter_cause.push('followers');
+							return false;
+						}
 					}
 
 					return true;
@@ -120,8 +138,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 				timeline.sort((a, b) => a.id > b.id ? -1 : 1);
 
-				if (timeline.length === 0) {
-					this.apiLoggerService.logger.warn(`Timeline is empty. me: ${me.id}, untilId: ${untilId}, sinceId: ${sinceId}, includeMyRenotes: ${ps.includeMyRenotes}, includeRenotedMyNotes: ${ps.includeRenotedMyNotes}, includeLocalRenotes: ${ps.includeLocalRenotes}, withFiles: ${ps.withFiles}, withRenotes: ${ps.withRenotes}`);
+				if (timeline.length === 0 && untilId == null && sinceId == null) {
+					this.apiLoggerService.logger.warn(`Timeline is empty. me: ${me.id}, beforeLength: ${_debug_beforeTimelineLength}, causes: [${_debug_filter_cause.join(', ')}], includeMyRenotes: ${ps.includeMyRenotes}, includeRenotedMyNotes: ${ps.includeRenotedMyNotes}, includeLocalRenotes: ${ps.includeLocalRenotes}, withFiles: ${ps.withFiles}, withRenotes: ${ps.withRenotes}`);
 				}
 
 				process.nextTick(() => {

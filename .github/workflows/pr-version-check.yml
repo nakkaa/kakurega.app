@@ -21,7 +21,16 @@ jobs:
           echo "Using repository: ${{ github.repository }}"
           gh repo set-default ${{ github.repository }}
 
-          COUNT=$(gh pr view ${{ github.event.number }} --json title --jq '.title' | grep 'release:' | grep '${{ steps.package-version.outputs.current-version }}' | wc -l)
+          TITLE=$(gh pr view ${{ github.event.number }} --json title --jq '.title')
+          IS_RELEASE_PR=$(echo $TITLE | grep 'release:' | wc -l)
+          COUNT=$(echo $TITLE | grep '${{ steps.package-version.outputs.current-version }}' | wc -l)
+
+          if [ $((IS_RELEASE_PR)) -eq 0 ]; then
+              echo "exists=true" >> $GITHUB_OUTPUT
+              echo "This PR is not a release PR"
+              exit 0
+          fi
+
           if [ $((COUNT)) -gt 0 ]; then
               echo "exists=true" >> $GITHUB_OUTPUT
               echo "Version already exists"
