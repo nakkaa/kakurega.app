@@ -191,6 +191,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				if (ps.withFiles) {
 					query.andWhere('note.fileIds != \'{}\'');
 				}
+
+				if (ps.withRenotes === false) {
+					query.andWhere('note.renoteId IS NULL');
+				}
 				//#endregion
 
 				const timeline = await query.limit(ps.limit).getMany();
