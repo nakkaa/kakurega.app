@@ -125,7 +125,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</div>
 	</article>
 </div>
-<div v-else-if="!muted || showMutedInfo" :class="$style.muted" @click="hideNote = false">
+<div v-else :class="$style.muted" @click="hideNote = false">
 	<I18n :src="i18n.ts.userSaysSomething" tag="small">
 		<template #name>
 			<MkA v-user-preview="appearNote.userId" :to="userPage(appearNote.user)">
@@ -214,14 +214,13 @@ const urls = appearNote.text ? extractUrlFromMfm(mfm.parse(appearNote.text)) : n
 const isLong = shouldCollapsed(appearNote);
 const collapsed = ref(appearNote.cw == null && isLong);
 const isDeleted = ref(false);
-const muted = ref($i ? checkWordMute(appearNote, $i, $i.mutedWords) : false);
+const muted = ref(defaultStore.state.showMutedInfo && $i ? checkWordMute(appearNote, $i, $i.mutedWords) : false);
 const isSensitive = defaultStore.state.hideNsfwNote && (appearNote as Misskey.entities.Note)?.files.some(x => x.isSensitive);
 const hideNote = ref(muted.value || isSensitive);
 const translation = ref<any>(null);
 const translating = ref(false);
 const showTicker = (defaultStore.state.instanceTicker === 'always') || (defaultStore.state.instanceTicker === 'remote' && appearNote.user.instance);
 const tickerStyle = defaultStore.state.instanceTickerStyle;
-const showMutedInfo = defaultStore.state.showMutedInfo;
 const canRenote = computed(() => ['public', 'home'].includes(appearNote.visibility) || (appearNote.visibility === 'followers' && appearNote.userId === $i.id));
 let renoteCollapsed = $ref(isRenote && checkCollapseRenote(appearNote, note, $i));
 

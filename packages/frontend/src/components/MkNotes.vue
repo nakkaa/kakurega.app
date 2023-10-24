@@ -4,7 +4,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<MkPagination ref="pagingComponent" :pagination="pagination" :disableAutoLoad="disableAutoLoad" :suppressInfinityFetch="isNeedSuppressInfinityFetch()">
+<MkPagination ref="pagingComponent" :pagination="pagination" :disableAutoLoad="disableAutoLoad" :displayLimit="overrideDisplayLimit" :suppressInfinityFetch="isNeedSuppressInfinityFetch()">
 	<template #empty>
 		<div class="_fullinfo">
 			<img :src="infoImageUrl" class="_ghost"/>
@@ -24,7 +24,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				:ad="true"
 				:class="$style.notes"
 			>
-				<MkNote v-if="!isFilteredNote(note)" :key="note._featuredId_ || note._prId_ || note.id" :class="$style.note" :note="note"/>
+				<MkNote v-if="!isFilteredNote(note) && !isNeedHide(note)" :key="note._featuredId_ || note._prId_ || note.id" :class="$style.note" :note="note"/>
 			</MkDateSeparatedList>
 		</div>
 	</template>
@@ -32,13 +32,16 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { shallowRef } from 'vue';
+import { shallowRef, ref } from 'vue';
 import * as Misskey from 'misskey-js';
 import MkNote from '@/components/MkNote.vue';
 import MkDateSeparatedList from '@/components/MkDateSeparatedList.vue';
 import MkPagination, { Paging } from '@/components/MkPagination.vue';
 import { i18n } from '@/i18n.js';
 import { infoImageUrl } from '@/instance.js';
+import { defaultStore } from '@/store.js';
+import { $i } from '@/account.js';
+import { checkWordMute } from '@/scripts/check-word-mute.js';
 
 export type Filter = {
 	includeKeywords?: string[];
@@ -57,6 +60,17 @@ const props = defineProps<{
 	filter?: Filter;
 	disableAutoLoad?: boolean;
 }>();
+
+const overrideDisplayLimit = ref<undefined | number>();
+
+if (defaultStore.state.enableOverrideTLDisplayLimit) {
+	overrideDisplayLimit.value = defaultStore.state.overrideTLDisplayLimit < 20 ? 20 : defaultStore.state.overrideTLDisplayLimit;
+}
+
+const isNeedHide = (note: Misskey.entities.Note) => {
+	if (defaultStore.state.showMutedInfo) return false;
+	return $i ? checkWordMute(note, $i, $i.mutedWords) : false;
+};
 
 const pagingComponent = shallowRef<InstanceType<typeof MkPagination>>();
 
