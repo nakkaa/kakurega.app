@@ -189,6 +189,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<template #label>{{ i18n.ts.numberOfPageCache }}</template>
 				<template #caption>{{ i18n.ts.numberOfPageCacheDescription }}</template>
 			</MkRange>
+			<MkSwitch v-model="enableOverrideTLDisplayLimit">{{ i18n.ts.enableOverrideTLDisplayLimit }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></MkSwitch>
+			<MkRange v-if="enableOverrideTLDisplayLimit" v-model="overrideTLDisplayLimit" :min="20" :max="200" :step="1" easing>
+				<template #label>{{ i18n.ts.overrideTLDisplayLimit }}</template>
+				<template #caption>{{ i18n.ts.overrideTLDisplayLimitDescription }}</template>
+			</MkRange>
 		</div>
 	</FormSection>
 
@@ -286,6 +291,8 @@ const notificationPosition = computed(defaultStore.makeGetterSetter('notificatio
 const notificationStackAxis = computed(defaultStore.makeGetterSetter('notificationStackAxis'));
 const keepScreenOn = computed(defaultStore.makeGetterSetter('keepScreenOn'));
 const defaultWithReplies = computed(defaultStore.makeGetterSetter('defaultWithReplies'));
+const enableOverrideTLDisplayLimit = computed(defaultStore.makeGetterSetter('enableOverrideTLDisplayLimit'));
+const overrideTLDisplayLimit = computed(defaultStore.makeGetterSetter('overrideTLDisplayLimit'));
 
 watch(lang, () => {
 	miLocalStorage.setItem('lang', lang.value as string);

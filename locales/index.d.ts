@@ -1195,6 +1195,9 @@ export interface Locale {
     "optoutStatisticsDescription": string;
     "autoRejectFollowRequest": string;
     "autoRejectFollowRequestDescription": string;
+    "enableOverrideTLDisplayLimit": string;
+    "overrideTLDisplayLimit": string;
+    "overrideTLDisplayLimitDescription": string;
     "_announcement": {
         "forExistingUsers": string;
         "forExistingUsersDescription": string;

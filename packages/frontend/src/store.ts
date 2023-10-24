@@ -408,6 +408,14 @@ export const defaultStore = markRaw(new Storage('base', {
 		where: 'account',
 		default: false,
 	},
+	enableOverrideTLDisplayLimit: {
+		where: 'device',
+		default: false,
+	},
+	overrideTLDisplayLimit: {
+		where: 'device',
+		default: 20,
+	},
 }));
 
 // TODO: 他のタブと永続化されたstateを同期
