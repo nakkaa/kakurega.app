@@ -184,7 +184,7 @@ export async function common(createVue: () => App<Element>) {
 		initializeTimeBasedDarkmode();
 	}
 
-	window.matchMedia('(prefers-color-scheme: dark)').addListener(mql => {
+	window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (mql) => {
 		if (ColdDeviceStorage.get('syncDeviceDarkMode')) {
 			defaultStore.set('darkMode', mql.matches);
 		}
