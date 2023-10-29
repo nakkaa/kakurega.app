@@ -11,7 +11,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	</MkSwitch>
 	-->
 
-	<MkSwitch v-if="host === 'misskey.yukineko.me'" v-model="reportError">{{ i18n.ts.optoutStatistics }}<template #caption>{{ i18n.t('optoutStatisticsDescription', { instance: instance.name || host }) }}</template></MkSwitch>
+	<MkSwitch v-if="instance.enableSentryLogging" v-model="reportError">{{ i18n.ts.optoutStatistics }}<template #caption>{{ i18n.t('optoutStatisticsDescription', { instance: instance.name || host }) }}</template></MkSwitch>
 
 	<FormSection first>
 		<div class="_gaps_s">
