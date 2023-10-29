@@ -199,6 +199,14 @@ export const meta = {
 				type: 'boolean',
 				optional: false, nullable: false,
 			},
+			enableSentryLogging: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
+			sentryDsn: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
 			enableSupporterPage: {
 				type: 'boolean',
 				optional: false, nullable: false,
@@ -248,6 +256,10 @@ export const meta = {
 						optional: false, nullable: false,
 					},
 					patreon: {
+						type: 'boolean',
+						optional: false, nullable: false,
+					},
+					sentryLogging: {
 						type: 'boolean',
 						optional: false, nullable: false,
 					},
@@ -351,6 +363,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				notesPerOneAd: instance.notesPerOneAd,
 				enableEmail: instance.enableEmail,
 				enablePatreonIntegration: instance.enablePatreonIntegration,
+				enableSentryLogging: instance.enableSentryLogging,
+				sentryDsn: instance.sentryDsn,
 				enableSupporterPage: instance.enableSupporterPage,
 				enableServiceWorker: instance.enableServiceWorker,
 
@@ -383,6 +397,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 					turnstile: instance.enableTurnstile,
 					objectStorage: instance.useObjectStorage,
 					patreon: instance.enablePatreonIntegration,
+					sentryLogging: instance.enableSentryLogging,
 					serviceWorker: instance.enableServiceWorker,
 					miauth: true,
 				};

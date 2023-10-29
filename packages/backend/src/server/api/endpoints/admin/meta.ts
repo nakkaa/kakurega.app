@@ -101,6 +101,14 @@ export const meta = {
 				type: 'boolean',
 				optional: false, nullable: false,
 			},
+			enableSentryLogging: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
+			sentryDsn: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
 			enableServiceWorker: {
 				type: 'boolean',
 				optional: false, nullable: false,
@@ -419,6 +427,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				defaultDarkTheme: instance.defaultDarkTheme,
 				enableEmail: instance.enableEmail,
 				enablePatreonIntegration: instance.enablePatreonIntegration,
+				enableSentryLogging: instance.enableSentryLogging,
+				sentryDsn: instance.sentryDsn,
 				enableServiceWorker: instance.enableServiceWorker,
 				translatorAvailable: instance.deeplAuthKey != null,
 				cacheRemoteFiles: instance.cacheRemoteFiles,

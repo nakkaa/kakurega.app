@@ -338,6 +338,17 @@ export class MiMeta {
 	})
 	public patreonRefreshToken: string | null;
 
+	@Column('boolean', {
+		default: false,
+	})
+	public enableSentryLogging: boolean;
+
+	@Column('varchar', {
+		length: 1024,
+		nullable: true,
+	})
+	public sentryDsn: string | null;
+
 	@Column('varchar', {
 		length: 1024,
 		nullable: true,

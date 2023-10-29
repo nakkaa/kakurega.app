@@ -254,11 +254,10 @@ export async function common(createVue: () => App<Element>) {
 
 	const app = createVue();
 
-	const uri = new URL(location.href);
-	if (!_DEV_ && uri.hostname === 'misskey.yukineko.me' && !defaultStore.state.optoutStatistics) {
+	if (!_DEV_ && instance.enableSentryLogging && instance.sentryDsn && !defaultStore.state.optoutStatistics) {
 		Sentry.init({
 			app,
-			dsn: 'https://4787e38fa976cc8ffc3b9348fb96a2e1@sentry.yukineko.dev/2',
+			dsn: instance.sentryDsn,
 			release: version,
 		});
 	}
