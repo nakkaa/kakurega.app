@@ -1198,6 +1198,19 @@ export interface Locale {
     "enableOverrideTLDisplayLimit": string;
     "overrideTLDisplayLimit": string;
     "overrideTLDisplayLimitDescription": string;
+    "avatarDecorations": string;
+    "attach": string;
+    "detach": string;
+    "angle": string;
+    "flip": string;
+    "showAvatarDecorations": string;
+    "releaseToRefresh": string;
+    "refreshing": string;
+    "pullDownToRefresh": string;
+    "disableStreamingTimeline": string;
+    "useGroupedNotifications": string;
+    "signupPendingError": string;
+    "cwNotationRequired": string;
     "_announcement": {
         "forExistingUsers": string;
         "forExistingUsersDescription": string;
