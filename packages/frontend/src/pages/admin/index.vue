@@ -82,7 +82,7 @@ const menuDef = $computed(() => [{
 		icon: 'ti ti-search',
 		text: i18n.ts.lookup,
 		action: lookup,
-	}, ...(instance.disableRegistration ? [{
+	}, ...(instance.disableRegistration || instance.enableRegistrationLimit ? [{
 		type: 'button',
 		icon: 'ti ti-user-plus',
 		text: i18n.ts.createInviteCode,
