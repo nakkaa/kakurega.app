@@ -61,7 +61,7 @@ export class MiMeta {
 	})
 	public registrationLimit: number;
 
-	@Column('boolean', {
+	@Column('integer', {
 		default: 24,
 		comment: 'Cooldown of registration limit in hours',
 	})
