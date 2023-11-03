@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { MoreThan } from 'typeorm';
+import { IsNull, MoreThan } from 'typeorm';
 import type { UserPendingsRepository, UsersRepository } from '@/models/_.js';
 import { MetaService } from '@/core/MetaService.js';
 import { DI } from '@/di-symbols.js';
@@ -35,6 +35,7 @@ export class RegistrationLimitService {
 		}
 
 		let count = await this.usersRepository.countBy({
+			host: IsNull(),
 			id: MoreThan(this.idService.gen(now - (1000 * 60 * 60 * instance.registrationLimitCooldown))),
 		});
 
