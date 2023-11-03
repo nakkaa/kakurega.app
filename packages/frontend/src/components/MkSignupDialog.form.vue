@@ -10,7 +10,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	</div>
 	<MkSpacer :marginMin="20" :marginMax="32">
 		<form class="_gaps_m" autocomplete="new-password" @submit.prevent="onSubmit">
-			<MkInput v-if="instance.disableRegistration" v-model="invitationCode" type="text" :spellcheck="false" required>
+			<MkInput v-if="useInviteCode" v-model="invitationCode" type="text" :spellcheck="false" required>
 				<template #label>{{ i18n.ts.invitationCode }}</template>
 				<template #prefix><i class="ti ti-key"></i></template>
 			</MkInput>
@@ -64,12 +64,15 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<MkCaptcha v-if="instance.enableHcaptcha" ref="hcaptcha" v-model="hCaptchaResponse" :class="$style.captcha" provider="hcaptcha" :sitekey="instance.hcaptchaSiteKey"/>
 			<MkCaptcha v-if="instance.enableRecaptcha" ref="recaptcha" v-model="reCaptchaResponse" :class="$style.captcha" provider="recaptcha" :sitekey="instance.recaptchaSiteKey"/>
 			<MkCaptcha v-if="instance.enableTurnstile" ref="turnstile" v-model="turnstileResponse" :class="$style.captcha" provider="turnstile" :sitekey="instance.turnstileSiteKey"/>
-			<MkButton type="submit" :disabled="shouldDisableSubmitting" large gradate rounded data-cy-signup-submit style="margin: 0 auto;">
-				<template v-if="submitting">
-					<MkLoading :em="true" :colored="false"/>
-				</template>
-				<template v-else>{{ i18n.ts.start }}</template>
-			</MkButton>
+			<div class="_buttonsCenter">
+				<MkButton inline large rounded @click="emit('back')"><i class="ti ti-arrow-left"></i> {{ i18n.ts.goBack }}</MkButton>
+				<MkButton type="submit" :disabled="shouldDisableSubmitting" inline large gradate rounded data-cy-signup-submit>
+					<template v-if="submitting">
+						<MkLoading :em="true" :colored="false"/>
+					</template>
+					<template v-else>{{ i18n.ts.start }}</template>
+				</MkButton>
+			</div>
 		</form>
 	</MkSpacer>
 </div>
@@ -90,6 +93,7 @@ import { i18n } from '@/i18n.js';
 
 const props = withDefaults(defineProps<{
 	autoSet?: boolean;
+	withoutInviteCode?: boolean;
 }>(), {
 	autoSet: false,
 });
@@ -97,9 +101,11 @@ const props = withDefaults(defineProps<{
 const emit = defineEmits<{
 	(ev: 'signup', user: Record<string, any>): void;
 	(ev: 'signupEmailPending'): void;
+	(ev: 'back'): void;
 }>();
 
 const host = toUnicode(config.host);
+const useInviteCode = instance.disableRegistration || (instance.enableRegistrationLimit && !props.withoutInviteCode);
 
 let hcaptcha = $ref<Captcha | undefined>();
 let recaptcha = $ref<Captcha | undefined>();

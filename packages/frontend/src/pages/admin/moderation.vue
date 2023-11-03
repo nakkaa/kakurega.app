@@ -18,6 +18,22 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<template #label>{{ i18n.ts.emailRequiredForSignup }}</template>
 					</MkSwitch>
 
+					<MkSwitch v-if="enableRegistration" v-model="enableRegistrationLimit">
+						<template #label>{{ i18n.ts.enableRegistrationLimit }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></template>
+						<template #caption>{{ i18n.ts.enableRegistrationLimitDescription }}</template>
+					</MkSwitch>
+
+					<MkInput v-if="enableRegistration && enableRegistrationLimit" v-model="registrationLimitCooldown" type="number" :min="1">
+						<template #label>{{ i18n.ts.registrationLimitCooldown }}</template>
+						<template #suffix>{{ i18n.ts._time.hour }}</template>
+						<template #caption>{{ i18n.ts.registrationLimitCooldownDescription }}</template>
+					</MkInput>
+
+					<MkInput v-if="enableRegistration && enableRegistrationLimit" v-model="registrationLimit" type="number" :min="0">
+						<template #label>{{ i18n.ts.registrationLimit }}</template>
+						<template #caption>{{ i18n.ts.registrationLimitDescription }}</template>
+					</MkInput>
+
 					<FormLink to="/admin/server-rules">{{ i18n.ts.serverRules }}</FormLink>
 
 					<MkInput v-model="tosUrl">
@@ -70,6 +86,9 @@ import MkButton from '@/components/MkButton.vue';
 import FormLink from '@/components/form/link.vue';
 
 let enableRegistration: boolean = $ref(false);
+let enableRegistrationLimit: boolean = $ref(false);
+let registrationLimit: number = $ref(0);
+let registrationLimitCooldown: number = $ref(0);
 let emailRequiredForSignup: boolean = $ref(false);
 let sensitiveWords: string = $ref('');
 let preservedUsernames: string = $ref('');
@@ -79,6 +98,9 @@ let privacyPolicyUrl: string | null = $ref(null);
 async function init() {
 	const meta = await os.api('admin/meta');
 	enableRegistration = !meta.disableRegistration;
+	enableRegistrationLimit = meta.enableRegistrationLimit;
+	registrationLimit = meta.registrationLimit;
+	registrationLimitCooldown = meta.registrationLimitCooldown;
 	emailRequiredForSignup = meta.emailRequiredForSignup;
 	sensitiveWords = meta.sensitiveWords.join('\n');
 	preservedUsernames = meta.preservedUsernames.join('\n');
@@ -89,6 +111,9 @@ async function init() {
 function save() {
 	os.apiWithDialog('admin/update-meta', {
 		disableRegistration: !enableRegistration,
+		enableRegistrationLimit,
+		registrationLimit,
+		registrationLimitCooldown,
 		emailRequiredForSignup,
 		tosUrl,
 		privacyPolicyUrl,

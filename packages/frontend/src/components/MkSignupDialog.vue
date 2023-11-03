@@ -24,8 +24,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<template v-if="!isAcceptedServerRule">
 				<XServerRules @done="isAcceptedServerRule = true" @cancel="dialog.close()"/>
 			</template>
+			<template v-else-if="!isChoosed && instance.enableRegistrationLimit">
+				<XChoice @done="doneChoice" @cancel="dialog?.close()"/>
+			</template>
 			<template v-else>
-				<XSignup :autoSet="autoSet" @signup="onSignup" @signupEmailPending="onSignupEmailPending"/>
+				<XSignup :autoSet="autoSet" :withoutInviteCode="withoutInviteCode" @back="onBack" @signup="onSignup" @signupEmailPending="onSignupEmailPending"/>
 			</template>
 		</Transition>
 	</div>
@@ -37,6 +40,7 @@ import { } from 'vue';
 import { $ref } from 'vue/macros';
 import XSignup from '@/components/MkSignupDialog.form.vue';
 import XServerRules from '@/components/MkSignupDialog.rules.vue';
+import XChoice from '@/components/MkSignupDialog.choice.vue';
 import MkModalWindow from '@/components/MkModalWindow.vue';
 import { i18n } from '@/i18n.js';
 import { instance } from '@/instance.js';
@@ -54,7 +58,22 @@ const emit = defineEmits<{
 
 const dialog = $shallowRef<InstanceType<typeof MkModalWindow>>();
 
-const isAcceptedServerRule = $ref(false);
+let isAcceptedServerRule = $ref(false);
+let isChoosed = $ref(false);
+let withoutInviteCode = $ref(true);
+
+function doneChoice(hasInviteCode: boolean) {
+	isChoosed = true;
+	withoutInviteCode = !hasInviteCode;
+}
+
+function onBack() {
+	if (isChoosed) {
+		isChoosed = false;
+	} else {
+		isAcceptedServerRule = false;
+	}
+}
 
 function onSignup(res) {
 	emit('done', res);

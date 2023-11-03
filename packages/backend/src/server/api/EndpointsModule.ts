@@ -318,6 +318,7 @@ import * as ep___requestResetPassword from './endpoints/request-reset-password.j
 import * as ep___resetDb from './endpoints/reset-db.js';
 import * as ep___resetPassword from './endpoints/reset-password.js';
 import * as ep___serverInfo from './endpoints/server-info.js';
+import * as ep___signupAvailable from './endpoints/signup-available.js';
 import * as ep___stats from './endpoints/stats.js';
 import * as ep___sw_show_registration from './endpoints/sw/show-registration.js';
 import * as ep___sw_update_registration from './endpoints/sw/update-registration.js';
@@ -674,6 +675,7 @@ const $requestResetPassword: Provider = { provide: 'ep:request-reset-password', 
 const $resetDb: Provider = { provide: 'ep:reset-db', useClass: ep___resetDb.default };
 const $resetPassword: Provider = { provide: 'ep:reset-password', useClass: ep___resetPassword.default };
 const $serverInfo: Provider = { provide: 'ep:server-info', useClass: ep___serverInfo.default };
+const $signupAvailable: Provider = { provide: 'ep:signup-available', useClass: ep___signupAvailable.default };
 const $stats: Provider = { provide: 'ep:stats', useClass: ep___stats.default };
 const $sw_show_registration: Provider = { provide: 'ep:sw/show-registration', useClass: ep___sw_show_registration.default };
 const $sw_update_registration: Provider = { provide: 'ep:sw/update-registration', useClass: ep___sw_update_registration.default };
@@ -1034,6 +1036,7 @@ const $retention: Provider = { provide: 'ep:retention', useClass: ep___retention
 		$resetDb,
 		$resetPassword,
 		$serverInfo,
+		$signupAvailable,
 		$stats,
 		$sw_show_registration,
 		$sw_update_registration,
@@ -1387,6 +1390,7 @@ const $retention: Provider = { provide: 'ep:retention', useClass: ep___retention
 		$resetDb,
 		$resetPassword,
 		$serverInfo,
+		$signupAvailable,
 		$stats,
 		$sw_register,
 		$sw_unregister,

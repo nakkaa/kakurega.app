@@ -32,6 +32,22 @@ export const meta = {
 				type: 'boolean',
 				optional: false, nullable: false,
 			},
+			disableRegistration: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
+			enableRegistrationLimit: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
+			registrationLimit: {
+				type: 'number',
+				optional: false, nullable: false,
+			},
+			registrationLimitCooldown: {
+				type: 'number',
+				optional: false, nullable: false,
+			},
 			enableHcaptcha: {
 				type: 'boolean',
 				optional: false, nullable: false,
@@ -400,6 +416,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				impressumUrl: instance.impressumUrl,
 				privacyPolicyUrl: instance.privacyPolicyUrl,
 				disableRegistration: instance.disableRegistration,
+				enableRegistrationLimit: instance.enableRegistrationLimit,
+				registrationLimit: instance.registrationLimit,
+				registrationLimitCooldown: instance.registrationLimitCooldown,
 				emailRequiredForSignup: instance.emailRequiredForSignup,
 				enableHcaptcha: instance.enableHcaptcha,
 				hcaptchaSiteKey: instance.hcaptchaSiteKey,

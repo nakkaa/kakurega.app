@@ -38,7 +38,7 @@ export function openInstanceMenu(ev: MouseEvent) {
 		text: i18n.ts.ads,
 		icon: 'ti ti-ad',
 		to: '/ads',
-	}, ($i && ($i.isAdmin || $i.policies.canInvite) && instance.disableRegistration) ? {
+	}, ($i && ($i.isAdmin || $i.policies.canInvite) && (instance.disableRegistration || instance.enableRegistrationLimit)) ? {
 		type: 'link',
 		to: '/invite',
 		text: i18n.ts.invite,
