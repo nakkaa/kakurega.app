@@ -20,6 +20,9 @@ export const paramDef = {
 	type: 'object',
 	properties: {
 		disableRegistration: { type: 'boolean', nullable: true },
+		enableRegistrationLimit: { type: 'boolean', nullable: true },
+		registrationLimit: { type: 'integer', nullable: true },
+		registrationLimitCooldown: { type: 'integer', nullable: true },
 		pinnedUsers: {
 			type: 'array', nullable: true, items: {
 				type: 'string',
@@ -161,6 +164,18 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 			if (typeof ps.disableRegistration === 'boolean') {
 				set.disableRegistration = ps.disableRegistration;
+			}
+
+			if (typeof ps.enableRegistrationLimit === 'boolean') {
+				set.enableRegistrationLimit = ps.enableRegistrationLimit;
+			}
+
+			if (typeof ps.registrationLimit === 'number') {
+				set.registrationLimit = ps.registrationLimit;
+			}
+
+			if (typeof ps.registrationLimitCooldown === 'number') {
+				set.registrationLimitCooldown = ps.registrationLimitCooldown;
 			}
 
 			if (Array.isArray(ps.pinnedUsers)) {

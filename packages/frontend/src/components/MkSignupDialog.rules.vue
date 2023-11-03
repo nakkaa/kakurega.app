@@ -13,6 +13,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<div v-if="instance.disableRegistration">
 				<MkInfo warn>{{ i18n.ts.invitationRequiredToRegister }}</MkInfo>
 			</div>
+			<div v-if="instance.enableRegistrationLimit" :class="$style.mainWarn">
+				<MkInfo warn>{{ i18n.ts.registrationLimitEnabled }}</MkInfo>
+			</div>
 
 			<div style="text-align: center;">
 				<div>{{ i18n.ts.pleaseConfirmBelowBeforeSignup }}</div>

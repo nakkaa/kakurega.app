@@ -15,6 +15,7 @@ import { IdService } from '@/core/IdService.js';
 import { SignupService } from '@/core/SignupService.js';
 import { UserEntityService } from '@/core/entities/UserEntityService.js';
 import { EmailService } from '@/core/EmailService.js';
+import { RegistrationLimitService } from '@/core/RegistrationLimitService.js';
 import { MiLocalUser } from '@/models/User.js';
 import { FastifyReplyError } from '@/misc/fastify-reply-error.js';
 import { bindThis } from '@/decorators.js';
@@ -50,6 +51,7 @@ export class SignupApiService {
 		private signupService: SignupService,
 		private signinService: SigninService,
 		private emailService: EmailService,
+		private registrationLimitService: RegistrationLimitService,
 	) {
 	}
 
@@ -136,9 +138,28 @@ export class SignupApiService {
 				return;
 			}
 
-			if (ticket.usedAt) {
+			// メアド認証が有効の場合
+			if (instance.emailRequiredForSignup) {
+				// メアド認証済みならエラー
+				if (ticket.usedBy) {
+					reply.code(400);
+					return;
+				}
+
+				// 認証しておらず、メール送信から30分以内ならエラー
+				if (ticket.usedAt && ticket.usedAt.getTime() + (1000 * 60 * 30) > Date.now()) {
+					reply.code(400);
+					return;
+				}
+			} else if (ticket.usedAt) {
 				reply.code(400);
 				return;
+			}
+		}
+
+		if (!instance.disableRegistration && instance.enableRegistrationLimit) {
+			if (!await this.registrationLimitService.isAvailable()) {
+				throw new FastifyReplyError(400, 'REGISTRATION_LIMIT_EXCEEDED');
 			}
 		}
 
@@ -223,6 +244,10 @@ export class SignupApiService {
 
 		try {
 			const pendingUser = await this.userPendingsRepository.findOneByOrFail({ code });
+
+			if (this.idService.parse(pendingUser.id).date.getTime() + (1000 * 60 * 30) < Date.now()) {
+				throw new FastifyReplyError(400, 'EXPIRED');
+			}
 
 			const { account, secret } = await this.signupService.signup({
 				username: pendingUser.username,
