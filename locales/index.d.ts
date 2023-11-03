@@ -1198,6 +1198,18 @@ export interface Locale {
     "enableOverrideTLDisplayLimit": string;
     "overrideTLDisplayLimit": string;
     "overrideTLDisplayLimitDescription": string;
+    "enableRegistrationLimit": string;
+    "enableRegistrationLimitDescription": string;
+    "registrationLimitEnabled": string;
+    "registrationLimitDetails": string;
+    "registrationLimitCooldown": string;
+    "registrationLimitCooldownDescription": string;
+    "registrationLimit": string;
+    "registrationLimitDescription": string;
+    "doYouHaveInviteCode": string;
+    "doesNotHaveInviteCode": string;
+    "hasInviteCode": string;
+    "hitRegistrationLimit": string;
     "avatarDecorations": string;
     "attach": string;
     "detach": string;
