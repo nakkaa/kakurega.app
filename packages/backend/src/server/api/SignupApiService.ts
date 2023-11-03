@@ -15,6 +15,7 @@ import { IdService } from '@/core/IdService.js';
 import { SignupService } from '@/core/SignupService.js';
 import { UserEntityService } from '@/core/entities/UserEntityService.js';
 import { EmailService } from '@/core/EmailService.js';
+import { RegistrationLimitService } from '@/core/RegistrationLimitService.js';
 import { MiLocalUser } from '@/models/User.js';
 import { FastifyReplyError } from '@/misc/fastify-reply-error.js';
 import { bindThis } from '@/decorators.js';
@@ -50,6 +51,7 @@ export class SignupApiService {
 		private signupService: SignupService,
 		private signinService: SigninService,
 		private emailService: EmailService,
+		private registrationLimitService: RegistrationLimitService,
 	) {
 	}
 
@@ -152,6 +154,12 @@ export class SignupApiService {
 			} else if (ticket.usedAt) {
 				reply.code(400);
 				return;
+			}
+		}
+
+		if (!instance.disableRegistration && instance.enableRegistrationLimit) {
+			if (!await this.registrationLimitService.isAvailable()) {
+				throw new FastifyReplyError(400, 'REGISTRATION_LIMIT_EXCEEDED');
 			}
 		}
 
