@@ -51,6 +51,22 @@ export class MiMeta {
 	})
 	public disableRegistration: boolean;
 
+	@Column('boolean', {
+		default: false,
+	})
+	public enableRegistrationLimit: boolean;
+
+	@Column('integer', {
+		default: 10,
+	})
+	public registrationLimit: number;
+
+	@Column('boolean', {
+		default: 24,
+		comment: 'Cooldown of registration limit in hours',
+	})
+	public registrationLimitCooldown: number;
+
 	@Column('varchar', {
 		length: 1024, array: true, default: '{}',
 	})
