@@ -11,6 +11,7 @@ import { AnnouncementService } from './AnnouncementService.js';
 import { AntennaService } from './AntennaService.js';
 import { AppLockService } from './AppLockService.js';
 import { AchievementService } from './AchievementService.js';
+import { AvatarDecorationService } from './AvatarDecorationService.js';
 import { CaptchaService } from './CaptchaService.js';
 import { CreateSystemUserService } from './CreateSystemUserService.js';
 import { CustomEmojiService } from './CustomEmojiService.js';
@@ -64,6 +65,8 @@ import { SearchService } from './SearchService.js';
 import { ClipService } from './ClipService.js';
 import { FeaturedService } from './FeaturedService.js';
 import { FunoutTimelineService } from './FunoutTimelineService.js';
+import { ChannelFollowingService } from './ChannelFollowingService.js';
+import { RegistryApiService } from './RegistryApiService.js';
 import { ChartLoggerService } from './chart/ChartLoggerService.js';
 import FederationChart from './chart/charts/federation.js';
 import NotesChart from './chart/charts/notes.js';
@@ -144,6 +147,7 @@ const $AnnouncementService: Provider = { provide: 'AnnouncementService', useExis
 const $AntennaService: Provider = { provide: 'AntennaService', useExisting: AntennaService };
 const $AppLockService: Provider = { provide: 'AppLockService', useExisting: AppLockService };
 const $AchievementService: Provider = { provide: 'AchievementService', useExisting: AchievementService };
+const $AvatarDecorationService: Provider = { provide: 'AvatarDecorationService', useExisting: AvatarDecorationService };
 const $CaptchaService: Provider = { provide: 'CaptchaService', useExisting: CaptchaService };
 const $CreateSystemUserService: Provider = { provide: 'CreateSystemUserService', useExisting: CreateSystemUserService };
 const $CustomEmojiService: Provider = { provide: 'CustomEmojiService', useExisting: CustomEmojiService };
@@ -197,6 +201,8 @@ const $SearchService: Provider = { provide: 'SearchService', useExisting: Search
 const $ClipService: Provider = { provide: 'ClipService', useExisting: ClipService };
 const $FeaturedService: Provider = { provide: 'FeaturedService', useExisting: FeaturedService };
 const $FunoutTimelineService: Provider = { provide: 'FunoutTimelineService', useExisting: FunoutTimelineService };
+const $ChannelFollowingService: Provider = { provide: 'ChannelFollowingService', useExisting: ChannelFollowingService };
+const $RegistryApiService: Provider = { provide: 'RegistryApiService', useExisting: RegistryApiService };
 
 const $ChartLoggerService: Provider = { provide: 'ChartLoggerService', useExisting: ChartLoggerService };
 const $FederationChart: Provider = { provide: 'FederationChart', useExisting: FederationChart };
@@ -281,6 +287,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		AntennaService,
 		AppLockService,
 		AchievementService,
+		AvatarDecorationService,
 		CaptchaService,
 		CreateSystemUserService,
 		CustomEmojiService,
@@ -334,6 +341,8 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		ClipService,
 		FeaturedService,
 		FunoutTimelineService,
+		ChannelFollowingService,
+		RegistryApiService,
 		ChartLoggerService,
 		FederationChart,
 		NotesChart,
@@ -411,6 +420,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		$AntennaService,
 		$AppLockService,
 		$AchievementService,
+		$AvatarDecorationService,
 		$CaptchaService,
 		$CreateSystemUserService,
 		$CustomEmojiService,
@@ -464,6 +474,8 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		$ClipService,
 		$FeaturedService,
 		$FunoutTimelineService,
+		$ChannelFollowingService,
+		$RegistryApiService,
 		$ChartLoggerService,
 		$FederationChart,
 		$NotesChart,
@@ -542,6 +554,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		AntennaService,
 		AppLockService,
 		AchievementService,
+		AvatarDecorationService,
 		CaptchaService,
 		CreateSystemUserService,
 		CustomEmojiService,
@@ -595,6 +608,8 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		ClipService,
 		FeaturedService,
 		FunoutTimelineService,
+		ChannelFollowingService,
+		RegistryApiService,
 		FederationChart,
 		NotesChart,
 		UsersChart,
@@ -671,6 +686,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		$AntennaService,
 		$AppLockService,
 		$AchievementService,
+		$AvatarDecorationService,
 		$CaptchaService,
 		$CreateSystemUserService,
 		$CustomEmojiService,
@@ -724,6 +740,8 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		$ClipService,
 		$FeaturedService,
 		$FunoutTimelineService,
+		$ChannelFollowingService,
+		$RegistryApiService,
 		$FederationChart,
 		$NotesChart,
 		$UsersChart,
