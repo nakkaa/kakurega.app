@@ -1228,6 +1228,7 @@ export interface Locale {
     "useGroupedNotifications": string;
     "signupPendingError": string;
     "cwNotationRequired": string;
+    "doReaction": string;
     "_announcement": {
         "forExistingUsers": string;
         "forExistingUsersDescription": string;
@@ -1239,6 +1240,8 @@ export interface Locale {
         "readConfirmText": string;
         "shouldNotBeUsedToPresentPermanentInfo": string;
         "dialogAnnouncementUxWarn": string;
+        "silence": string;
+        "silenceDescription": string;
     };
     "_initialAccountSetting": {
         "accountCreated": string;
