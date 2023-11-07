@@ -15,15 +15,15 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<template #header><i class="ti ti-bookmark ti-fw" style="margin-right: 0.5em;"></i>{{ i18n.ts.pinnedUsers }}</template>
 				<MkUserList :pagination="pinnedUsers"/>
 			</MkFoldableSection>
-			<MkFoldableSection class="_margin" persistKey="explore-popular-users">
+			<MkFoldableSection v-if="!instance.disableExploreLocalUsers" class="_margin" persistKey="explore-popular-users">
 				<template #header><i class="ti ti-chart-line ti-fw" style="margin-right: 0.5em;"></i>{{ i18n.ts.popularUsers }}</template>
 				<MkUserList :pagination="popularUsers"/>
 			</MkFoldableSection>
-			<MkFoldableSection class="_margin" persistKey="explore-recently-updated-users">
+			<MkFoldableSection v-if="!instance.disableExploreLocalUsers" class="_margin" persistKey="explore-recently-updated-users">
 				<template #header><i class="ti ti-message ti-fw" style="margin-right: 0.5em;"></i>{{ i18n.ts.recentlyUpdatedUsers }}</template>
 				<MkUserList :pagination="recentlyUpdatedUsers"/>
 			</MkFoldableSection>
-			<MkFoldableSection class="_margin" persistKey="explore-recently-registered-users">
+			<MkFoldableSection v-if="!instance.disableExploreLocalUsers" class="_margin" persistKey="explore-recently-registered-users">
 				<template #header><i class="ti ti-plus ti-fw" style="margin-right: 0.5em;"></i>{{ i18n.ts.recentlyRegisteredUsers }}</template>
 				<MkUserList :pagination="recentlyRegisteredUsers"/>
 			</MkFoldableSection>
@@ -69,6 +69,7 @@ import MkFoldableSection from '@/components/MkFoldableSection.vue';
 import MkTab from '@/components/MkTab.vue';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
+import { instance } from '@/instance.js';
 
 const props = defineProps<{
 	tag?: string;

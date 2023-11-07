@@ -1231,6 +1231,8 @@ export interface Locale {
     "doReaction": string;
     "disableProfileHighlight": string;
     "disableProfileHighlightDescription": string;
+    "disableExploreLocalUsers": string;
+    "disableExploreLocalUsersDescription": string;
     "_announcement": {
         "forExistingUsers": string;
         "forExistingUsersDescription": string;

@@ -239,6 +239,10 @@ export const meta = {
 				type: 'string',
 				optional: false, nullable: false,
 			},
+			disableExploreLocalUsers: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
 			features: {
 				type: 'object',
 				optional: true, nullable: false,
@@ -382,6 +386,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				sentryDsn: instance.sentryDsn,
 				enableSupporterPage: instance.enableSupporterPage,
 				enableServiceWorker: instance.enableServiceWorker,
+				disableExploreLocalUsers: instance.disableExploreLocalUsers,
 
 				translatorAvailable: instance.deeplAuthKey != null,
 
