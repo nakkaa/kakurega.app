@@ -44,7 +44,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts">
 import { computed, ComputedRef, isRef, nextTick, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, watch } from 'vue';
-import { captureMessage, captureException } from '@sentry/vue';
 import * as Misskey from 'misskey-js';
 import * as os from '@/os.js';
 import { $i } from '@/account.js';
@@ -217,16 +216,6 @@ async function init(): Promise<void> {
 			if (i === 3) item._shouldInsertAd_ = true;
 		}
 
-		if (props.pagination.endpoint === 'notes/timeline' && res.length === 0) {
-			captureMessage('timeline is empty', {
-				extra: {
-					userId: $i?.id,
-					response: res,
-					...params,
-				},
-			});
-		}
-
 		if (res.length === 0 || props.pagination.noPaging) {
 			concatItems(res);
 			more.value = false;
@@ -240,12 +229,6 @@ async function init(): Promise<void> {
 		error.value = false;
 		fetching.value = false;
 	}, err => {
-		captureException(err, {
-			extra: {
-				userId: $i?.id,
-				...params,
-			},
-		});
 		error.value = true;
 		fetching.value = false;
 	});
