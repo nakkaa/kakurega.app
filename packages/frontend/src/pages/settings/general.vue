@@ -197,6 +197,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<template #label>{{ i18n.ts.overrideTLDisplayLimit }}</template>
 				<template #caption>{{ i18n.ts.overrideTLDisplayLimitDescription }}</template>
 			</MkRange>
+			<MkSwitch v-model="disableProfileHighlight">
+				<template #caption>{{ i18n.ts.disableProfileHighlightDescription }}</template>
+				{{ i18n.ts.disableProfileHighlight }}
+				<span class="_beta">{{ i18n.ts.originalFeature }}</span>
+			</MkSwitch>
 		</div>
 	</FormSection>
 
@@ -298,6 +303,7 @@ const enableOverrideTLDisplayLimit = computed(defaultStore.makeGetterSetter('ena
 const overrideTLDisplayLimit = computed(defaultStore.makeGetterSetter('overrideTLDisplayLimit'));
 const disableStreamingTimeline = computed(defaultStore.makeGetterSetter('disableStreamingTimeline'));
 const useGroupedNotifications = computed(defaultStore.makeGetterSetter('useGroupedNotifications'));
+const disableProfileHighlight = computed(defaultStore.makeGetterSetter('disableProfileHighlight'));
 
 watch(lang, () => {
 	miLocalStorage.setItem('lang', lang.value as string);
