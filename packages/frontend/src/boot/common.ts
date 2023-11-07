@@ -91,8 +91,9 @@ export async function common(createVue: () => App<Element>) {
 	//#endregion
 
 	//#region Detect language & fetch translations
+	const clientBuiltAt = miLocalStorage.getItem('builtAt');
 	const localeVersion = miLocalStorage.getItem('localeVersion');
-	const localeOutdated = (localeVersion == null || localeVersion !== version);
+	const localeOutdated = (localeVersion == null || localeVersion !== version) || (_DEV_ && clientBuiltAt !== _BUILT_AT_);
 	if (localeOutdated) {
 		const res = await window.fetch(`/assets/locales/${lang}.${version}.json`);
 		if (res.status === 200) {
@@ -100,6 +101,7 @@ export async function common(createVue: () => App<Element>) {
 			const parsedNewLocale = JSON.parse(newLocale);
 			miLocalStorage.setItem('locale', newLocale);
 			miLocalStorage.setItem('localeVersion', version);
+			if (_DEV_) miLocalStorage.setItem('builtAt', _BUILT_AT_);
 			updateLocale(parsedNewLocale);
 			updateI18n(parsedNewLocale);
 		}

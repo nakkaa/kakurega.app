@@ -34,6 +34,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<template #caption>{{ i18n.ts.registrationLimitDescription }}</template>
 					</MkInput>
 
+					<MkSwitch v-model="disableExploreLocalUsers">
+						<template #label>{{ i18n.ts.disableExploreLocalUsers }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></template>
+						<template #caption>{{ i18n.ts.disableExploreLocalUsersDescription }}</template>
+					</MkSwitch>
+
 					<FormLink to="/admin/server-rules">{{ i18n.ts.serverRules }}</FormLink>
 
 					<MkInput v-model="tosUrl" type="url">
@@ -90,6 +95,7 @@ let enableRegistrationLimit: boolean = $ref(false);
 let registrationLimit: number = $ref(0);
 let registrationLimitCooldown: number = $ref(0);
 let emailRequiredForSignup: boolean = $ref(false);
+let disableExploreLocalUsers: boolean = $ref(false);
 let sensitiveWords: string = $ref('');
 let preservedUsernames: string = $ref('');
 let tosUrl: string | null = $ref(null);
@@ -102,6 +108,7 @@ async function init() {
 	registrationLimit = meta.registrationLimit;
 	registrationLimitCooldown = meta.registrationLimitCooldown;
 	emailRequiredForSignup = meta.emailRequiredForSignup;
+	disableExploreLocalUsers = meta.disableExploreLocalUsers;
 	sensitiveWords = meta.sensitiveWords.join('\n');
 	preservedUsernames = meta.preservedUsernames.join('\n');
 	tosUrl = meta.tosUrl;
@@ -115,6 +122,7 @@ function save() {
 		registrationLimit,
 		registrationLimitCooldown,
 		emailRequiredForSignup,
+		disableExploreLocalUsers,
 		tosUrl,
 		privacyPolicyUrl,
 		sensitiveWords: sensitiveWords.split('\n'),

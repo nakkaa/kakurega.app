@@ -142,6 +142,7 @@ export const paramDef = {
 		perUserHomeTimelineCacheMax: { type: 'integer' },
 		perUserListTimelineCacheMax: { type: 'integer' },
 		notesPerOneAd: { type: 'integer' },
+		disableExploreLocalUsers: { type: 'boolean' },
 		silencedHosts: {
 			type: 'array',
 			nullable: true,
@@ -575,6 +576,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 			if (ps.notesPerOneAd !== undefined) {
 				set.notesPerOneAd = ps.notesPerOneAd;
+			}
+
+			if (ps.disableExploreLocalUsers !== undefined) {
+				set.disableExploreLocalUsers = ps.disableExploreLocalUsers;
 			}
 
 			const before = await this.metaService.fetch(true);

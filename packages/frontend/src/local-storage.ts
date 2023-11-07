@@ -25,6 +25,7 @@ type Keys =
 	'ui_temp' |
 	'locale' |
 	'localeVersion' |
+	'builtAt' |
 	'theme' |
 	'customCss' |
 	'message_drafts' |
