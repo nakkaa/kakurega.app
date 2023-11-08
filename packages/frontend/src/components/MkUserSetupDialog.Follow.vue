@@ -19,7 +19,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</MkPagination>
 	</MkFolder>
 
-	<MkFolder :defaultOpen="true">
+	<MkFolder v-if="!instance.disableExploreLocalUsers" :defaultOpen="true">
 		<template #label>{{ i18n.ts.popularUsers }}</template>
 
 		<MkPagination :pagination="popularUsers">

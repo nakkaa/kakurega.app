@@ -117,47 +117,27 @@ export class SignupApiService {
 		}
 
 		let ticket: MiRegistrationTicket | null = null;
+		const isInvalidInvitationCode = invitationCode == null || typeof invitationCode !== 'string';
 
 		if (instance.disableRegistration) {
-			if (invitationCode == null || typeof invitationCode !== 'string') {
+			if (isInvalidInvitationCode) {
 				reply.code(400);
 				return;
 			}
 
-			ticket = await this.registrationTicketsRepository.findOneBy({
-				code: invitationCode,
-			});
+			ticket = await this.verifyInvitationCode(invitationCode, instance.emailRequiredForSignup);
 
 			if (ticket == null) {
 				reply.code(400);
 				return;
 			}
-
-			if (ticket.expiresAt && ticket.expiresAt < new Date()) {
-				reply.code(400);
-				return;
-			}
-
-			// メアド認証が有効の場合
-			if (instance.emailRequiredForSignup) {
-				// メアド認証済みならエラー
-				if (ticket.usedBy) {
-					reply.code(400);
-					return;
-				}
-
-				// 認証しておらず、メール送信から30分以内ならエラー
-				if (ticket.usedAt && ticket.usedAt.getTime() + (1000 * 60 * 30) > Date.now()) {
-					reply.code(400);
-					return;
-				}
-			} else if (ticket.usedAt) {
-				reply.code(400);
-				return;
-			}
 		}
 
-		if (!instance.disableRegistration && instance.enableRegistrationLimit) {
+		if (instance.enableRegistrationLimit && !isInvalidInvitationCode) {
+			ticket = await this.verifyInvitationCode(invitationCode, instance.emailRequiredForSignup);
+		}
+
+		if (instance.enableRegistrationLimit && ticket === null) {
 			if (!await this.registrationLimitService.isAvailable()) {
 				throw new FastifyReplyError(400, 'REGISTRATION_LIMIT_EXCEEDED');
 			}
@@ -234,6 +214,35 @@ export class SignupApiService {
 				throw new FastifyReplyError(400, typeof err === 'string' ? err : (err as Error).toString());
 			}
 		}
+	}
+
+	@bindThis
+	private async verifyInvitationCode(code: string, emailRequiredForSignup: boolean) {
+		const ticket = await this.registrationTicketsRepository.findOneBy({ code });
+		if (ticket == null) {
+			return null;
+		}
+
+		if (ticket.expiresAt && ticket.expiresAt < new Date()) {
+			return null;
+		}
+
+		// メアド認証が有効の場合
+		if (emailRequiredForSignup) {
+			// メアド認証済みならエラー
+			if (ticket.usedBy) {
+				return null;
+			}
+
+			// 認証しておらず、メール送信から30分以内ならエラー
+			if (ticket.usedAt && ticket.usedAt.getTime() + (1000 * 60 * 30) > Date.now()) {
+				return null;
+			}
+		} else if (ticket.usedAt) {
+			return null;
+		}
+
+		return ticket;
 	}
 
 	@bindThis
