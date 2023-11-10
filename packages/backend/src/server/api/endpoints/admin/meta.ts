@@ -387,6 +387,10 @@ export const meta = {
 				type: 'boolean',
 				optional: false, nullable: false,
 			},
+			disableEntranceFeatureTimeline: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
 		},
 	},
 } as const;
@@ -516,6 +520,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				perUserListTimelineCacheMax: instance.perUserListTimelineCacheMax,
 				notesPerOneAd: instance.notesPerOneAd,
 				disableExploreLocalUsers: instance.disableExploreLocalUsers,
+				disableEntranceFeatureTimeline: instance.disableEntranceFeatureTimeline,
 			};
 		});
 	}

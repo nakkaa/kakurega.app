@@ -243,6 +243,10 @@ export const meta = {
 				type: 'boolean',
 				optional: false, nullable: false,
 			},
+			disableEntranceFeatureTimeline: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
 			features: {
 				type: 'object',
 				optional: true, nullable: false,
@@ -387,6 +391,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				enableSupporterPage: instance.enableSupporterPage,
 				enableServiceWorker: instance.enableServiceWorker,
 				disableExploreLocalUsers: instance.disableExploreLocalUsers,
+				disableEntranceFeatureTimeline: instance.disableEntranceFeatureTimeline,
 
 				translatorAvailable: instance.deeplAuthKey != null,
 

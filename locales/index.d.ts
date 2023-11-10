@@ -1235,6 +1235,8 @@ export interface Locale {
     "disableExploreLocalUsersDescription": string;
     "select": string;
     "selected": string;
+    "disableEntranceFeatureTimeline": string;
+    "disableEntranceFeatureTimelineDescription": string;
     "_announcement": {
         "forExistingUsers": string;
         "forExistingUsersDescription": string;

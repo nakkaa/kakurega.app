@@ -1232,6 +1232,8 @@ disableExploreLocalUsers: "「みつける」のローカルユーザーを無�
 disableExploreLocalUsersDescription: "「みつける」のユーザータブ内にあるローカルユーザーの表示を無効にします。ピン留めユーザーは無効になりません。"
 select: "選択"
 selected: "選択済み"
+disableEntranceFeatureTimeline: "トップページのタイムラインを無効にする"
+disableEntranceFeatureTimelineDescription: "非ログイン時のトップページ右側に表示されるハイライトタイムラインを無効にします。"
 
 _announcement:
   forExistingUsers: "既存ユーザーのみ"

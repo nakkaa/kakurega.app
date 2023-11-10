@@ -34,14 +34,15 @@ import MkMediaList from '@/components/MkMediaList.vue';
 import MkPoll from '@/components/MkPoll.vue';
 import { getScrollContainer } from '@/scripts/scroll.js';
 import { $i } from '@/account.js';
+import * as os from '@/os.js';
 
 let notes = $ref<Misskey.entities.Note[]>([]);
 let isScrolling = $ref(false);
 let scrollEl = $shallowRef<HTMLElement>();
 
-// os.apiGet('notes/featured').then(_notes => {
-// 	notes = _notes;
-// });
+os.apiGet('notes/featured').then(_notes => {
+	notes = _notes;
+});
 
 onUpdated(() => {
 	if (!scrollEl) return;
