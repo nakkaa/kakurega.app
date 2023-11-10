@@ -143,6 +143,9 @@ export const paramDef = {
 		perUserListTimelineCacheMax: { type: 'integer' },
 		notesPerOneAd: { type: 'integer' },
 		disableExploreLocalUsers: { type: 'boolean' },
+		disableEntranceFeatureTimeline: { type: 'boolean' },
+		enableAgeRestriction: { type: 'boolean' },
+		ageRestrictionThreshold: { type: 'integer' },
 		silencedHosts: {
 			type: 'array',
 			nullable: true,
@@ -580,6 +583,18 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 			if (ps.disableExploreLocalUsers !== undefined) {
 				set.disableExploreLocalUsers = ps.disableExploreLocalUsers;
+			}
+
+			if (ps.disableEntranceFeatureTimeline !== undefined) {
+				set.disableEntranceFeatureTimeline = ps.disableEntranceFeatureTimeline;
+			}
+
+			if (ps.enableAgeRestriction !== undefined) {
+				set.enableAgeRestriction = ps.enableAgeRestriction;
+			}
+
+			if (ps.ageRestrictionThreshold !== undefined) {
+				set.ageRestrictionThreshold = ps.ageRestrictionThreshold;
 			}
 
 			const before = await this.metaService.fetch(true);

@@ -24,13 +24,13 @@ export class RegistrationLimitService {
 	}
 
 	@bindThis
-	public async isAvailable(): Promise<boolean> {
+	public async isAvailable(skipCache = false): Promise<boolean> {
 		const instance = await this.metaService.fetch();
 		if (!instance.enableRegistrationLimit) return true;
 		if (instance.disableRegistration) return false;
 
 		const now = Date.now();
-		if (this.cacheTtl > now) {
+		if (this.cacheTtl > now && !skipCache) {
 			return instance.registrationLimit > this.cache;
 		}
 

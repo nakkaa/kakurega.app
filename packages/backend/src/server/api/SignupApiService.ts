@@ -116,29 +116,19 @@ export class SignupApiService {
 			}
 		}
 
-		let ticket: MiRegistrationTicket | null = null;
+		const isNeedFetchTicket = instance.disableRegistration || instance.enableRegistrationLimit;
 		const isInvalidInvitationCode = invitationCode == null || typeof invitationCode !== 'string';
+		const ticket = isInvalidInvitationCode || !isNeedFetchTicket ? null : await this.fetchTicket(invitationCode, instance.emailRequiredForSignup);
 
 		if (instance.disableRegistration) {
-			if (isInvalidInvitationCode) {
+			// 新規登録を無効にしている場合
+			if (ticket === null) {
 				reply.code(400);
 				return;
 			}
-
-			ticket = await this.verifyInvitationCode(invitationCode, instance.emailRequiredForSignup);
-
-			if (ticket == null) {
-				reply.code(400);
-				return;
-			}
-		}
-
-		if (instance.enableRegistrationLimit && !isInvalidInvitationCode) {
-			ticket = await this.verifyInvitationCode(invitationCode, instance.emailRequiredForSignup);
-		}
-
-		if (instance.enableRegistrationLimit && ticket === null) {
-			if (!await this.registrationLimitService.isAvailable()) {
+		} else {
+			// 新規登録が有効ではあるものの、登録制限が有効の場合
+			if (instance.enableRegistrationLimit && ticket === null && !await this.registrationLimitService.isAvailable(true)) {
 				throw new FastifyReplyError(400, 'REGISTRATION_LIMIT_EXCEEDED');
 			}
 		}
@@ -217,7 +207,7 @@ export class SignupApiService {
 	}
 
 	@bindThis
-	private async verifyInvitationCode(code: string, emailRequiredForSignup: boolean) {
+	private async fetchTicket(code: string, emailRequiredForSignup: boolean) {
 		const ticket = await this.registrationTicketsRepository.findOneBy({ code });
 		if (ticket == null) {
 			return null;

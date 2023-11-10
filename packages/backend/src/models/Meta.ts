@@ -599,4 +599,19 @@ export class MiMeta {
 		default: false,
 	})
 	public disableExploreLocalUsers: boolean;
+
+	@Column('boolean', {
+		default: false,
+	})
+	public disableEntranceFeatureTimeline: boolean;
+
+	@Column('boolean', {
+		default: false,
+	})
+	public enableAgeRestriction: boolean;
+
+	@Column('integer', {
+		default: 20,
+	})
+	public ageRestrictionThreshold: number;
 }

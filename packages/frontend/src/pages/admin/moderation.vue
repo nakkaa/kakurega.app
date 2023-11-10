@@ -39,6 +39,21 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<template #caption>{{ i18n.ts.disableExploreLocalUsersDescription }}</template>
 					</MkSwitch>
 
+					<MkSwitch v-model="disableEntranceFeatureTimeline">
+						<template #label>{{ i18n.ts.disableEntranceFeatureTimeline }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></template>
+						<template #caption>{{ i18n.ts.disableEntranceFeatureTimelineDescription }}</template>
+					</MkSwitch>
+
+					<MkSwitch v-model="enableAgeRestriction">
+						<template #label>{{ i18n.ts.enableAgeRestriction }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></template>
+					</MkSwitch>
+
+					<MkInput v-if="enableAgeRestriction" v-model="ageRestrictionThreshold" type="number" :min="0">
+						<template #label>{{ i18n.ts.ageRestrictionThreshold }}</template>
+						<template #suffix>{{ i18n.t('yearsOld', { age: '' }) }}</template>
+						<template #caption>{{ i18n.ts.ageRestrictionThresholdDescription }}</template>
+					</MkInput>
+
 					<FormLink to="/admin/server-rules">{{ i18n.ts.serverRules }}</FormLink>
 
 					<MkInput v-model="tosUrl" type="url">
@@ -96,6 +111,9 @@ let registrationLimit: number = $ref(0);
 let registrationLimitCooldown: number = $ref(0);
 let emailRequiredForSignup: boolean = $ref(false);
 let disableExploreLocalUsers: boolean = $ref(false);
+let disableEntranceFeatureTimeline: boolean = $ref(false);
+let enableAgeRestriction: boolean = $ref(false);
+let ageRestrictionThreshold: number = $ref(0);
 let sensitiveWords: string = $ref('');
 let preservedUsernames: string = $ref('');
 let tosUrl: string | null = $ref(null);
@@ -109,6 +127,9 @@ async function init() {
 	registrationLimitCooldown = meta.registrationLimitCooldown;
 	emailRequiredForSignup = meta.emailRequiredForSignup;
 	disableExploreLocalUsers = meta.disableExploreLocalUsers;
+	disableEntranceFeatureTimeline = meta.disableEntranceFeatureTimeline;
+	enableAgeRestriction = meta.enableAgeRestriction;
+	ageRestrictionThreshold = meta.ageRestrictionThreshold;
 	sensitiveWords = meta.sensitiveWords.join('\n');
 	preservedUsernames = meta.preservedUsernames.join('\n');
 	tosUrl = meta.tosUrl;
@@ -123,6 +144,9 @@ function save() {
 		registrationLimitCooldown,
 		emailRequiredForSignup,
 		disableExploreLocalUsers,
+		disableEntranceFeatureTimeline,
+		enableAgeRestriction,
+		ageRestrictionThreshold,
 		tosUrl,
 		privacyPolicyUrl,
 		sensitiveWords: sensitiveWords.split('\n'),
