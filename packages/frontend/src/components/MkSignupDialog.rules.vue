@@ -53,13 +53,13 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<MkSwitch :modelValue="agreeNote" style="margin-top: 16px;" data-cy-signup-rules-notes-agree @update:modelValue="updateAgreeNote">{{ i18n.ts.agree }}</MkSwitch>
 			</MkFolder>
 
-			<MkFolder :default-open="true">
+			<MkFolder v-if="instance.enableAgeRestriction" :defaultOpen="true">
 				<template #label>{{ i18n.ts.ageCheck }}</template>
 				<template #suffix><i v-if="ageLimitAgreement" class="ti ti-check" style="color: var(--success)"></i></template>
 
-				<span>{{ i18n.ts.ageCheckDescription }}</span>
+				<span>{{ i18n.t('ageCheckDescription', { age: instance.ageRestrictionThreshold }) }}</span>
 
-				<MkSwitch v-model="ageLimitAgreement" style="margin-top: 16px;">{{ i18n.ts.imOverSixteen }}</MkSwitch>
+				<MkSwitch v-model="ageLimitAgreement" style="margin-top: 16px;">{{ i18n.t('ageCheckYes', { age: instance.ageRestrictionThreshold }) }}</MkSwitch>
 			</MkFolder>
 
 			<div v-if="!agreed" style="text-align: center;">{{ i18n.ts.pleaseAgreeAllToContinue }}</div>
@@ -93,7 +93,7 @@ const agreeNote = ref(false);
 const ageLimitAgreement = ref(false);
 
 const agreed = computed(() => {
-	return (!availableServerRules || agreeServerRules.value) && ((!availableTos && !availablePrivacyPolicy) || agreeTosAndPrivacyPolicy.value) && agreeNote.value && ageLimitAgreement.value;
+	return (!availableServerRules || agreeServerRules.value) && ((!availableTos && !availablePrivacyPolicy) || agreeTosAndPrivacyPolicy.value) && agreeNote.value && (!instance.enableAgeRestriction || ageLimitAgreement.value);
 });
 
 const emit = defineEmits<{

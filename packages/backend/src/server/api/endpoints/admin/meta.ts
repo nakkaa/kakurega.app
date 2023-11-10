@@ -391,6 +391,14 @@ export const meta = {
 				type: 'boolean',
 				optional: false, nullable: false,
 			},
+			enableAgeRestriction: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
+			ageRestrictionThreshold: {
+				type: 'number',
+				optional: false, nullable: false,
+			},
 		},
 	},
 } as const;
@@ -521,6 +529,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				notesPerOneAd: instance.notesPerOneAd,
 				disableExploreLocalUsers: instance.disableExploreLocalUsers,
 				disableEntranceFeatureTimeline: instance.disableEntranceFeatureTimeline,
+				enableAgeRestriction: instance.enableAgeRestriction,
+				ageRestrictionThreshold: instance.ageRestrictionThreshold,
 			};
 		});
 	}

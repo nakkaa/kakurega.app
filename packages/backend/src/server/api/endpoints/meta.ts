@@ -247,6 +247,14 @@ export const meta = {
 				type: 'boolean',
 				optional: false, nullable: false,
 			},
+			enableAgeRestriction: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
+			ageRestrictionThreshold: {
+				type: 'number',
+				optional: false, nullable: false,
+			},
 			features: {
 				type: 'object',
 				optional: true, nullable: false,
@@ -392,6 +400,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				enableServiceWorker: instance.enableServiceWorker,
 				disableExploreLocalUsers: instance.disableExploreLocalUsers,
 				disableEntranceFeatureTimeline: instance.disableEntranceFeatureTimeline,
+				enableAgeRestriction: instance.enableAgeRestriction,
+				ageRestrictionThreshold: instance.ageRestrictionThreshold,
 
 				translatorAvailable: instance.deeplAuthKey != null,
 

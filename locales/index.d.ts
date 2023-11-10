@@ -255,7 +255,7 @@ export interface Locale {
     "newPasswordRetype": string;
     "ageCheck": string;
     "ageCheckDescription": string;
-    "imOverSixteen": string;
+    "ageCheckYes": string;
     "attachFile": string;
     "more": string;
     "featured": string;
@@ -1237,6 +1237,9 @@ export interface Locale {
     "selected": string;
     "disableEntranceFeatureTimeline": string;
     "disableEntranceFeatureTimelineDescription": string;
+    "enableAgeRestriction": string;
+    "ageRestrictionThreshold": string;
+    "ageRestrictionThresholdDescription": string;
     "_announcement": {
         "forExistingUsers": string;
         "forExistingUsersDescription": string;
