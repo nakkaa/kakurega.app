@@ -1230,6 +1230,8 @@ disableProfileHighlight: "プロフィールのハイライトをノートに戻
 disableProfileHighlightDescription: "プロフィールの概要タブにある「ハイライト」をノート一覧に戻します。"
 disableExploreLocalUsers: "「みつける」のローカルユーザーを無効にする"
 disableExploreLocalUsersDescription: "「みつける」のユーザータブ内にあるローカルユーザーの表示を無効にします。ピン留めユーザーは無効になりません。"
+select: "選択"
+selected: "選択済み"
 
 _announcement:
   forExistingUsers: "既存ユーザーのみ"

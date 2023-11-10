@@ -1233,6 +1233,8 @@ export interface Locale {
     "disableProfileHighlightDescription": string;
     "disableExploreLocalUsers": string;
     "disableExploreLocalUsersDescription": string;
+    "select": string;
+    "selected": string;
     "_announcement": {
         "forExistingUsers": string;
         "forExistingUsersDescription": string;
