@@ -11,6 +11,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts" setup>
 import { computed, provide, onUnmounted } from 'vue';
+import type { entities as MisskeyEntities } from 'misskey-js';
 import MkNotes, { type Filter as NoteFilter } from '@/components/MkNotes.vue';
 import MkPullToRefresh from '@/components/MkPullToRefresh.vue';
 import { useStream, reloadStream } from '@/stream.js';
@@ -48,8 +49,12 @@ const tlComponent: InstanceType<typeof MkNotes> = $ref();
 
 let tlNotesCount = 0;
 
-const prepend = note => {
-	if (props.src === 'global' && defaultStore.state.mutedInstancesGtl.includes(note.user.host)) return;
+const prepend = (note: MisskeyEntities.Note) => {
+	if (props.src === 'global') {
+		const mutedInstancesGtl = defaultStore.state.mutedInstancesGtl;
+		if (note.user.host && mutedInstancesGtl.includes(note.user.host)) return;
+		if (note.renote?.user.host && mutedInstancesGtl.includes(note.renote.user.host)) return;
+	}
 
 	tlNotesCount++;
 
