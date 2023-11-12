@@ -7077,6 +7077,10 @@ export interface Locale extends ILocale {
             /**
              * サーバー招待コードの発行
              */
+            "canImportNotes": string;
+            /**
+             * ノートのインポート
+             */
             "canInvite": string;
             /**
              * 招待コードの作成可能数
