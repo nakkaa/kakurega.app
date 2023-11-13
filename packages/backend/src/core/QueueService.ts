@@ -36,6 +36,7 @@ import type {
 } from './QueueModule.js';
 import type httpSignature from '@peertube/http-signature';
 import type * as Bull from 'bullmq';
+import { MiNote } from '@/models/Note.js';
 
 @Injectable()
 export class QueueService {
@@ -331,8 +332,8 @@ export class QueueService {
 	}
 
 	@bindThis
-	public createImportKeyNotesToDbJob(user: ThinUser, targets: string[]) {
-		const jobs = targets.map(rel => this.generateToDbJobData('importKeyNotesToDb', { user, target: rel }));
+	public createImportKeyNotesToDbJob(user: ThinUser, targets: string[], note: MiNote['id'] | null) {
+		const jobs = targets.map(rel => this.generateToDbJobData('importKeyNotesToDb', { user, target: rel, note }));
 		return this.dbQueue.addBulk(jobs);
 	}
 
