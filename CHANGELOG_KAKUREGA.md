@@ -1,3 +1,14 @@
+## 1.25.2
+Release: 2023/11/17  
+Base: 2023.11.1  
+
+### 新機能
+- 「カスタムフォント」機能で使用できるフォントを5種類追加
+  - 「kosugi」「kosugi maru」「kiwi maru」「zen kaku gothic new」「zen kurenaido」を追加しました
+
+### 修正
+- Server: pnpm-lock.yamlが壊れていたのを修正
+
 ## 1.25.1
 Release: 2023/11/12  
 Base: 2023.11.0  
