@@ -363,6 +363,10 @@ export const meta = {
 				type: 'boolean',
 				optional: false, nullable: false,
 			},
+			enableFanoutTimelineDbFallback: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
 			perLocalUserUserTimelineCacheMax: {
 				type: 'number',
 				optional: false, nullable: false,
@@ -522,6 +526,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				supporterNameWithIconThreshold: instance.supporterNameWithIconThreshold,
 				manifestJsonOverride: instance.manifestJsonOverride,
 				enableFanoutTimeline: instance.enableFanoutTimeline,
+				enableFanoutTimelineDbFallback: instance.enableFanoutTimelineDbFallback,
 				perLocalUserUserTimelineCacheMax: instance.perLocalUserUserTimelineCacheMax,
 				perRemoteUserUserTimelineCacheMax: instance.perRemoteUserUserTimelineCacheMax,
 				perUserHomeTimelineCacheMax: instance.perUserHomeTimelineCacheMax,
