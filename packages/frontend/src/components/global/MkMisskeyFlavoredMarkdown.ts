@@ -7,6 +7,7 @@ import { VNode, h } from 'vue';
 import * as mfm from 'mfm-js';
 import * as Misskey from 'misskey-js';
 import MkUrl from '@/components/global/MkUrl.vue';
+import MkTime from '@/components/global/MkTime.vue';
 import MkLink from '@/components/MkLink.vue';
 import MkMention from '@/components/MkMention.vue';
 import MkEmoji from '@/components/global/MkEmoji.vue';
@@ -37,7 +38,7 @@ type MfmProps = {
 	isPage?: boolean;
 	emojiUrls?: string[];
 	rootScale?: number;
-	nyaize: boolean | 'account';
+	nyaize: boolean | 'respect';
 	parsedNodes?: mfm.MfmNode[] | null;
 	enableEmojiMenu?: boolean;
 	enableEmojiMenuReaction?: boolean;
@@ -47,7 +48,7 @@ type MfmProps = {
 export default function(props: MfmProps) {
 	const isNote = props.isNote ?? true;
 	const isPage = props.isPage ?? false;
-	const shouldNyaize = props.nyaize ? props.nyaize === 'account' ? props.author?.isCat : false : false;
+	const shouldNyaize = props.nyaize ? props.nyaize === 'respect' ? props.author?.isCat : false : false;
 
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	if (props.text == null || props.text === '') return;
@@ -262,26 +263,32 @@ export default function(props: MfmProps) {
 						break;
 					}
 					case 'ruby': {
-						token.children.forEach((t) => { if (t.type === 'text') { t.props.text = t.props.text.trim(); }});
-						let rb: string | (string | VNode)[];
-						let rt: string | (string | VNode)[];
-
-						const children = token.children.filter((t) => t.type !== 'text' || t.props.text !== '');
-						if (children.length === 1 && children[0].type === 'text') {
-							const tokens = children[0].props.text.split(' ');
-							rb = [tokens[0]];
-							rt = [tokens.slice(1).join(' ')];
-						} else if (children.length >= 2) {
-							rb = genEl([children[0]], scale);
-							rt = genEl(children.slice(1), scale);
+						if (token.children.length === 1) {
+							const child = token.children[0];
+							const text = child.type === 'text' ? child.props.text : '';
+							return h('ruby', {}, [text.split(' ')[0], h('rt', text.split(' ')[1])]);
 						} else {
-							return genEl(children, scale);
+							const rt = token.children.at(-1)!;
+							const text = rt.type === 'text' ? rt.props.text : '';
+							return h('ruby', {}, [...genEl(token.children.slice(0, token.children.length - 1), scale), h('rt', text.trim())]);
 						}
-
-						if (typeof rb[0] === 'string' && typeof rt[0] === 'string' && rt[0] === '') rt = '・'.repeat(rb[0].length);
-						const align = typeof rb[0] === 'string' ? { style: rb.length < rt.length ? 'ruby-align:center' : 'ruby-align:space-around' } : {};
-
-						return h('ruby', align, [rb, h('rt', rt)]);
+					}
+					case 'unixtime': {
+						const child = token.children[0];
+						const unixtime = parseInt(child.type === 'text' ? child.props.text : '');
+						return h('span', {
+							style: 'display: inline-block; font-size: 90%; border: solid 1px var(--divider); border-radius: 999px; padding: 4px 10px 4px 6px;',
+						}, [
+							h('i', {
+								class: 'ti ti-clock',
+								style: 'margin-right: 0.25em;',
+							}),
+							h(MkTime, {
+								key: Math.random(),
+								time: unixtime * 1000,
+								mode: 'detail',
+							}),
+						]);
 					}
 				}
 				if (style == null) {

@@ -58,6 +58,7 @@ const props = withDefaults(defineProps<{
 	naked?: boolean;
 	menu?: MenuItem[];
 	enableFilter?: boolean;
+	refresher?: () => Promise<void>;
 }>(), {
 	isStacked: false,
 	naked: false,
@@ -252,6 +253,18 @@ function getMenu() {
 
 	if (props.menu) {
 		items = props.menu.concat(items);
+	}
+
+	if (props.refresher) {
+		items = [{
+			icon: 'ti ti-refresh',
+			text: i18n.ts.reload,
+			action: () => {
+				if (props.refresher) {
+					props.refresher();
+				}
+			},
+		}, ...items];
 	}
 
 	return items;

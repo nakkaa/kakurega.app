@@ -43,13 +43,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, isRef, nextTick, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, watch } from 'vue';
+import { computed, ComputedRef, isRef, nextTick, onActivated, onBeforeMount, onBeforeUnmount, onDeactivated, ref, watch } from 'vue';
 import * as Misskey from 'misskey-js';
 import * as os from '@/os.js';
 import { $i } from '@/account.js';
 import { onScrollTop, isTopVisible, getBodyScrollHeight, getScrollContainer, onScrollBottom, scrollToBottom, scroll, isBottomVisible } from '@/scripts/scroll.js';
 import { useDocumentVisibility } from '@/scripts/use-document-visibility.js';
-import MkButton from '@/components/MkButton.vue';
 import { defaultStore } from '@/store.js';
 import { MisskeyEntity } from '@/types/date-separated-list';
 import { i18n } from '@/i18n.js';
@@ -93,6 +92,7 @@ function concatMapWithArray(map: MisskeyEntityMap, entities: MisskeyEntity[]): M
 </script>
 <script lang="ts" setup>
 import { infoImageUrl } from '@/instance.js';
+import MkButton from '@/components/MkButton.vue';
 
 const props = withDefaults(defineProps<{
 	pagination: Paging;
@@ -188,9 +188,8 @@ watch([$$(backed), $$(contentEl)], () => {
 	}
 });
 
-if (props.pagination.params && isRef(props.pagination.params)) {
-	watch(props.pagination.params, init, { deep: true });
-}
+// パラメータに何らかの変更があった際、再読込したい（チャンネル等のIDが変わったなど）
+watch(() => props.pagination.params, init, { deep: true });
 
 watch(queue, (a, b) => {
 	if (a.size === 0 && b.size === 0) return;
@@ -451,8 +450,6 @@ const updateItem = (id: MisskeyEntity['id'], replacer: (old: MisskeyEntity) => M
 	if (queueItem) queue.value.set(id, replacer(queueItem));
 };
 
-const inited = init();
-
 onActivated(() => {
 	isBackTop.value = false;
 });
@@ -465,8 +462,8 @@ function toBottom() {
 	scrollToBottom(contentEl!);
 }
 
-onMounted(() => {
-	inited.then(() => {
+onBeforeMount(() => {
+	init().then(() => {
 		if (props.pagination.reversed) {
 			nextTick(() => {
 				setTimeout(toBottom, 800);
@@ -498,7 +495,6 @@ defineExpose({
 	queue,
 	backed,
 	more,
-	inited,
 	reload,
 	prepend,
 	append: appendItem,
