@@ -75,7 +75,7 @@ const alt = computed(() => `:${customEmojiName.value}:`);
 let errored = $ref(url.value == null);
 
 function onClick(ev: MouseEvent) {
-	if (props.menu) {
+	if (props.menu && canReact.value) {
 		os.popupMenu([{
 			type: 'label',
 			text: `:${props.name}:`,
@@ -86,7 +86,7 @@ function onClick(ev: MouseEvent) {
 				copyToClipboard(`:${props.name}:`);
 				os.success();
 			},
-		}, ...(props.menuReaction && canReact.value && react ? [{
+		}, ...(props.menuReaction && react ? [{
 			text: i18n.ts.doReaction,
 			icon: 'ti ti-plus',
 			action: () => {
