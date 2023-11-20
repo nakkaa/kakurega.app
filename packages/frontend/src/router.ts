@@ -163,6 +163,10 @@ export const routes = [{
 		name: 'deck',
 		component: page(() => import('./pages/settings/deck.vue')),
 	}, {
+		path: '/zen',
+		name: 'zen',
+		component: page(() => import('./pages/settings/zen.vue')),
+	}, {
 		path: '/preferences-backups',
 		name: 'preferences-backups',
 		component: page(() => import('./pages/settings/preferences-backups.vue')),

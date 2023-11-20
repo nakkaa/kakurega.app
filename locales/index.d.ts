@@ -1240,6 +1240,9 @@ export interface Locale {
     "enableAgeRestriction": string;
     "ageRestrictionThreshold": string;
     "ageRestrictionThresholdDescription": string;
+    "zen": string;
+    "zenMode": string;
+    "showWidgets": string;
     "_announcement": {
         "forExistingUsers": string;
         "forExistingUsersDescription": string;
