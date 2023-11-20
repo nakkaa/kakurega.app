@@ -42,6 +42,7 @@ const react = inject<((name: string) => void) | null>('react', null);
 
 const customEmojiName = computed(() => (props.name[0] === ':' ? props.name.substring(1, props.name.length - 1) : props.name).replace('@.', ''));
 const isLocal = computed(() => !props.host && (customEmojiName.value.endsWith('@.') || !customEmojiName.value.includes('@')));
+const canReact = computed(() => isLocal.value || customEmojisMap.has(customEmojiName.value));
 
 const rawUrl = computed(() => {
 	if (props.url) {
@@ -74,7 +75,7 @@ const alt = computed(() => `:${customEmojiName.value}:`);
 let errored = $ref(url.value == null);
 
 function onClick(ev: MouseEvent) {
-	if (props.menu) {
+	if (props.menu && canReact.value) {
 		os.popupMenu([{
 			type: 'label',
 			text: `:${props.name}:`,

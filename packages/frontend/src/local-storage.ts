@@ -31,6 +31,7 @@ type Keys =
 	'message_drafts' |
 	'scratchpad' |
 	'debug' |
+	'overrideAddress' |
 	`miux:${string}` |
 	`ui:folder:${string}` |
 	`themes:${string}` |

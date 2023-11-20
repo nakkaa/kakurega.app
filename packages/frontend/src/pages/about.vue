@@ -10,7 +10,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<div class="_gaps_m">
 			<div :class="$style.banner" :style="{ backgroundImage: `url(${ instance.bannerUrl })` }">
 				<div style="overflow: clip;">
-					<img :src="instance.iconUrl ?? instance.faviconUrl ?? '/favicon.ico'" alt="" :class="$style.bannerIcon"/>
+					<img :src="instance.iconUrl ?? instance.faviconUrl ?? '/favicon.ico'" alt="" :class="$style.bannerIcon" @click="devFlag++"/>
 					<div :class="$style.bannerName">
 						<b>{{ instance.name ?? host }}</b>
 					</div>
@@ -87,6 +87,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<FormLink :to="`/manifest.json`" external>manifest.json</FormLink>
 				</div>
 			</FormSection>
+
+			<FormSection v-if="devFlag >= 10">
+				<template #label>Dev Menu</template>
+				<MkButton @click="setOverrideAddress">Override instance address</MkButton>
+			</FormSection>
 		</div>
 	</MkSpacer>
 	<MkSpacer v-else-if="tab === 'emojis'" :contentMax="1000" :marginMin="20">
@@ -113,11 +118,14 @@ import FormSplit from '@/components/form/split.vue';
 import MkFolder from '@/components/MkFolder.vue';
 import MkKeyValue from '@/components/MkKeyValue.vue';
 import MkInstanceStats from '@/components/MkInstanceStats.vue';
+import MkButton from '@/components/MkButton.vue';
 import * as os from '@/os.js';
+import { miLocalStorage } from '@/local-storage.js';
 import number from '@/filters/number.js';
 import { i18n } from '@/i18n.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
 import { claimAchievement } from '@/scripts/achievements.js';
+import { cacheClear } from '@/scripts/cache-clear.js';
 import { instance } from '@/instance.js';
 
 const props = withDefaults(defineProps<{
@@ -128,6 +136,7 @@ const props = withDefaults(defineProps<{
 
 let stats = $ref(null);
 let tab = $ref(props.initialTab);
+let devFlag = $ref(0);
 
 watch($$(tab), () => {
 	if (tab === 'charts') {
@@ -139,6 +148,18 @@ const initStats = () => os.api('stats', {
 }).then((res) => {
 	stats = res;
 });
+
+async function setOverrideAddress() {
+	const result = await os.inputText({
+		title: 'Override instance address',
+		type: 'url',
+		default: miLocalStorage.getItem('overrideAddress'),
+	});
+
+	if (result.canceled) return;
+	miLocalStorage.setItem('overrideAddress', result.result);
+	cacheClear();
+}
 
 const headerActions = $computed(() => []);
 
