@@ -63,6 +63,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<MkSwitch v-model="devMode">
 						<template #label>{{ i18n.ts.devMode }}</template>
 					</MkSwitch>
+					<MkInput v-if="devMode" v-model="overrideAddress" manualSave>
+						<template #label>Override instance address</template>
+					</MkInput>
 				</div>
 			</MkFolder>
 		</div>
@@ -83,27 +86,37 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { computed, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 import FormLink from '@/components/form/link.vue';
 import MkFolder from '@/components/MkFolder.vue';
 import FormInfo from '@/components/MkInfo.vue';
 import MkKeyValue from '@/components/MkKeyValue.vue';
 import MkButton from '@/components/MkButton.vue';
+import MkInput from '@/components/MkInput.vue';
 import * as os from '@/os.js';
 import { defaultStore } from '@/store.js';
 import { signout, $i } from '@/account.js';
 import { i18n } from '@/i18n.js';
 import { instance } from '@/instance.js';
 import { host } from '@/config.js';
+import { miLocalStorage } from '@/local-storage.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
 import { unisonReload } from '@/scripts/unison-reload.js';
+import { cacheClear } from '@/scripts/cache-clear.js';
 import FormSection from '@/components/form/section.vue';
 
 const reportError = computed(defaultStore.makeGetterSetter('optoutStatistics'));
 const enableCondensedLineForAcct = computed(defaultStore.makeGetterSetter('enableCondensedLineForAcct'));
 const devMode = computed(defaultStore.makeGetterSetter('devMode'));
 const defaultWithReplies = computed(defaultStore.makeGetterSetter('defaultWithReplies'));
+
+const overrideAddress = ref(miLocalStorage.getItem('overrideAddress') ?? '');
+
+watch(overrideAddress, async () => {
+	miLocalStorage.setItem('overrideAddress', overrideAddress.value);
+	cacheClear();
+});
 
 function onChangeInjectFeaturedNote(v) {
 	os.api('i/update', {
