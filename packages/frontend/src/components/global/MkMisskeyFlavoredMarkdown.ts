@@ -397,6 +397,8 @@ export default function(props: MfmProps) {
 							normal: props.plain,
 							host: props.author.host,
 							useOriginalSize: scale >= 2.5,
+							menu: props.enableEmojiMenu,
+							menuReaction: props.enableEmojiMenuReaction,
 						})];
 					}
 				}
