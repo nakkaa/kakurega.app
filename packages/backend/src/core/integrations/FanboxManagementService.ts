@@ -118,8 +118,8 @@ export class FanboxManagementService implements OnApplicationShutdown {
 	private async fetchUsers(): Promise<Record<string, number>> {
 		this.logger.debug('Getting fanbox supporters from api');
 
-		const plans = (await this.request('/plan'))?.body;
-		const members = (await this.request('/relationships'))?.body;
+		const plans = (await this.request('plan'))?.body;
+		const members = (await this.request('relationships'))?.body;
 
 		if (!plans || !members) throw new Error('Failed to fetch fanbox supporters');
 
