@@ -1240,6 +1240,10 @@ ageRestrictionThresholdDescription: "ここで入力した年齢が年齢制限�
 zen: "禅"
 zenMode: "禅モード"
 showWidgets: "ウィジェットを表示"
+enterPixivIdOrUrl: "あなたのPixivユーザーID (数字のみ) またはPixivのプロフィールのURLを貼り付けてください"
+invalidPixivId: "入力された文字列からユーザーIDを取得することが出来ませんでした。貼り付けた内容をご確認の上、もう一度お試しください。"
+failedToSetPixivId: "このPixivユーザーIDは既に連携されているため、このアカウントに連携することが出来ませんでした。以前に連携した覚えがない場合は、お手数をお掛けしますが管理人にお問い合わせください。"
+connectionSucceeded: "連携に成功しました！ (反映されるまで時間がかかる場合があります)"
 
 _announcement:
   forExistingUsers: "既存ユーザーのみ"
