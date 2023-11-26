@@ -54,7 +54,7 @@ const headerActions = $computed(() => []);
 const headerTabs = $computed(() => []);
 
 onMounted(async () => {
-	const supporters = (await os.api('integrations/patreon/list')) as SupporterUser[];
+	const supporters = (await os.api('supporter-list')) as SupporterUser[];
 	supporters.forEach(supporter => {
 		if (supporter.type === 'nameWithIcon') {
 			supporterNameWithIcon.push(supporter);
