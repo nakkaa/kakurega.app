@@ -17,6 +17,7 @@
 			<template #label>
 				<i class="ti ti-square-rounded-letter-p"></i>
 				PixivFANBOX
+				<span class="_beta">{{ i18n.ts.originalFeature }}</span>
 			</template>
 			<p v-if="integrations.fanbox">{{ i18n.ts.connectedTo }}: <a :href="'https://www.pixiv.net/users/' + integrations.fanbox.id" rel="nofollow noopener" target="_blank">{{ integrations.fanbox.id }}</a></p>
 			<div v-if="integrations.fanbox" class="_gaps_s">
