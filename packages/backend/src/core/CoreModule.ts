@@ -136,6 +136,7 @@ import { QueueModule } from './QueueModule.js';
 import { QueueService } from './QueueService.js';
 import { LoggerService } from './LoggerService.js';
 import { PatreonManagementService } from './integrations/PatreonManagementService.js';
+import { FanboxManagementService } from './integrations/FanboxManagementService.js';
 import type { Provider } from '@nestjs/common';
 
 //#region 文字列ベースでのinjection用(循環参照対応のため)
@@ -253,6 +254,7 @@ const $FlashEntityService: Provider = { provide: 'FlashEntityService', useExisti
 const $FlashLikeEntityService: Provider = { provide: 'FlashLikeEntityService', useExisting: FlashLikeEntityService };
 const $RoleEntityService: Provider = { provide: 'RoleEntityService', useExisting: RoleEntityService };
 const $PatreonManagementService: Provider = { provide: 'PatreonManagementService', useExisting: PatreonManagementService };
+const $FanboxManagementService: Provider = { provide: 'FanboxManagementService', useExisting: FanboxManagementService };
 
 const $ApAudienceService: Provider = { provide: 'ApAudienceService', useExisting: ApAudienceService };
 const $ApDbResolverService: Provider = { provide: 'ApDbResolverService', useExisting: ApDbResolverService };
@@ -391,6 +393,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		FlashLikeEntityService,
 		RoleEntityService,
 		PatreonManagementService,
+		FanboxManagementService,
 		ApAudienceService,
 		ApDbResolverService,
 		ApDeliverManagerService,
@@ -524,6 +527,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		$FlashLikeEntityService,
 		$RoleEntityService,
 		$PatreonManagementService,
+		$FanboxManagementService,
 		$ApAudienceService,
 		$ApDbResolverService,
 		$ApDeliverManagerService,
@@ -657,6 +661,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		FlashLikeEntityService,
 		RoleEntityService,
 		PatreonManagementService,
+		FanboxManagementService,
 		ApAudienceService,
 		ApDbResolverService,
 		ApDeliverManagerService,
@@ -789,6 +794,7 @@ const $ApQuestionService: Provider = { provide: 'ApQuestionService', useExisting
 		$FlashLikeEntityService,
 		$RoleEntityService,
 		$PatreonManagementService,
+		$FanboxManagementService,
 		$ApAudienceService,
 		$ApDbResolverService,
 		$ApDeliverManagerService,

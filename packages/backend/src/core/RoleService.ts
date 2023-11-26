@@ -16,6 +16,7 @@ import { CacheService } from '@/core/CacheService.js';
 import type { RoleCondFormulaValue } from '@/models/Role.js';
 import { UserEntityService } from '@/core/entities/UserEntityService.js';
 import { PatreonManagementService } from '@/core/integrations/PatreonManagementService.js';
+import { FanboxManagementService } from '@/core/integrations/FanboxManagementService.js';
 import type { GlobalEvents } from '@/core/GlobalEventService.js';
 import { IdService } from '@/core/IdService.js';
 import { GlobalEventService } from '@/core/GlobalEventService.js';
@@ -104,6 +105,7 @@ export class RoleService implements OnApplicationShutdown {
 		private cacheService: CacheService,
 		private userEntityService: UserEntityService,
 		private patreonManagementService: PatreonManagementService,
+		private fanboxManagementService: FanboxManagementService,
 		private globalEventService: GlobalEventService,
 		private idService: IdService,
 		private moderationLogService: ModerationLogService,
@@ -217,11 +219,15 @@ export class RoleService implements OnApplicationShutdown {
 					return user.followingCount >= value.value;
 				}
 				case 'patreonAmountsLessThanOrEq': {
-					const amounts = this.patreonManagementService.amountsValue(user);
+					const amountsPatreon = this.patreonManagementService.amountsValue(user);
+					const amountsFanbox = this.fanboxManagementService.amountsValue(user);
+					const amounts = Math.max(amountsPatreon, amountsFanbox);
 					return amounts !== 0 && amounts <= value.value;
 				}
 				case 'patreonAmountsMoreThanOrEq': {
-					const amounts = this.patreonManagementService.amountsValue(user);
+					const amountsPatreon = this.patreonManagementService.amountsValue(user);
+					const amountsFanbox = this.fanboxManagementService.amountsValue(user);
+					const amounts = Math.max(amountsPatreon, amountsFanbox);
 					return amounts !== 0 && amounts >= value.value;
 				}
 				case 'notesLessThanOrEq': {
