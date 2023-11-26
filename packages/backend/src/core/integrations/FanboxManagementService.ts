@@ -75,10 +75,10 @@ export class FanboxManagementService implements OnApplicationShutdown {
 	@bindThis
 	private async updateCache(): Promise<void> {
 		if (this.isUpdating) return;
-		this.isUpdating = true;
-
 		const meta = await this.metaService.fetch();
 		if (!meta.enableFanboxIntegration) return;
+
+		this.isUpdating = true;
 
 		const members = await this.fetchUsers();
 		const users = await this.userProfilesRepository.find({
@@ -119,7 +119,7 @@ export class FanboxManagementService implements OnApplicationShutdown {
 		this.logger.debug('Getting fanbox supporters from api');
 
 		const plans = (await this.request('plan'))?.body;
-		const members = (await this.request('relationships'))?.body;
+		const members = (await this.request('relationship'))?.body;
 
 		if (!plans || !members) throw new Error('Failed to fetch fanbox supporters');
 
