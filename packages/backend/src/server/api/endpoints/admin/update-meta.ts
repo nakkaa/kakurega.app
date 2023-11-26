@@ -93,6 +93,8 @@ export const paramDef = {
 		patreonClientSecret: { type: 'string', nullable: true },
 		patreonAccessToken: { type: 'string', nullable: true },
 		patreonRefreshToken: { type: 'string', nullable: true },
+		enableFanboxIntegration: { type: 'boolean' },
+		fanboxApiBackendUrl: { type: 'string', nullable: true },
 		enableEmail: { type: 'boolean' },
 		email: { type: 'string', nullable: true },
 		smtpSecure: { type: 'boolean' },
@@ -380,6 +382,14 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 			if (ps.patreonRefreshToken !== undefined) {
 				set.patreonRefreshToken = ps.patreonRefreshToken;
+			}
+
+			if (ps.enableFanboxIntegration !== undefined) {
+				set.enableFanboxIntegration = ps.enableFanboxIntegration;
+			}
+
+			if (ps.fanboxApiBackendUrl !== undefined) {
+				set.fanboxApiBackendUrl = ps.fanboxApiBackendUrl;
 			}
 
 			if (ps.enableEmail !== undefined) {
