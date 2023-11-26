@@ -9,21 +9,22 @@
 			<p v-if="integrations.patreon">{{ i18n.ts.connectedTo }}: <a href="https://www.patreon.com/home" rel="nofollow noopener" target="_blank">{{ integrations.patreon.id }}</a></p>
 			<div v-if="integrations.patreon" class="_gaps_s">
 				<MkButton danger @click="disconnectPatreon">{{ i18n.ts.disconnectService }}</MkButton>
-				<MkButton primary @click="requestPatreonRefresh">{{ i18n.ts.requestPatreonRefresh }}</MkButton>
+				<MkButton primary @click="requestPatreonRefresh">{{ i18n.ts.requestRefresh }}</MkButton>
 			</div>
 			<MkButton v-else primary @click="connectPatreon">{{ i18n.ts.connectService }}</MkButton>
 		</FormSection>
-		<FormSection v-if="instance.enableFanboxIntegration">
+		<FormSection v-if="instance.enableFanboxIntegration" :first="!instance.enablePatreonIntegration">
 			<template #label>
 				<i class="ti ti-square-rounded-letter-p"></i>
 				PixivFANBOX
 			</template>
-			<p v-if="integrations.fanbox">{{ i18n.ts.connectedTo }}: <a :href="'https://www.pixiv.net/users/' + integrations.pixiv.id" rel="nofollow noopener" target="_blank">{{ integrations.pixiv.id }}</a></p>
+			<p v-if="integrations.fanbox">{{ i18n.ts.connectedTo }}: <a :href="'https://www.pixiv.net/users/' + integrations.fanbox.id" rel="nofollow noopener" target="_blank">{{ integrations.fanbox.id }}</a></p>
 			<div v-if="integrations.fanbox" class="_gaps_s">
 				<MkButton danger @click="disconnectFanbox">{{ i18n.ts.disconnectService }}</MkButton>
-				<MkButton primary @click="requestFanboxRefresh">{{ i18n.ts.requestPatreonRefresh }}</MkButton>
+				<MkButton primary @click="requestFanboxRefresh">{{ i18n.ts.requestRefresh }}</MkButton>
 			</div>
 			<MkButton v-else primary @click="connectFanbox">{{ i18n.ts.connectService }}</MkButton>
+		</FormSection>
 	</div>
 </template>
 
