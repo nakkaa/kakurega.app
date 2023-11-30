@@ -16,7 +16,7 @@
 				<MkFolder>
 					<template #icon><i class="ti ti-square-rounded-letter-p"></i></template>
 					<template #label>PixivFANBOX</template>
-					<template #suffix>{{ i18n.ts.disabled }}</template>
+					<template #suffix>{{ enableFanboxIntegration ? i18n.ts.enabled : i18n.ts.disabled }}</template>
 					<XFanbox/>
 				</MkFolder>
 			</div>
@@ -36,10 +36,12 @@ import { i18n } from '@/i18n.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
 
 let enablePatreonIntegration: boolean = $ref(false);
+let enableFanboxIntegration: boolean = $ref(false);
 
 async function init() {
 	const meta = await os.api('admin/meta');
 	enablePatreonIntegration = meta.enablePatreonIntegration;
+	enableFanboxIntegration = meta.enableFanboxIntegration;
 }
 
 const headerActions = $computed(() => []);
