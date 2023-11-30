@@ -1243,6 +1243,10 @@ export interface Locale {
     "zen": string;
     "zenMode": string;
     "showWidgets": string;
+    "enterPixivIdOrUrl": string;
+    "invalidPixivId": string;
+    "failedToSetPixivId": string;
+    "connectionSucceeded": string;
     "_announcement": {
         "forExistingUsers": string;
         "forExistingUsersDescription": string;

@@ -211,6 +211,10 @@ export const meta = {
 				type: 'boolean',
 				optional: false, nullable: false,
 			},
+			enableFanboxIntegration: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
 			enableSentryLogging: {
 				type: 'boolean',
 				optional: false, nullable: false,
@@ -394,6 +398,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				notesPerOneAd: instance.notesPerOneAd,
 				enableEmail: instance.enableEmail,
 				enablePatreonIntegration: instance.enablePatreonIntegration,
+				enableFanboxIntegration: instance.enableFanboxIntegration,
 				enableSentryLogging: instance.enableSentryLogging,
 				sentryDsn: instance.sentryDsn,
 				enableSupporterPage: instance.enableSupporterPage,
@@ -432,6 +437,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 					turnstile: instance.enableTurnstile,
 					objectStorage: instance.useObjectStorage,
 					patreon: instance.enablePatreonIntegration,
+					fanbox: instance.enableFanboxIntegration,
 					sentryLogging: instance.enableSentryLogging,
 					serviceWorker: instance.enableServiceWorker,
 					miauth: true,

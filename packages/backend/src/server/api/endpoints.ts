@@ -245,8 +245,10 @@ import * as ep___i_webhooks_show from './endpoints/i/webhooks/show.js';
 import * as ep___i_webhooks_list from './endpoints/i/webhooks/list.js';
 import * as ep___i_webhooks_update from './endpoints/i/webhooks/update.js';
 import * as ep___i_webhooks_delete from './endpoints/i/webhooks/delete.js';
+import * as ep___integrations_fanbox_connect from './endpoints/integrations/fanbox/connect.js';
+import * as ep___integrations_fanbox_disconnect from './endpoints/integrations/fanbox/disconnect.js';
+import * as ep___integrations_fanbox_requestRefresh from './endpoints/integrations/fanbox/request-refresh.js';
 import * as ep___integrations_patreon_requestRefresh from './endpoints/integrations/patreon/request-refresh.js';
-import * as ep___integrations_patreon_list from './endpoints/integrations/patreon/list.js';
 import * as ep___invite_create from './endpoints/invite/create.js';
 import * as ep___invite_delete from './endpoints/invite/delete.js';
 import * as ep___invite_list from './endpoints/invite/list.js';
@@ -328,6 +330,7 @@ import * as ep___resetPassword from './endpoints/reset-password.js';
 import * as ep___serverInfo from './endpoints/server-info.js';
 import * as ep___signupAvailable from './endpoints/signup-available.js';
 import * as ep___stats from './endpoints/stats.js';
+import * as ep___supporterList from './endpoints/supporter-list.js';
 import * as ep___sw_show_registration from './endpoints/sw/show-registration.js';
 import * as ep___sw_update_registration from './endpoints/sw/update-registration.js';
 import * as ep___sw_register from './endpoints/sw/register.js';
@@ -609,8 +612,10 @@ const eps = [
 	['i/webhooks/show', ep___i_webhooks_show],
 	['i/webhooks/update', ep___i_webhooks_update],
 	['i/webhooks/delete', ep___i_webhooks_delete],
+	['integrations/fanbox/connect', ep___integrations_fanbox_connect],
+	['integrations/fanbox/disconnect', ep___integrations_fanbox_disconnect],
+	['integrations/fanbox/request-refresh', ep___integrations_fanbox_requestRefresh],
 	['integrations/patreon/request-refresh', ep___integrations_patreon_requestRefresh],
-	['integrations/patreon/list', ep___integrations_patreon_list],
 	['invite/create', ep___invite_create],
 	['invite/delete', ep___invite_delete],
 	['invite/list', ep___invite_list],
@@ -692,6 +697,7 @@ const eps = [
 	['server-info', ep___serverInfo],
 	['signup-available', ep___signupAvailable],
 	['stats', ep___stats],
+	['supporter-list', ep___supporterList],
 	['sw/show-registration', ep___sw_show_registration],
 	['sw/update-registration', ep___sw_update_registration],
 	['sw/register', ep___sw_register],

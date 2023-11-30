@@ -3,7 +3,7 @@
 	<template #header>
 		<MkPageHeader :actions="headerActions" :tabs="headerTabs"/>
 	</template>
-	<MkSpacer :content-max="700" :margin-min="16" :margin-max="32">
+	<MkSpacer :contentMax="700" :marginMin="16" :marginMax="32">
 		<FormSuspense :p="init">
 			<div class="_gaps_m">
 				<MkFolder>
@@ -11,6 +11,13 @@
 					<template #label>Patreon</template>
 					<template #suffix>{{ enablePatreonIntegration? i18n.ts.enabled : i18n.ts.disabled }}</template>
 					<XPatreon/>
+				</MkFolder>
+
+				<MkFolder>
+					<template #icon><i class="ti ti-square-rounded-letter-p"></i></template>
+					<template #label>PixivFANBOX</template>
+					<template #suffix>{{ i18n.ts.disabled }}</template>
+					<XFanbox/>
 				</MkFolder>
 			</div>
 		</FormSuspense>
@@ -21,11 +28,12 @@
 <script lang="ts" setup>
 import { } from 'vue';
 import XPatreon from './integrations.patreon.vue';
+import XFanbox from './integrations.fanbox.vue';
 import FormSuspense from '@/components/form/suspense.vue';
 import MkFolder from '@/components/MkFolder.vue';
-import * as os from '@/os';
-import { i18n } from '@/i18n';
-import { definePageMetadata } from '@/scripts/page-metadata';
+import * as os from '@/os.js';
+import { i18n } from '@/i18n.js';
+import { definePageMetadata } from '@/scripts/page-metadata.js';
 
 let enablePatreonIntegration: boolean = $ref(false);
 

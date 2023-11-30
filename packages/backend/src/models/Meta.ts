@@ -357,6 +357,17 @@ export class MiMeta {
 	@Column('boolean', {
 		default: false,
 	})
+	public enableFanboxIntegration: boolean;
+
+	@Column('varchar', {
+		length: 128,
+		nullable: true,
+	})
+	public fanboxApiBackendUrl: string | null;
+
+	@Column('boolean', {
+		default: false,
+	})
 	public enableSentryLogging: boolean;
 
 	@Column('varchar', {

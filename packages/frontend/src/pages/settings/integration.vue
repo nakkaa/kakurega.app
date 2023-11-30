@@ -9,23 +9,36 @@
 			<p v-if="integrations.patreon">{{ i18n.ts.connectedTo }}: <a href="https://www.patreon.com/home" rel="nofollow noopener" target="_blank">{{ integrations.patreon.id }}</a></p>
 			<div v-if="integrations.patreon" class="_gaps_s">
 				<MkButton danger @click="disconnectPatreon">{{ i18n.ts.disconnectService }}</MkButton>
-				<MkButton primary @click="requestRefresh">{{ i18n.ts.requestRefresh }}</MkButton>
+				<MkButton primary @click="requestPatreonRefresh">{{ i18n.ts.requestRefresh }}</MkButton>
 			</div>
 			<MkButton v-else primary @click="connectPatreon">{{ i18n.ts.connectService }}</MkButton>
+		</FormSection>
+		<FormSection v-if="instance.enableFanboxIntegration" :first="!instance.enablePatreonIntegration">
+			<template #label>
+				<i class="ti ti-square-rounded-letter-p"></i>
+				PixivFANBOX
+				<span class="_beta">{{ i18n.ts.originalFeature }}</span>
+			</template>
+			<p v-if="integrations.fanbox">{{ i18n.ts.connectedTo }}: <a :href="'https://www.pixiv.net/users/' + integrations.fanbox.id" rel="nofollow noopener" target="_blank">{{ integrations.fanbox.id }}</a></p>
+			<div v-if="integrations.fanbox" class="_gaps_s">
+				<MkButton danger @click="disconnectFanbox">{{ i18n.ts.disconnectService }}</MkButton>
+				<MkButton primary @click="requestFanboxRefresh">{{ i18n.ts.requestRefresh }}</MkButton>
+			</div>
+			<MkButton v-else primary @click="connectFanbox">{{ i18n.ts.connectService }}</MkButton>
 		</FormSection>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue';
-import { apiUrl } from '@/config';
-import * as os from '@/os';
+import { apiUrl } from '@/config.js';
+import * as os from '@/os.js';
 import FormSection from '@/components/form/section.vue';
 import MkButton from '@/components/MkButton.vue';
-import { $i } from '@/account';
-import { instance } from '@/instance';
-import { i18n } from '@/i18n';
-import { definePageMetadata } from '@/scripts/page-metadata';
+import { $i } from '@/account.js';
+import { instance } from '@/instance.js';
+import { i18n } from '@/i18n.js';
+import { definePageMetadata } from '@/scripts/page-metadata.js';
 
 const patreonForm = ref<Window | null>(null);
 
@@ -46,8 +59,64 @@ function disconnectPatreon() {
 	openWindow('patreon', 'disconnect');
 }
 
-async function requestRefresh() {
+async function requestPatreonRefresh() {
 	await os.api('integrations/patreon/request-refresh');
+
+	os.alert({
+		type: 'success',
+		title: i18n.ts.requestedRefresh,
+		text: i18n.ts.requestedRefreshDetails,
+	});
+}
+
+async function connectFanbox() {
+	const { canceled, result } = await os.inputText({
+		text: i18n.ts.enterPixivIdOrUrl,
+	});
+
+	if (canceled) return;
+
+	let id: string | null = null;
+
+	if (!isNaN(Number(result))) {
+		id = result;
+	} else {
+		const match = result.match(/www.pixiv.net\/users\/(\d+)/)?.[1];
+
+		if (!isNaN(Number(match))) {
+			id = match as string;
+		}
+	}
+
+	if (!id) {
+		return os.alert({
+			type: 'error',
+			title: i18n.ts.error,
+			text: i18n.ts.invalidPixivId,
+		});
+	}
+
+	const res = await os.api('integrations/fanbox/connect', { id });
+	if (res.error) {
+		return os.alert({
+			type: 'error',
+			title: i18n.ts.error,
+			text: res.failedToSetPixivId,
+		});
+	}
+
+	os.alert({
+		type: 'success',
+		text: i18n.ts.connectionSucceeded,
+	});
+}
+
+async function disconnectFanbox() {
+	await os.apiWithDialog('integrations/fanbox/disconnect');
+}
+
+async function requestFanboxRefresh() {
+	await os.api('integrations/fanbox/request-refresh');
 
 	os.alert({
 		type: 'success',

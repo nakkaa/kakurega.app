@@ -117,6 +117,10 @@ export const meta = {
 				type: 'boolean',
 				optional: false, nullable: false,
 			},
+			enableFanboxIntegration: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
 			enableSentryLogging: {
 				type: 'boolean',
 				optional: false, nullable: false,
@@ -224,6 +228,10 @@ export const meta = {
 				optional: true, nullable: true,
 			},
 			patreonRefreshToken: {
+				type: 'string',
+				optional: true, nullable: true,
+			},
+			fanboxApiBackendUrl: {
 				type: 'string',
 				optional: true, nullable: true,
 			},
@@ -466,6 +474,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				defaultDarkTheme: instance.defaultDarkTheme,
 				enableEmail: instance.enableEmail,
 				enablePatreonIntegration: instance.enablePatreonIntegration,
+				enableFanboxIntegration: instance.enableFanboxIntegration,
 				enableSentryLogging: instance.enableSentryLogging,
 				sentryDsn: instance.sentryDsn,
 				enableServiceWorker: instance.enableServiceWorker,
@@ -490,6 +499,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				patreonClientSecret: instance.patreonClientSecret,
 				patreonAccessToken: instance.patreonAccessToken,
 				patreonRefreshToken: instance.patreonRefreshToken,
+				fanboxApiBackendUrl: instance.fanboxApiBackendUrl,
 				summalyProxy: instance.summalyProxy,
 				email: instance.email,
 				smtpSecure: instance.smtpSecure,

@@ -245,8 +245,10 @@ import * as ep___i_webhooks_show from './endpoints/i/webhooks/show.js';
 import * as ep___i_webhooks_list from './endpoints/i/webhooks/list.js';
 import * as ep___i_webhooks_update from './endpoints/i/webhooks/update.js';
 import * as ep___i_webhooks_delete from './endpoints/i/webhooks/delete.js';
+import * as ep___integrations_fanbox_connect from './endpoints/integrations/fanbox/connect.js';
+import * as ep___integrations_fanbox_disconnect from './endpoints/integrations/fanbox/disconnect.js';
+import * as ep___integrations_fanbox_requestRefresh from './endpoints/integrations/fanbox/request-refresh.js';
 import * as ep___integrations_patreon_requestRefresh from './endpoints/integrations/patreon/request-refresh.js';
-import * as ep___integrations_patreon_list from './endpoints/integrations/patreon/list.js';
 import * as ep___invite_create from './endpoints/invite/create.js';
 import * as ep___invite_delete from './endpoints/invite/delete.js';
 import * as ep___invite_list from './endpoints/invite/list.js';
@@ -328,6 +330,7 @@ import * as ep___resetPassword from './endpoints/reset-password.js';
 import * as ep___serverInfo from './endpoints/server-info.js';
 import * as ep___signupAvailable from './endpoints/signup-available.js';
 import * as ep___stats from './endpoints/stats.js';
+import * as ep___supporterList from './endpoints/supporter-list.js';
 import * as ep___sw_show_registration from './endpoints/sw/show-registration.js';
 import * as ep___sw_update_registration from './endpoints/sw/update-registration.js';
 import * as ep___sw_register from './endpoints/sw/register.js';
@@ -611,8 +614,10 @@ const $i_webhooks_list: Provider = { provide: 'ep:i/webhooks/list', useClass: ep
 const $i_webhooks_show: Provider = { provide: 'ep:i/webhooks/show', useClass: ep___i_webhooks_show.default };
 const $i_webhooks_update: Provider = { provide: 'ep:i/webhooks/update', useClass: ep___i_webhooks_update.default };
 const $i_webhooks_delete: Provider = { provide: 'ep:i/webhooks/delete', useClass: ep___i_webhooks_delete.default };
+const $integrations_fanbox_connect: Provider = { provide: 'ep:integrations/fanbox/connect', useClass: ep___integrations_fanbox_connect.default };
+const $integrations_fanbox_disconnect: Provider = { provide: 'ep:integrations/fanbox/disconnect', useClass: ep___integrations_fanbox_disconnect.default };
+const $integrations_fanbox_requestRefresh: Provider = { provide: 'ep:integrations/fanbox/request-refresh', useClass: ep___integrations_fanbox_requestRefresh.default };
 const $integrations_patreon_requestRefresh: Provider = { provide: 'ep:integrations/patreon/request-refresh', useClass: ep___integrations_patreon_requestRefresh.default };
-const $integrations_patreon_list: Provider = { provide: 'ep:integrations/patreon/list', useClass: ep___integrations_patreon_list.default };
 const $invite_create: Provider = { provide: 'ep:invite/create', useClass: ep___invite_create.default };
 const $invite_delete: Provider = { provide: 'ep:invite/delete', useClass: ep___invite_delete.default };
 const $invite_list: Provider = { provide: 'ep:invite/list', useClass: ep___invite_list.default };
@@ -694,6 +699,7 @@ const $resetPassword: Provider = { provide: 'ep:reset-password', useClass: ep___
 const $serverInfo: Provider = { provide: 'ep:server-info', useClass: ep___serverInfo.default };
 const $signupAvailable: Provider = { provide: 'ep:signup-available', useClass: ep___signupAvailable.default };
 const $stats: Provider = { provide: 'ep:stats', useClass: ep___stats.default };
+const $supporterList: Provider = { provide: 'ep:supporter-list', useClass: ep___supporterList.default };
 const $sw_show_registration: Provider = { provide: 'ep:sw/show-registration', useClass: ep___sw_show_registration.default };
 const $sw_update_registration: Provider = { provide: 'ep:sw/update-registration', useClass: ep___sw_update_registration.default };
 const $sw_register: Provider = { provide: 'ep:sw/register', useClass: ep___sw_register.default };
@@ -981,8 +987,10 @@ const $retention: Provider = { provide: 'ep:retention', useClass: ep___retention
 		$i_webhooks_show,
 		$i_webhooks_update,
 		$i_webhooks_delete,
+		$integrations_fanbox_connect,
+		$integrations_fanbox_disconnect,
+		$integrations_fanbox_requestRefresh,
 		$integrations_patreon_requestRefresh,
-		$integrations_patreon_list,
 		$invite_create,
 		$invite_delete,
 		$invite_list,
@@ -1064,6 +1072,7 @@ const $retention: Provider = { provide: 'ep:retention', useClass: ep___retention
 		$serverInfo,
 		$signupAvailable,
 		$stats,
+		$supporterList,
 		$sw_show_registration,
 		$sw_update_registration,
 		$sw_register,
@@ -1345,8 +1354,10 @@ const $retention: Provider = { provide: 'ep:retention', useClass: ep___retention
 		$i_webhooks_show,
 		$i_webhooks_update,
 		$i_webhooks_delete,
+		$integrations_fanbox_connect,
+		$integrations_fanbox_disconnect,
+		$integrations_fanbox_requestRefresh,
 		$integrations_patreon_requestRefresh,
-		$integrations_patreon_list,
 		$invite_create,
 		$invite_delete,
 		$invite_list,
@@ -1427,6 +1438,7 @@ const $retention: Provider = { provide: 'ep:retention', useClass: ep___retention
 		$serverInfo,
 		$signupAvailable,
 		$stats,
+		$supporterList,
 		$sw_register,
 		$sw_unregister,
 		$test,

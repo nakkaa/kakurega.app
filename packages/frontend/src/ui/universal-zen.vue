@@ -12,7 +12,7 @@
 		</template>
 		<MkSpacer v-if="isRootPage" :contentMax="800">
 			<MkPostForm :class="$style.postForm" class="post-form _panel" fixed style="margin-bottom: var(--margin);"/>
-			<XWidgets v-if="zenStore.state.showWidgets"/>
+			<XWidgets v-if="showWidgets"/>
 		</MkSpacer>
 		<RouterView v-else/>
 		<div :class="$style.spacer"></div>
@@ -92,6 +92,11 @@ const navFooter = $shallowRef<HTMLElement>();
 const contents = shallowRef<InstanceType<typeof MkStickyContainer>>();
 
 const isRootPage = ref(mainRouter.currentRoute.value.path === '/');
+
+let showWidgets = $ref(zenStore.state.showWidgets);
+watch(zenStore.reactiveState.showWidgets, (value) => {
+	showWidgets = value;
+});
 
 watch(mainRouter.currentRoute, (route) => {
 	isRootPage.value = route.path === '/';
