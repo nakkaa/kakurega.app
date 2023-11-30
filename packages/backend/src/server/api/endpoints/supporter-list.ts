@@ -27,7 +27,7 @@ type SupporterUser = {
 	username: string,
 	name: string,
 	avatarUrl: string,
-	type: 'name' | 'nameWithIcon'
+	withIcon: boolean,
 }
 
 // eslint-disable-next-line import/no-default-export
@@ -53,7 +53,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					username: patreon.user.username,
 					name: patreon.user.name ?? patreon.user.username,
 					avatarUrl: patreon.user.avatarUrl ?? this.userEntityService.getIdenticonUrl(patreon.user),
-					type: meta.supporterNameWithIconThreshold <= patreon.amounts ? 'nameWithIcon' : 'name',
+					withIcon: meta.supporterNameWithIconThreshold <= patreon.amounts,
 				});
 			}
 
@@ -63,7 +63,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					username: supporter.user.username,
 					name: supporter.user.name ?? supporter.user.username,
 					avatarUrl: supporter.user.avatarUrl ?? this.userEntityService.getIdenticonUrl(supporter.user),
-					type: meta.supporterNameWithIconThreshold <= supporter.amounts ? 'nameWithIcon' : 'name',
+					withIcon: meta.supporterNameWithIconThreshold <= supporter.amounts,
 				});
 			}
 
