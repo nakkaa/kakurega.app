@@ -141,7 +141,14 @@ export class FanboxManagementService implements OnApplicationShutdown {
 		if (retry >= 2) return {};
 		const meta = await this.metaService.fetch(true);
 
-		return await this.httpRequestService.getJson(encodeURI(`${meta.fanboxApiBackendUrl}/api/${url}`), '*/*').then(res => res).catch(async err => {
+		return await this.httpRequestService.send(encodeURI(`${meta.fanboxApiBackendUrl}/api/${url}`), {
+			method: 'GET',
+			headers: {
+				Accept: 'application/json, */*',
+			},
+			timeout: 30000,
+			size: 1024 * 256,
+		}).then(res => res.json()).catch(async err => {
 			if (!(err instanceof StatusError)) {
 				this.logger.error(err);
 				return {};
