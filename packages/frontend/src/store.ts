@@ -202,10 +202,6 @@ export const defaultStore = markRaw(new Storage('base', {
 		where: 'account',
 		default: [] as string[],
 	},
-	showMutedInfo: {
-		where: 'account',
-		default: true,
-	},
 	pinnedUserLists: {
 		where: 'deviceAccount',
 		default: [] as Misskey.entities.UserList[],
