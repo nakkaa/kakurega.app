@@ -59,7 +59,7 @@ export function getConfig(): UserConfig {
 			pluginJson5(),
 			...process.env.NODE_ENV === 'production'
 				? [
-					process.env.SENTRY_AUTH_TOKEN ? viteSentry.default({
+					process.env.SENTRY_AUTH_TOKEN ? viteSentry({
 						url: 'https://sentry.yukineko.dev',
 						org: 'sentry',
 						project: 'misskey-kakurega',
@@ -70,7 +70,7 @@ export function getConfig(): UserConfig {
 							include: ['../../built/_vite_'],
 						},
 					}) : null,
-					pluginReplace.default({
+					pluginReplace({
 						preventAssignment: true,
 						values: {
 							'isChromatic()': JSON.stringify(false),
