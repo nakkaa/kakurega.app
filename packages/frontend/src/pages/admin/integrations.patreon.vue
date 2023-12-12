@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts" setup>
-import { } from 'vue';
+import { ref } from 'vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 import MkInput from '@/components/MkInput.vue';
 import MkButton from '@/components/MkButton.vue';
@@ -45,30 +45,30 @@ import * as os from '@/os.js';
 import { fetchInstance } from '@/instance.js';
 import { i18n } from '@/i18n.js';
 
-let uri: string = $ref('');
-let enablePatreonIntegration: boolean = $ref(false);
-let patreonClientId: string | null = $ref(null);
-let patreonClientSecret: string | null = $ref(null);
-let patreonAccessToken: string | null = $ref(null);
-let patreonRefreshToken: string | null = $ref(null);
+const uri = ref('');
+const enablePatreonIntegration = ref(false);
+const patreonClientId = ref<string | null>(null);
+const patreonClientSecret = ref<string | null>(null);
+const patreonAccessToken = ref<string | null>(null);
+const patreonRefreshToken = ref<string | null>(null);
 
 async function init() {
 	const meta = await os.api('admin/meta');
-	uri = meta.uri;
-	enablePatreonIntegration = meta.enablePatreonIntegration;
-	patreonClientId = meta.patreonClientId;
-	patreonClientSecret = meta.patreonClientSecret;
-	patreonAccessToken = meta.patreonAccessToken;
-	patreonRefreshToken = meta.patreonRefreshToken;
+	uri.value = meta.uri;
+	enablePatreonIntegration.value = meta.enablePatreonIntegration;
+	patreonClientId.value = meta.patreonClientId;
+	patreonClientSecret.value = meta.patreonClientSecret;
+	patreonAccessToken.value = meta.patreonAccessToken;
+	patreonRefreshToken.value = meta.patreonRefreshToken;
 }
 
 function save() {
 	os.apiWithDialog('admin/update-meta', {
-		enablePatreonIntegration,
-		patreonClientId,
-		patreonClientSecret,
-		patreonAccessToken,
-		patreonRefreshToken,
+		enablePatreonIntegration: enablePatreonIntegration.value,
+		patreonClientId: patreonClientId.value,
+		patreonClientSecret: patreonClientSecret.value,
+		patreonAccessToken: patreonAccessToken.value,
+		patreonRefreshToken: patreonRefreshToken.value,
 	}).then(() => {
 		fetchInstance();
 	});

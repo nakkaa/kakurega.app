@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-import { } from 'vue';
+import { ref, computed } from 'vue';
 import XPatreon from './integrations.patreon.vue';
 import XFanbox from './integrations.fanbox.vue';
 import FormSuspense from '@/components/form/suspense.vue';
@@ -35,18 +35,18 @@ import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
 
-let enablePatreonIntegration: boolean = $ref(false);
-let enableFanboxIntegration: boolean = $ref(false);
+const enablePatreonIntegration = ref(false);
+const enableFanboxIntegration = ref(false);
 
 async function init() {
 	const meta = await os.api('admin/meta');
-	enablePatreonIntegration = meta.enablePatreonIntegration;
-	enableFanboxIntegration = meta.enableFanboxIntegration;
+	enablePatreonIntegration.value = meta.enablePatreonIntegration;
+	enableFanboxIntegration.value = meta.enableFanboxIntegration;
 }
 
-const headerActions = $computed(() => []);
+const headerActions = computed(() => []);
 
-const headerTabs = $computed(() => []);
+const headerTabs = computed(() => []);
 
 definePageMetadata({
 	title: i18n.ts.integration,

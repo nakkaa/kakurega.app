@@ -6,6 +6,7 @@
 </template>
 
 <script lang="ts" setup>
+import { computed, defineProps } from 'vue';
 import * as Misskey from 'misskey-js';
 import { instanceName } from '@/config.js';
 import { instance as Instance } from '@/instance.js';
@@ -21,7 +22,7 @@ const instance = props.instance ?? {
 	themeColor: (document.querySelector('meta[name="theme-color-orig"]') as HTMLMetaElement).content,
 };
 
-const faviconUrl = $computed(() => props.instance ? getProxiedImageUrlNullable(props.instance.faviconUrl, 'preview') : getProxiedImageUrlNullable(Instance.iconUrl, 'preview') ?? getProxiedImageUrlNullable(Instance.iconUrl, 'preview') ?? '/favicon.ico');
+const faviconUrl = computed(() => props.instance ? getProxiedImageUrlNullable(props.instance.faviconUrl, 'preview') : getProxiedImageUrlNullable(Instance.iconUrl, 'preview') ?? getProxiedImageUrlNullable(Instance.iconUrl, 'preview') ?? '/favicon.ico');
 const firstLetter = instance.name?.slice(0, 1);
 
 const themeColor = instance.themeColor ?? '#777777';

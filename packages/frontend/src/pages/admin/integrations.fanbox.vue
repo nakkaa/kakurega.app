@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { } from 'vue';
+import { ref } from 'vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 import MkInput from '@/components/MkInput.vue';
 import MkButton from '@/components/MkButton.vue';
@@ -27,21 +27,21 @@ import * as os from '@/os.js';
 import { fetchInstance } from '@/instance.js';
 import { i18n } from '@/i18n.js';
 
-let uri: string = $ref('');
-let enableFanboxIntegration: boolean = $ref(false);
-let fanboxApiBackendUrl: string = $ref('');
+const uri = ref('');
+const enableFanboxIntegration = ref(false);
+const fanboxApiBackendUrl = ref('');
 
 async function init() {
 	const meta = await os.api('admin/meta');
-	uri = meta.uri;
-	enableFanboxIntegration = meta.enableFanboxIntegration;
-	fanboxApiBackendUrl = meta.fanboxApiBackendUrl;
+	uri.value = meta.uri;
+	enableFanboxIntegration.value = meta.enableFanboxIntegration;
+	fanboxApiBackendUrl.value = meta.fanboxApiBackendUrl;
 }
 
 function save() {
 	os.apiWithDialog('admin/update-meta', {
-		enableFanboxIntegration,
-		fanboxApiBackendUrl,
+		enableFanboxIntegration: enableFanboxIntegration.value,
+		fanboxApiBackendUrl: fanboxApiBackendUrl.value,
 	}).then(() => {
 		fetchInstance();
 	});

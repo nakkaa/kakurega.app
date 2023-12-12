@@ -87,15 +87,15 @@ window.addEventListener('resize', () => {
 	isMobile.value = deviceKind === 'smartphone' || window.innerWidth <= MOBILE_THRESHOLD;
 });
 
-let pageMetadata = $ref<null | ComputedRef<PageMetadata>>();
-const navFooter = $shallowRef<HTMLElement>();
+const pageMetadata = ref<null | PageMetadata>();
+const navFooter = shallowRef<HTMLElement>();
 const contents = shallowRef<InstanceType<typeof MkStickyContainer>>();
 
 const isRootPage = ref(mainRouter.currentRoute.value.path === '/');
 
-let showWidgets = $ref(zenStore.state.showWidgets);
+const showWidgets = ref(zenStore.state.showWidgets);
 watch(zenStore.reactiveState.showWidgets, (value) => {
-	showWidgets = value;
+	showWidgets.value = value;
 });
 
 watch(mainRouter.currentRoute, (route) => {
@@ -104,7 +104,7 @@ watch(mainRouter.currentRoute, (route) => {
 
 provide('router', mainRouter);
 provideMetadataReceiver((info) => {
-	pageMetadata = info;
+	pageMetadata.value = info.value;
 	if (pageMetadata.value) {
 		document.title = `${pageMetadata.value.title} | ${instanceName}`;
 	}
@@ -186,16 +186,16 @@ function top() {
 	});
 }
 
-let navFooterHeight = $ref(0);
-provide<Ref<number>>(CURRENT_STICKY_BOTTOM, $$(navFooterHeight));
+const navFooterHeight = ref(0);
+provide<Ref<number>>(CURRENT_STICKY_BOTTOM, navFooterHeight);
 
-watch($$(navFooter), () => {
-	if (navFooter) {
-		navFooterHeight = navFooter.offsetHeight;
-		document.body.style.setProperty('--stickyBottom', `${navFooterHeight}px`);
+watch(navFooter, () => {
+	if (navFooter.value) {
+		navFooterHeight.value = navFooter.value.offsetHeight;
+		document.body.style.setProperty('--stickyBottom', `${navFooterHeight.value}px`);
 		document.body.style.setProperty('--minBottomSpacing', 'var(--minBottomSpacingMobile)');
 	} else {
-		navFooterHeight = 0;
+		navFooterHeight.value = 0;
 		document.body.style.setProperty('--stickyBottom', '0px');
 		document.body.style.setProperty('--minBottomSpacing', '0px');
 	}
@@ -205,7 +205,7 @@ watch($$(navFooter), () => {
 
 useScrollPositionManager(() => contents.value.rootEl, mainRouter);
 
-const headerActions = $computed(() => [{
+const headerActions = computed(() => [{
 	icon: 'ti ti-settings',
 	text: i18n.ts.settings,
 	handler: () => {

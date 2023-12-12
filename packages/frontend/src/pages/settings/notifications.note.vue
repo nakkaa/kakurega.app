@@ -32,6 +32,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ref, computed } from 'vue';
 import MkPagination from '@/components/MkPagination.vue';
 import { i18n } from '@/i18n.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
@@ -44,7 +45,7 @@ const noteNotificationPagination = {
 	limit: 10,
 };
 
-let expandedNoteNotificationItems = $ref([]);
+const expandedNoteNotificationItems = ref([]);
 
 async function noteUnsubscribe(userId, ev) {
 	os.popupMenu([{
@@ -57,16 +58,16 @@ async function noteUnsubscribe(userId, ev) {
 }
 
 async function toggleNoteNotificationItem(item) {
-	if (expandedNoteNotificationItems.includes(item.id)) {
-		expandedNoteNotificationItems = expandedNoteNotificationItems.filter(x => x !== item.id);
+	if (expandedNoteNotificationItems.value.includes(item.id)) {
+		expandedNoteNotificationItems.value = expandedNoteNotificationItems.value.filter(x => x !== item.id);
 	} else {
-		expandedNoteNotificationItems.push(item.id);
+		expandedNoteNotificationItems.value.push(item.id);
 	}
 }
 
-const headerActions = $computed(() => []);
+const headerActions = computed(() => []);
 
-const headerTabs = $computed(() => []);
+const headerTabs = computed(() => []);
 
 definePageMetadata({
 	title: i18n.ts.notifications,

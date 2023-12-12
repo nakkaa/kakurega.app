@@ -186,7 +186,7 @@ function calcAge(birthdate: string): number {
 	return yearDiff;
 }
 
-const disableHighlight = $computed(defaultStore.makeGetterSetter('disableProfileHighlight'));
+const disableHighlight = computed(defaultStore.makeGetterSetter('disableProfileHighlight'));
 
 const XFiles = defineAsyncComponent(() => import('./index.files.vue'));
 const XActivity = defineAsyncComponent(() => import('./index.activity.vue'));
@@ -217,7 +217,7 @@ watch(moderationNote, async () => {
 });
 
 const pagination = {
-	endpoint: disableHighlight ? 'users/notes' : 'users/featured-notes' as const,
+	endpoint: disableHighlight.value ? 'users/notes' : 'users/featured-notes' as const,
 	limit: 10,
 	params: computed(() => ({
 		userId: props.user.id,

@@ -3,7 +3,7 @@
 	<template #header>
 		<XHeader :tabs="headerTabs"/>
 	</template>
-	<MkSpacer :content-max="700" :margin-min="16" :margin-max="32">
+	<MkSpacer :contentMax="700" :marginMin="16" :marginMax="32">
 		<FormSuspense :p="init">
 			<div class="_gaps_m">
 				<MkSwitch v-model="enableSupporterPage">{{ i18n.ts.enableSupporterPage }}</MkSwitch>
@@ -29,7 +29,7 @@
 	</MkSpacer>
 	<template #footer>
 		<div :class="$style.footer">
-			<MkSpacer :content-max="700" :margin-min="16" :margin-max="16">
+			<MkSpacer :contentMax="700" :marginMin="16" :marginMax="16">
 				<MkButton primary rounded @click="save"><i class="ti ti-check"></i> {{ i18n.ts.save }}</MkButton>
 			</MkSpacer>
 		</div>
@@ -38,43 +38,43 @@
 </template>
 
 <script lang="ts" setup>
-import { } from 'vue';
+import { ref, computed } from 'vue';
 import XHeader from './_header_.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 import MkInput from '@/components/MkInput.vue';
 import MkButton from '@/components/MkButton.vue';
 import MkTextarea from '@/components/MkTextarea.vue';
 import FormSuspense from '@/components/form/suspense.vue';
-import * as os from '@/os';
-import { fetchInstance } from '@/instance';
-import { i18n } from '@/i18n';
-import { definePageMetadata } from '@/scripts/page-metadata';
+import * as os from '@/os.js';
+import { fetchInstance } from '@/instance.js';
+import { i18n } from '@/i18n.js';
+import { definePageMetadata } from '@/scripts/page-metadata.js';
 
-let enableSupporterPage: boolean = $ref(false);
-let supporterRoles: string = $ref('');
-let supporterNameThreshold: number | null = $ref(null);
-let supporterNameWithIconThreshold: number | null = $ref(null);
+const enableSupporterPage = ref(false);
+const supporterRoles = ref('');
+const supporterNameThreshold = ref<number | null>(null);
+const supporterNameWithIconThreshold = ref<number | null>(null);
 
 async function init() {
 	const meta = await os.api('admin/meta');
-	enableSupporterPage = meta.enableSupporterPage;
-	supporterRoles = meta.supporterRoles.join('\n');
-	supporterNameThreshold = meta.supporterNameThreshold;
-	supporterNameWithIconThreshold = meta.supporterNameWithIconThreshold;
+	enableSupporterPage.value = meta.enableSupporterPage;
+	supporterRoles.value = meta.supporterRoles.join('\n');
+	supporterNameThreshold.value = meta.supporterNameThreshold;
+	supporterNameWithIconThreshold.value = meta.supporterNameWithIconThreshold;
 }
 
 function save() {
 	os.apiWithDialog('admin/update-meta', {
-		enableSupporterPage,
-		supporterRoles: supporterRoles.split('\n'),
-		supporterNameThreshold,
-		supporterNameWithIconThreshold,
+		enableSupporterPage: enableSupporterPage.value,
+		supporterRoles: supporterRoles.value.split('\n'),
+		supporterNameThreshold: supporterNameThreshold.value,
+		supporterNameWithIconThreshold: supporterNameWithIconThreshold.value,
 	}).then(() => {
 		fetchInstance();
 	});
 }
 
-const headerTabs = $computed(() => []);
+const headerTabs = computed(() => []);
 
 definePageMetadata({
 	title: i18n.ts.supporter,
