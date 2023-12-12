@@ -96,7 +96,7 @@ const menuDef = computed(() => [{
 		icon: 'ti ti-share',
 		text: i18n.ts.integration,
 		to: '/settings/integration',
-		active: currentPage?.route.name === 'integration',
+		active: currentPage.value?.route.name === 'integration',
 	}, {
 		icon: 'ti ti-lock',
 		text: i18n.ts.security,

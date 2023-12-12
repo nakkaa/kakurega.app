@@ -197,12 +197,12 @@ const menuDef = computed(() => [{
 		icon: 'ti ti-share',
 		text: i18n.ts.integration,
 		to: '/admin/integrations',
-		active: currentPage?.route.name === 'integrations',
+		active: currentPage.value?.route.name === 'integrations',
 	}, {
 		icon: 'ti ti-cash',
 		text: i18n.ts.supporter,
 		to: '/admin/supporter',
-		active: currentPage?.route.name === 'supporter',
+		active: currentPage.value?.route.name === 'supporter',
 	}, {
 		icon: 'ti ti-ban',
 		text: i18n.ts.instanceBlocking,
