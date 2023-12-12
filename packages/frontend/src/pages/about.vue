@@ -107,7 +107,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { computed, watch } from 'vue';
+import { computed, watch, ref } from 'vue';
 import XEmojis from './about.emojis.vue';
 import XFederation from './about.federation.vue';
 import { version, host } from '@/config.js';
@@ -134,19 +134,19 @@ const props = withDefaults(defineProps<{
 	initialTab: 'overview',
 });
 
-let stats = $ref(null);
-let tab = $ref(props.initialTab);
-let devFlag = $ref(0);
+const stats = ref(null);
+const tab = ref(props.initialTab);
+const devFlag = ref(0);
 
-watch($$(tab), () => {
-	if (tab === 'charts') {
+watch(tab, () => {
+	if (tab.value === 'charts') {
 		claimAchievement('viewInstanceChart');
 	}
 });
 
 const initStats = () => os.api('stats', {
 }).then((res) => {
-	stats = res;
+	stats.value = res;
 });
 
 async function setOverrideAddress() {
@@ -161,9 +161,9 @@ async function setOverrideAddress() {
 	cacheClear();
 }
 
-const headerActions = $computed(() => []);
+const headerActions = computed(() => []);
 
-const headerTabs = $computed(() => [{
+const headerTabs = computed(() => [{
 	key: 'overview',
 	title: i18n.ts.overview,
 }, {

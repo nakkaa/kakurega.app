@@ -131,6 +131,8 @@ export const paramDef = {
 		} },
 		supporterNameThreshold: { type: 'integer', nullable: true },
 		supporterNameWithIconThreshold: { type: 'integer', nullable: true },
+		enableVerifymailApi: { type: 'boolean' },
+		verifymailAuthKey: { type: 'string', nullable: true },
 		enableChartsForRemoteUser: { type: 'boolean' },
 		enableChartsForFederatedInstances: { type: 'boolean' },
 		enableServerMachineStats: { type: 'boolean' },
@@ -538,6 +540,18 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 			if (ps.supporterNameWithIconThreshold !== undefined) {
 				set.supporterNameWithIconThreshold = ps.supporterNameWithIconThreshold;
+			}
+
+			if (ps.enableVerifymailApi !== undefined) {
+				set.enableVerifymailApi = ps.enableVerifymailApi;
+			}
+
+			if (ps.verifymailAuthKey !== undefined) {
+				if (ps.verifymailAuthKey === '') {
+					set.verifymailAuthKey = null;
+				} else {
+					set.verifymailAuthKey = ps.verifymailAuthKey;
+				}
 			}
 
 			if (ps.enableChartsForRemoteUser !== undefined) {

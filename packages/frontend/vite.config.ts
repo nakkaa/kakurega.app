@@ -2,8 +2,6 @@ import path from 'path';
 import pluginReplace from '@rollup/plugin-replace';
 import pluginVue from '@vitejs/plugin-vue';
 import { type UserConfig, defineConfig } from 'vite';
-// @ts-expect-error https://github.com/sxzz/unplugin-vue-macros/issues/257#issuecomment-1410752890
-import ReactivityTransform from '@vue-macros/reactivity-transform/vite';
 import viteSentry from 'vite-plugin-sentry';
 import dotenv from 'dotenv';
 
@@ -32,6 +30,7 @@ const hash = (str: string, seed = 0): number => {
 };
 
 const BASE62_DIGITS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
 function toBase62(n: number): string {
 	if (n === 0) {
 		return '0';
@@ -54,15 +53,13 @@ export function getConfig(): UserConfig {
 		},
 
 		plugins: [
-			pluginVue({
-				reactivityTransform: true,
-			}),
-			ReactivityTransform(),
+			pluginVue(),
+			pluginUnwindCssModuleClassName(),
 			process.env.SENTRY_AUTH_TOKEN ? null : pluginUnwindCssModuleClassName(),
 			pluginJson5(),
 			...process.env.NODE_ENV === 'production'
 				? [
-					process.env.SENTRY_AUTH_TOKEN ? viteSentry({
+					process.env.SENTRY_AUTH_TOKEN ? viteSentry.default({
 						url: 'https://sentry.yukineko.dev',
 						org: 'sentry',
 						project: 'misskey-kakurega',
@@ -73,7 +70,7 @@ export function getConfig(): UserConfig {
 							include: ['../../built/_vite_'],
 						},
 					}) : null,
-					pluginReplace({
+					pluginReplace.default({
 						preventAssignment: true,
 						values: {
 							'isChromatic()': JSON.stringify(false),
@@ -166,10 +163,14 @@ export function getConfig(): UserConfig {
 		test: {
 			environment: 'happy-dom',
 			deps: {
-				inline: [
-					// XXX: misskey-dev/browser-image-resizer has no "type": "module"
-					'browser-image-resizer',
-				],
+				optimizer: {
+					web: {
+						include: [
+							// XXX: misskey-dev/browser-image-resizer has no "type": "module"
+							'browser-image-resizer',
+						],
+					},
+				},
 			},
 		},
 	};

@@ -209,7 +209,7 @@ export class SignupApiService {
 	@bindThis
 	private async fetchTicket(code: string, emailRequiredForSignup: boolean) {
 		const ticket = await this.registrationTicketsRepository.findOneBy({ code });
-		if (ticket == null) {
+		if (ticket == null || ticket.usedById != null) {
 			return null;
 		}
 

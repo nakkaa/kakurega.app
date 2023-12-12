@@ -5,7 +5,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <template>
 <div class="_gaps_m">
-	<MkButton v-if="oldMutedWords" inline rounded @click="showOldMuteWords()">{{ i18n.ts.showOldMuteWords }}</MkButton>
 	<div>
 		<MkTextarea v-model="mutedWords">
 			<span>{{ i18n.ts._wordMute.muteWords }}</span>
@@ -13,10 +12,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</MkTextarea>
 	</div>
 	<MkButton primary inline :disabled="!changed" @click="save()"><i class="ti ti-device-floppy"></i> {{ i18n.ts.save }}</MkButton>
-	<MkSwitch v-model="showMutedInfo">
-		<template #label>{{ i18n.ts.showMutedInfo }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></template>
-		<template #caption>{{ i18n.ts.showMutedInfoDescription }}</template>
-	</MkSwitch>
 </div>
 </template>
 
@@ -24,12 +19,16 @@ SPDX-License-Identifier: AGPL-3.0-only
 import { computed, ref, watch } from 'vue';
 import MkTextarea from '@/components/MkTextarea.vue';
 import MkButton from '@/components/MkButton.vue';
-import MkSwitch from '@/components/MkSwitch.vue';
-import { unisonReload } from '@/scripts/unison-reload.js';
 import * as os from '@/os.js';
-import { defaultStore } from '@/store.js';
-import { $i } from '@/account.js';
 import { i18n } from '@/i18n.js';
+
+const props = defineProps<{
+	muted: (string[] | string)[];
+}>();
+
+const emit = defineEmits<{
+	(ev: 'save', value: (string[] | string)[]): void;
+}>();
 
 const render = (mutedWords: string[][]) => mutedWords.map(x => {
 	if (Array.isArray(x)) {
@@ -39,18 +38,11 @@ const render = (mutedWords: string[][]) => mutedWords.map(x => {
 	}
 }).join('\n');
 
-const tab = ref('soft');
-const mutedWords = ref(render($i!.mutedWords));
-const oldMutedWords = ref(render(defaultStore.state.mutedWords));
+const mutedWords = ref(render(props.muted));
 const changed = ref(false);
-const showMutedInfo = computed(defaultStore.makeGetterSetter('showMutedInfo'));
 
 watch(mutedWords, () => {
 	changed.value = true;
-});
-
-watch(showMutedInfo, async () => {
-	await apply();
 });
 
 async function save() {
@@ -93,27 +85,8 @@ async function save() {
 		return;
 	}
 
-	await os.api('i/update', {
-		mutedWords: parsed,
-	});
+	emit('save', parsed);
 
 	changed.value = false;
-}
-
-async function showOldMuteWords() {
-	os.alert({
-		type: 'info',
-		text: oldMutedWords.value,
-	});
-}
-
-async function apply() {
-	const { canceled } = await os.confirm({
-		type: 'info',
-		text: i18n.ts.reloadToApplySetting,
-	});
-	if (canceled) return;
-
-	unisonReload();
 }
 </script>

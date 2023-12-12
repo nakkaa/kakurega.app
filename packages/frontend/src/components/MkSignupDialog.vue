@@ -36,8 +36,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { } from 'vue';
-import { $ref } from 'vue/macros';
+import { shallowRef, ref } from 'vue';
+
 import XSignup from '@/components/MkSignupDialog.form.vue';
 import XServerRules from '@/components/MkSignupDialog.rules.vue';
 import XChoice from '@/components/MkSignupDialog.choice.vue';
@@ -56,32 +56,32 @@ const emit = defineEmits<{
 	(ev: 'closed'): void;
 }>();
 
-const dialog = $shallowRef<InstanceType<typeof MkModalWindow>>();
+const dialog = shallowRef<InstanceType<typeof MkModalWindow>>();
 
-let isAcceptedServerRule = $ref(false);
-let isChoosed = $ref(false);
-let withoutInviteCode = $ref(true);
+const isAcceptedServerRule = ref(false);
+const isChoosed = ref(false);
+const withoutInviteCode = ref(true);
 
 function doneChoice(hasInviteCode: boolean) {
-	isChoosed = true;
-	withoutInviteCode = !hasInviteCode;
+	isChoosed.value = true;
+	withoutInviteCode.value = !hasInviteCode;
 }
 
 function onBack() {
-	if (isChoosed) {
-		isChoosed = false;
+	if (isChoosed.value) {
+		isChoosed.value = false;
 	} else {
-		isAcceptedServerRule = false;
+		isAcceptedServerRule.value = false;
 	}
 }
 
 function onSignup(res) {
 	emit('done', res);
-	dialog.close();
+	dialog.value.close();
 }
 
 function onSignupEmailPending() {
-	dialog.close();
+	dialog.value.close();
 }
 </script>
 
