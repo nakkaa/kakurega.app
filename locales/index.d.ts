@@ -1203,9 +1203,8 @@ export interface Locale {
     "privacyPolicy": string;
     "privacyPolicyUrl": string;
     "tosAndPrivacyPolicy": string;
-    "showOldMuteWords": string;
-    "showMutedInfo": string;
-    "showMutedInfoDescription": string;
+    "transferOldMuteWords": string;
+    "transferOldMuteWordsDescription": string;
     "optoutStatistics": string;
     "optoutStatisticsDescription": string;
     "autoRejectFollowRequest": string;
