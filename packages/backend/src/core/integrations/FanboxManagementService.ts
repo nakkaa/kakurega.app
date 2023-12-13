@@ -80,38 +80,43 @@ export class FanboxManagementService implements OnApplicationShutdown {
 
 		this.isUpdating = true;
 
-		const members = await this.fetchUsers();
-		const users = await this.userProfilesRepository.find({
-			where: {
-				integrations: Not('{}'),
-			},
-			relations: {
-				user: {
-					avatar: true,
+		try {
+			const members = await this.fetchUsers();
+			const users = await this.userProfilesRepository.find({
+				where: {
+					integrations: Not('{}'),
 				},
-			},
-		});
+				relations: {
+					user: {
+						avatar: true,
+					},
+				},
+			});
 
-		const usersList = {} as Record<string, FanboxMember>;
+			const usersList = {} as Record<string, FanboxMember>;
 
-		for (const user of users) {
-			const pixivId = user.integrations.fanbox?.id;
-			const amounts = pixivId ? members[pixivId] : null;
-			if (!amounts) continue;
-			usersList[user.userId] = {
-				amounts,
-				user: user.user as MiUser,
-				isHideFromSupporterPage: user.hideFromSupporterPage,
-			};
+			for (const user of users) {
+				const pixivId = user.integrations.fanbox?.id;
+				const amounts = pixivId ? members[pixivId] : null;
+				if (!amounts) continue;
+				usersList[user.userId] = {
+					amounts,
+					user: user.user as MiUser,
+					isHideFromSupporterPage: user.hideFromSupporterPage,
+				};
+			}
+
+			this.logger.info(`Found ${Object.keys(usersList).length} fanbox supporter(s)`);
+			this.cache = usersList;
+			this.logger.info('Cache updated.');
+		} catch (err: any) {
+			this.logger.error('Failed to update fanbox supporter cache');
+			this.logger.error(err);
 		}
 
-		this.logger.info(`Found ${Object.keys(usersList).length} fanbox supporter(s)`);
-		this.cache = usersList;
 		this.cacheLastUpdate = Date.now();
 		this.isWaitingToUpdate = false;
 		this.isUpdating = false;
-
-		this.logger.info('Cache updated.');
 	}
 
 	@bindThis
