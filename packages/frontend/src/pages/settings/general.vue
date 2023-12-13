@@ -198,18 +198,19 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<span class="_beta">{{ i18n.ts.originalFeature }}</span>
 			</MkSwitch>
 
-			<MkFolder>
-				<template #label>{{ i18n.ts.dataSaver }}</template>
+			<MkSwitch v-model="enableDataSaverMode" :disabled="autoDataSaver">{{ i18n.ts.dataSaver }}</MkSwitch>
+
+			<MkSwitch v-model="autoDataSaver" :disabled="!supportAutoDataSaver">
+				<template #caption>{{ i18n.ts.autoDataSaverDescription }}</template>
+				{{ i18n.ts.autoDataSaver }}
+				<span class="_beta">{{ i18n.ts.originalFeature }}</span>
+			</MkSwitch>
+
+			<MkFolder v-if="enableDataSaverMode">
+				<template #label>{{ i18n.ts.dataSaverAdvancedSettings }}</template>
 
 				<div class="_gaps_m">
 					<MkInfo>{{ i18n.ts.reloadRequiredToApplySettings }}</MkInfo>
-
-					<MkSwitch v-model="enableDataSaverMode" :disabled="autoDataSaver">{{ i18n.ts.dataSaver }}</MkSwitch>
-					<MkSwitch v-model="autoDataSaver" :disabled="!supportAutoDataSaver">
-						<template #caption>{{ i18n.ts.autoDataSaverDescription }}</template>
-						{{ i18n.ts.autoDataSaver }}
-						<span class="_beta">{{ i18n.ts.originalFeature }}</span>
-					</MkSwitch>
 
 					<div class="_buttons">
 						<MkButton inline @click="enableAllDataSaver">{{ i18n.ts.enableAll }}</MkButton>
@@ -316,6 +317,7 @@ const disableDrawer = computed(defaultStore.makeGetterSetter('disableDrawer'));
 const customFont = computed(defaultStore.makeGetterSetter('customFont'));
 const disableShowingAnimatedImages = computed(defaultStore.makeGetterSetter('disableShowingAnimatedImages'));
 const autoDataSaver = computed(defaultStore.makeGetterSetter('autoDataSaver'));
+const enableDataSaverMode = computed(defaultStore.makeGetterSetter('enableDataSaverMode'));
 const forceShowAds = computed(defaultStore.makeGetterSetter('forceShowAds'));
 const loadRawImages = computed(defaultStore.makeGetterSetter('loadRawImages'));
 const highlightSensitiveMedia = computed(defaultStore.makeGetterSetter('highlightSensitiveMedia'));

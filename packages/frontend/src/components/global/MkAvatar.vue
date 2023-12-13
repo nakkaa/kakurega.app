@@ -42,6 +42,7 @@ import * as Misskey from 'misskey-js';
 import MkImgWithBlurhash from '../MkImgWithBlurhash.vue';
 import MkA from './MkA.vue';
 import { getStaticImageUrl } from '@/scripts/media-proxy.js';
+import { getDataSaverState } from '@/scripts/datasaver.js';
 import { extractAvgColorFromBlurhash } from '@/scripts/extract-avg-color-from-blurhash.js';
 import { acct, userPage } from '@/filters/user.js';
 import MkUserOnlineIndicator from '@/components/MkUserOnlineIndicator.vue';
@@ -83,7 +84,7 @@ const bound = computed(() => props.link
 	? { to: userPage(props.user), target: props.target }
 	: {});
 
-const url = computed(() => (defaultStore.state.disableShowingAnimatedImages || defaultStore.state.dataSaver.avatar)
+const url = computed(() => (defaultStore.state.disableShowingAnimatedImages || getDataSaverState('avatar'))
 	? getStaticImageUrl(props.user.avatarUrl)
 	: props.user.avatarUrl);
 

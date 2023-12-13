@@ -1088,6 +1088,7 @@ export interface Locale {
     "video": string;
     "videos": string;
     "dataSaver": string;
+    "dataSaverAdvancedSettings": string;
     "autoDataSaver": string;
     "autoDataSaverDescription": string;
     "accountMigration": string;

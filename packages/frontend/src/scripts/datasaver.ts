@@ -24,3 +24,7 @@ export function initializeDetectNetworkChange(): void {
 		defaultStore.set('enableDataSaverMode', isEnableDataSaver(connection.type));
 	});
 }
+
+export function getDataSaverState(type: 'media' | 'avatar' | 'urlPreview' | 'code') {
+	return defaultStore.state.enableDataSaverMode && defaultStore.state.dataSaver[type];
+}
