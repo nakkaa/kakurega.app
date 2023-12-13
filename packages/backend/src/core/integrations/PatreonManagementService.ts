@@ -26,6 +26,7 @@ export class PatreonManagementService implements OnApplicationShutdown {
 	private cache: Record<string, PatreonMember> = {};
 	private cacheLastUpdate = 0;
 	private isWaitingToUpdate = false;
+	private isUpdating = false;
 
 	constructor(
 		@Inject(DI.userProfilesRepository)
@@ -79,36 +80,44 @@ export class PatreonManagementService implements OnApplicationShutdown {
 
 	@bindThis
 	private async updateCache(): Promise<void> {
+		if (this.isUpdating) return;
 		const meta = await this.metaService.fetch();
 		if (!meta.enableSupporterPage) return;
 
-		const members = meta.enablePatreonIntegration ? await this.fetchUsers() : {};
-		const users = await this.userProfilesRepository.find({
-			where: {
-				integrations: Not('{}'),
-			},
-			relations: {
-				user: {
-					avatar: true,
-				},
-			},
-		});
+		this.isUpdating = true;
 
 		const usersList = {} as Record<string, PatreonMember>;
 
-		for (const user of users) {
-			const patreonId = user.integrations.patreon?.id;
-			const amounts = patreonId ? members[patreonId] : null;
-			if (!amounts) continue;
-			usersList[user.userId] = {
-				amounts,
-				user: user.user as MiUser,
-				isPatreon: true,
-				isHideFromSupporterPage: user.hideFromSupporterPage,
-			};
-		}
+		try {
+			const members = meta.enablePatreonIntegration ? await this.fetchUsers() : {};
+			const users = await this.userProfilesRepository.find({
+				where: {
+					integrations: Not('{}'),
+				},
+				relations: {
+					user: {
+						avatar: true,
+					},
+				},
+			});
 
-		this.logger.info(`Found ${Object.keys(usersList).length} patreon(s)`);
+			for (const user of users) {
+				const patreonId = user.integrations.patreon?.id;
+				const amounts = patreonId ? members[patreonId] : null;
+				if (!amounts) continue;
+				usersList[user.userId] = {
+					amounts,
+					user: user.user as MiUser,
+					isPatreon: true,
+					isHideFromSupporterPage: user.hideFromSupporterPage,
+				};
+			}
+
+			this.logger.info(`Found ${Object.keys(usersList).length} patreon(s)`);
+		} catch (err: any) {
+			this.logger.error('Failed to fetch patreon users');
+			this.logger.error(err);
+		}
 
 		// 支援者ロールに該当するユーザーも追加
 		for (const role of meta.supporterRoles) {
@@ -140,6 +149,7 @@ export class PatreonManagementService implements OnApplicationShutdown {
 		this.cache = usersList;
 		this.cacheLastUpdate = Date.now();
 		this.isWaitingToUpdate = false;
+		this.isUpdating = false;
 
 		this.logger.info('Cache updated.');
 	}
