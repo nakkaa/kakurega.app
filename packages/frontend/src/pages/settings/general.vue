@@ -346,7 +346,7 @@ const disableProfileHighlight = computed(defaultStore.makeGetterSetter('disableP
 watch(lang, () => {
 	miLocalStorage.setItem('lang', lang.value as string);
 	miLocalStorage.removeItem('locale');
-  miLocalStorage.removeItem('localeVersion');
+	miLocalStorage.removeItem('localeVersion');
 });
 
 watch(fontSize, () => {

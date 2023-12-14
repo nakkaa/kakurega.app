@@ -240,7 +240,7 @@ const birthday = computed(() => {
 	return isHideAge ? `${parsedBirthday[1]}/${parsedBirthday[2]}` : `${props.user.birthday.replaceAll('-', '/')} (${i18n.t('yearsOld', { age: calcAge(props.user.birthday) })})`;
 });
 
-function menu(ev) {
+function menu(ev: MouseEvent) {
 	const { menu, cleanup } = getUserMenu(user.value, router);
 	os.popupMenu(menu, ev.currentTarget ?? ev.target).finally(cleanup);
 }

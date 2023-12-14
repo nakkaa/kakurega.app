@@ -105,7 +105,7 @@ function toggleActive() {
 }
 
 function getMenu() {
-	let items = [{
+	let items: MenuItem[] = [{
 		icon: 'ti ti-settings',
 		text: i18n.ts._deck.configureColumn,
 		action: async () => {
@@ -171,7 +171,7 @@ function getMenu() {
 		action: () => {
 			popRightColumn(props.column.id);
 		},
-	} : undefined, null, {
+	} : undefined, { type: 'divider' }, {
 		icon: 'ti ti-trash',
 		text: i18n.ts.remove,
 		danger: true,
@@ -181,7 +181,7 @@ function getMenu() {
 	}];
 
 	if (props.enableFilter || props.menu) {
-		items.unshift(null);
+		items.unshift({ type: 'divider' });
 	}
 
 	if (props.enableFilter) {
