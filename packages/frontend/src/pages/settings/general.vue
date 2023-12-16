@@ -139,6 +139,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<MkSwitch v-model="useSystemFont">{{ i18n.ts.useSystemFont }}</MkSwitch>
 				<MkSwitch v-model="disableDrawer">{{ i18n.ts.disableDrawer }}</MkSwitch>
 				<MkSwitch v-model="forceShowAds">{{ i18n.ts.forceShowAds }}</MkSwitch>
+				<MkSwitch v-model="enableSeasonalScreenEffect">{{ i18n.ts.seasonalScreenEffect }}</MkSwitch>
 			</div>
 			<div>
 				<MkRadios v-model="emojiStyle">
@@ -342,6 +343,7 @@ const overrideTLDisplayLimit = computed(defaultStore.makeGetterSetter('overrideT
 const disableStreamingTimeline = computed(defaultStore.makeGetterSetter('disableStreamingTimeline'));
 const useGroupedNotifications = computed(defaultStore.makeGetterSetter('useGroupedNotifications'));
 const disableProfileHighlight = computed(defaultStore.makeGetterSetter('disableProfileHighlight'));
+const enableSeasonalScreenEffect = computed(defaultStore.makeGetterSetter('enableSeasonalScreenEffect'));
 
 watch(lang, () => {
 	miLocalStorage.setItem('lang', lang.value as string);
@@ -383,6 +385,7 @@ watch([
 	highlightSensitiveMedia,
 	keepScreenOn,
 	disableStreamingTimeline,
+	enableSeasonalScreenEffect,
 ], async () => {
 	await reloadAsk();
 });
