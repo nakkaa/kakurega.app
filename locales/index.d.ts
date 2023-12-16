@@ -1246,8 +1246,6 @@ export interface Locale {
     "signupPendingError": string;
     "cwNotationRequired": string;
     "doReaction": string;
-    "disableProfileHighlight": string;
-    "disableProfileHighlightDescription": string;
     "disableExploreLocalUsers": string;
     "disableExploreLocalUsersDescription": string;
     "select": string;
