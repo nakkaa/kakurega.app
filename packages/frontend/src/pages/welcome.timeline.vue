@@ -33,7 +33,6 @@ import MkReactionsViewer from '@/components/MkReactionsViewer.vue';
 import MkMediaList from '@/components/MkMediaList.vue';
 import MkPoll from '@/components/MkPoll.vue';
 import { getScrollContainer } from '@/scripts/scroll.js';
-import { $i } from '@/account.js';
 import * as os from '@/os.js';
 
 const notes = ref<Misskey.entities.Note[]>([]);
