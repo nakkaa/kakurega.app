@@ -13,6 +13,8 @@ import { DEFAULT_POLICIES } from '@/core/RoleService.js';
 export const meta = {
 	tags: ['meta'],
 
+	kind: 'read:admin',
+
 	requireCredential: true,
 	requireAdmin: true,
 
@@ -175,6 +177,14 @@ export const meta = {
 					type: 'string',
 				},
 			},
+			bannedEmailDomains: {
+				type: 'array',
+				optional: true, nullable: false,
+				items: {
+					type: 'string',
+					optional: false, nullable: false,
+				},
+			},
 			preservedUsernames: {
 				type: 'array',
 				optional: false, nullable: false,
@@ -323,6 +333,14 @@ export const meta = {
 				type: 'boolean',
 				optional: false, nullable: false,
 			},
+			enableVerifymailApi: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
+			verifymailAuthKey: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
 			enableChartsForRemoteUser: {
 				type: 'boolean',
 				optional: false, nullable: false,
@@ -409,6 +427,78 @@ export const meta = {
 			},
 			ageRestrictionThreshold: {
 				type: 'number',
+				optional: false, nullable: false,
+			},
+			backgroundImageUrl: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
+			deeplAuthKey: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
+			deeplIsPro: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
+			defaultDarkTheme: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
+			defaultLightTheme: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
+			description: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
+			impressumUrl: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
+			maintainerEmail: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
+			maintainerName: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
+			name: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
+			objectStorageS3ForcePathStyle: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
+			privacyPolicyUrl: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
+			repositoryUrl: {
+				type: 'string',
+				optional: false, nullable: false,
+			},
+			summalyProxy: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
+			themeColor: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
+			tosUrl: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
+			uri: {
+				type: 'string',
+				optional: false, nullable: false,
+			},
+			version: {
+				type: 'string',
 				optional: false, nullable: false,
 			},
 		},
@@ -525,10 +615,13 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				deeplIsPro: instance.deeplIsPro,
 				enableIpLogging: instance.enableIpLogging,
 				enableActiveEmailValidation: instance.enableActiveEmailValidation,
+				enableVerifymailApi: instance.enableVerifymailApi,
+				verifymailAuthKey: instance.verifymailAuthKey,
 				enableChartsForRemoteUser: instance.enableChartsForRemoteUser,
 				enableChartsForFederatedInstances: instance.enableChartsForFederatedInstances,
 				enableServerMachineStats: instance.enableServerMachineStats,
 				enableIdenticonGeneration: instance.enableIdenticonGeneration,
+				bannedEmailDomains: instance.bannedEmailDomains,
 				policies: { ...DEFAULT_POLICIES, ...instance.policies },
 				enableSupporterPage: instance.enableSupporterPage,
 				supporterRoles: instance.supporterRoles,

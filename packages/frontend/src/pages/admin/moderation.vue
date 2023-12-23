@@ -75,6 +75,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<template #label>{{ i18n.ts.sensitiveWords }}</template>
 						<template #caption>{{ i18n.ts.sensitiveWordsDescription }}<br>{{ i18n.ts.sensitiveWordsDescription2 }}</template>
 					</MkTextarea>
+
+					<MkTextarea v-model="hiddenTags">
+						<template #label>{{ i18n.ts.hiddenTags }}</template>
+						<template #caption>{{ i18n.ts.hiddenTagsDescription }}</template>
+					</MkTextarea>
 				</div>
 			</FormSuspense>
 		</MkSpacer>
@@ -90,13 +95,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { } from 'vue';
+import { ref, computed } from 'vue';
 import XHeader from './_header_.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 import MkInput from '@/components/MkInput.vue';
 import MkTextarea from '@/components/MkTextarea.vue';
-import FormSection from '@/components/form/section.vue';
-import FormSplit from '@/components/form/split.vue';
 import FormSuspense from '@/components/form/suspense.vue';
 import * as os from '@/os.js';
 import { fetchInstance } from '@/instance.js';
@@ -105,58 +108,58 @@ import { definePageMetadata } from '@/scripts/page-metadata.js';
 import MkButton from '@/components/MkButton.vue';
 import FormLink from '@/components/form/link.vue';
 
-let enableRegistration: boolean = $ref(false);
-let enableRegistrationLimit: boolean = $ref(false);
-let registrationLimit: number = $ref(0);
-let registrationLimitCooldown: number = $ref(0);
-let emailRequiredForSignup: boolean = $ref(false);
-let disableExploreLocalUsers: boolean = $ref(false);
-let disableEntranceFeatureTimeline: boolean = $ref(false);
-let enableAgeRestriction: boolean = $ref(false);
-let ageRestrictionThreshold: number = $ref(0);
-let sensitiveWords: string = $ref('');
-let preservedUsernames: string = $ref('');
-let tosUrl: string | null = $ref(null);
-let privacyPolicyUrl: string | null = $ref(null);
+const enableRegistration = ref(false);
+const enableRegistrationLimit = ref(false);
+const registrationLimit = ref(0);
+const registrationLimitCooldown = ref(0);
+const emailRequiredForSignup = ref(false);
+const disableExploreLocalUsers = ref(false);
+const disableEntranceFeatureTimeline = ref(false);
+const enableAgeRestriction = ref(false);
+const ageRestrictionThreshold = ref(0);
+const sensitiveWords = ref('');
+const preservedUsernames = ref('');
+const tosUrl = ref<string | null>(null);
+const privacyPolicyUrl = ref<string | null>(null);
 
 async function init() {
 	const meta = await os.api('admin/meta');
-	enableRegistration = !meta.disableRegistration;
-	enableRegistrationLimit = meta.enableRegistrationLimit;
-	registrationLimit = meta.registrationLimit;
-	registrationLimitCooldown = meta.registrationLimitCooldown;
-	emailRequiredForSignup = meta.emailRequiredForSignup;
-	disableExploreLocalUsers = meta.disableExploreLocalUsers;
-	disableEntranceFeatureTimeline = meta.disableEntranceFeatureTimeline;
-	enableAgeRestriction = meta.enableAgeRestriction;
-	ageRestrictionThreshold = meta.ageRestrictionThreshold;
-	sensitiveWords = meta.sensitiveWords.join('\n');
-	preservedUsernames = meta.preservedUsernames.join('\n');
-	tosUrl = meta.tosUrl;
-	privacyPolicyUrl = meta.privacyPolicyUrl;
+	enableRegistration.value = !meta.disableRegistration;
+	enableRegistrationLimit.value = meta.enableRegistrationLimit;
+	registrationLimit.value = meta.registrationLimit;
+	registrationLimitCooldown.value = meta.registrationLimitCooldown;
+	emailRequiredForSignup.value = meta.emailRequiredForSignup;
+	disableExploreLocalUsers.value = meta.disableExploreLocalUsers;
+	disableEntranceFeatureTimeline.value = meta.disableEntranceFeatureTimeline;
+	enableAgeRestriction.value = meta.enableAgeRestriction;
+	ageRestrictionThreshold.value = meta.ageRestrictionThreshold;
+	sensitiveWords.value = meta.sensitiveWords.join('\n');
+	preservedUsernames.value = meta.preservedUsernames.join('\n');
+	tosUrl.value = meta.tosUrl;
+	privacyPolicyUrl.value = meta.privacyPolicyUrl;
 }
 
 function save() {
 	os.apiWithDialog('admin/update-meta', {
-		disableRegistration: !enableRegistration,
-		enableRegistrationLimit,
-		registrationLimit,
-		registrationLimitCooldown,
-		emailRequiredForSignup,
-		disableExploreLocalUsers,
-		disableEntranceFeatureTimeline,
-		enableAgeRestriction,
-		ageRestrictionThreshold,
-		tosUrl,
-		privacyPolicyUrl,
-		sensitiveWords: sensitiveWords.split('\n'),
-		preservedUsernames: preservedUsernames.split('\n'),
+		disableRegistration: !enableRegistration.value,
+		enableRegistrationLimit: enableRegistrationLimit.value,
+		registrationLimit: registrationLimit.value,
+		registrationLimitCooldown: registrationLimitCooldown.value,
+		emailRequiredForSignup: emailRequiredForSignup.value,
+		disableExploreLocalUsers: disableExploreLocalUsers.value,
+		disableEntranceFeatureTimeline: disableEntranceFeatureTimeline.value,
+		enableAgeRestriction: enableAgeRestriction.value,
+		ageRestrictionThreshold: ageRestrictionThreshold.value,
+		tosUrl: tosUrl.value,
+		privacyPolicyUrl: privacyPolicyUrl.value,
+		sensitiveWords: sensitiveWords.value.split('\n'),
+		preservedUsernames: preservedUsernames.value.split('\n'),
 	}).then(() => {
 		fetchInstance();
 	});
 }
 
-const headerTabs = $computed(() => []);
+const headerTabs = computed(() => []);
 
 definePageMetadata({
 	title: i18n.ts.moderation,

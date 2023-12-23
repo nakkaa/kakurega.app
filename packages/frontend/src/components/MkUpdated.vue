@@ -43,7 +43,7 @@ function close() {
 
 const whatIsNew = () => {
 	emit('closed');
-	window.open(`https://misskey-hub.net/docs/releases.html#_${version.split('-')[0].replace(/\./g, '-')}`, '_blank');
+	window.open(`https://misskey-hub.net/docs/releases/#_${version.split('-')[0].replace(/\./g, '-')}`, '_blank');
 };
 
 const whatIsNewKakurega = () => {

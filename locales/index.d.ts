@@ -124,7 +124,12 @@ export interface Locale {
     "add": string;
     "reaction": string;
     "reactions": string;
-    "reactionSetting": string;
+    "emojiPicker": string;
+    "pinnedEmojisForReactionSettingDescription": string;
+    "pinnedEmojisSettingDescription": string;
+    "emojiPickerDisplay": string;
+    "overwriteFromPinnedEmojisForReaction": string;
+    "overwriteFromPinnedEmojis": string;
     "reactionSettingDescription2": string;
     "rememberNoteVisibility": string;
     "rememberReactionAcceptance": string;
@@ -269,6 +274,7 @@ export interface Locale {
     "removeAreYouSure": string;
     "deleteAreYouSure": string;
     "resetAreYouSure": string;
+    "areYouSure": string;
     "saved": string;
     "messaging": string;
     "upload": string;
@@ -321,6 +327,7 @@ export interface Locale {
     "createFolder": string;
     "renameFolder": string;
     "deleteFolder": string;
+    "folder": string;
     "addFile": string;
     "emptyDrive": string;
     "emptyFolder": string;
@@ -464,7 +471,6 @@ export interface Locale {
     "notFound": string;
     "notFoundDescription": string;
     "uploadFolder": string;
-    "cacheClear": string;
     "markAsReadAllNotifications": string;
     "markAsReadAllUnreadNotes": string;
     "markAsReadAllTalkMessages": string;
@@ -572,6 +578,8 @@ export interface Locale {
     "popout": string;
     "volume": string;
     "masterVolume": string;
+    "notUseSound": string;
+    "useSoundOnlyWhenActive": string;
     "details": string;
     "chooseEmoji": string;
     "unableToProcess": string;
@@ -592,6 +600,10 @@ export interface Locale {
     "script": string;
     "disablePagesScript": string;
     "updateRemoteUser": string;
+    "unsetUserAvatar": string;
+    "unsetUserAvatarConfirm": string;
+    "unsetUserBanner": string;
+    "unsetUserBannerConfirm": string;
     "deleteAllFiles": string;
     "deleteAllFilesConfirm": string;
     "removeAllFollowing": string;
@@ -663,6 +675,7 @@ export interface Locale {
     "smtpSecureInfo": string;
     "testEmail": string;
     "wordMute": string;
+    "hardWordMute": string;
     "regexpError": string;
     "regexpErrorDescription": string;
     "instanceMute": string;
@@ -903,9 +916,9 @@ export interface Locale {
     "classic": string;
     "muteThread": string;
     "unmuteThread": string;
-    "ffVisibility": string;
-    "ffVisibilityDescription": string;
     "enableGTL": string;
+    "followingVisibility": string;
+    "followersVisibility": string;
     "continueThread": string;
     "deleteAccountConfirm": string;
     "incorrectPassword": string;
@@ -1062,6 +1075,8 @@ export interface Locale {
     "sensitiveWords": string;
     "sensitiveWordsDescription": string;
     "sensitiveWordsDescription2": string;
+    "hiddenTags": string;
+    "hiddenTagsDescription": string;
     "notesSearchNotAvailable": string;
     "license": string;
     "unfavoriteConfirm": string;
@@ -1074,10 +1089,12 @@ export interface Locale {
     "enableChartsForFederatedInstances": string;
     "showClipButtonInNoteFooter": string;
     "reactionsDisplaySize": string;
+    "limitWidthOfReaction": string;
     "noteIdOrUrl": string;
     "video": string;
     "videos": string;
     "dataSaver": string;
+    "dataSaverAdvancedSettings": string;
     "autoDataSaver": string;
     "autoDataSaverDescription": string;
     "accountMigration": string;
@@ -1193,9 +1210,8 @@ export interface Locale {
     "privacyPolicy": string;
     "privacyPolicyUrl": string;
     "tosAndPrivacyPolicy": string;
-    "showOldMuteWords": string;
-    "showMutedInfo": string;
-    "showMutedInfoDescription": string;
+    "transferOldMuteWords": string;
+    "transferOldMuteWordsDescription": string;
     "optoutStatistics": string;
     "optoutStatisticsDescription": string;
     "autoRejectFollowRequest": string;
@@ -1218,6 +1234,7 @@ export interface Locale {
     "avatarDecorations": string;
     "attach": string;
     "detach": string;
+    "detachAll": string;
     "angle": string;
     "flip": string;
     "showAvatarDecorations": string;
@@ -1229,8 +1246,6 @@ export interface Locale {
     "signupPendingError": string;
     "cwNotationRequired": string;
     "doReaction": string;
-    "disableProfileHighlight": string;
-    "disableProfileHighlightDescription": string;
     "disableExploreLocalUsers": string;
     "disableExploreLocalUsersDescription": string;
     "select": string;
@@ -1247,6 +1262,12 @@ export interface Locale {
     "invalidPixivId": string;
     "failedToSetPixivId": string;
     "connectionSucceeded": string;
+    "code": string;
+    "reloadRequiredToApplySettings": string;
+    "remainingN": string;
+    "overwriteContentConfirm": string;
+    "seasonalScreenEffect": string;
+    "decorate": string;
     "_announcement": {
         "forExistingUsers": string;
         "forExistingUsersDescription": string;
@@ -1723,7 +1744,9 @@ export interface Locale {
         "assignTarget": string;
         "descriptionOfAssignTarget": string;
         "manual": string;
+        "manualRoles": string;
         "conditional": string;
+        "conditionalRoles": string;
         "condition": string;
         "isConditionalRole": string;
         "isPublic": string;
@@ -1773,6 +1796,7 @@ export interface Locale {
             "canHideAds": string;
             "canSearchNotes": string;
             "canUseTranslator": string;
+            "avatarDecorationLimit": string;
         };
         "_condition": {
             "isLocal": string;
@@ -1807,6 +1831,7 @@ export interface Locale {
         "disposable": string;
         "mx": string;
         "smtp": string;
+        "banned": string;
     };
     "_ffVisibility": {
         "public": string;
@@ -2066,6 +2091,15 @@ export interface Locale {
         "notification": string;
         "antenna": string;
         "channel": string;
+        "reaction": string;
+    };
+    "_soundSettings": {
+        "driveFile": string;
+        "driveFileWarn": string;
+        "driveFileTypeWarn": string;
+        "driveFileTypeWarnDescription": string;
+        "driveFileDurationWarn": string;
+        "driveFileDurationWarnDescription": string;
     };
     "_ago": {
         "future": string;
@@ -2220,6 +2254,7 @@ export interface Locale {
             "chooseList": string;
         };
         "clicker": string;
+        "birthdayFollowings": string;
     };
     "_cw": {
         "hide": string;
@@ -2288,6 +2323,7 @@ export interface Locale {
         "changeAvatar": string;
         "changeBanner": string;
         "verifiedLinkDescription": string;
+        "avatarDecorationMax": string;
     };
     "_exportOrImport": {
         "allNotes": string;
@@ -2419,6 +2455,7 @@ export interface Locale {
         "pollEnded": string;
         "newNote": string;
         "unreadAntennaNote": string;
+        "roleAssigned": string;
         "emptyPushNotificationMessage": string;
         "achievementEarned": string;
         "testNotification": string;
@@ -2440,6 +2477,7 @@ export interface Locale {
             "pollEnded": string;
             "receiveFollowRequest": string;
             "followRequestAccepted": string;
+            "roleAssigned": string;
             "achievementEarned": string;
             "app": string;
         };
@@ -2544,6 +2582,8 @@ export interface Locale {
         "createAvatarDecoration": string;
         "updateAvatarDecoration": string;
         "deleteAvatarDecoration": string;
+        "unsetUserAvatar": string;
+        "unsetUserBanner": string;
     };
     "_fileViewer": {
         "title": string;
@@ -2609,8 +2649,27 @@ export interface Locale {
             };
         };
     };
+    "_dataSaver": {
+        "_media": {
+            "title": string;
+            "description": string;
+        };
+        "_avatar": {
+            "title": string;
+            "description": string;
+        };
+        "_urlPreview": {
+            "title": string;
+            "description": string;
+        };
+        "_code": {
+            "title": string;
+            "description": string;
+        };
+    };
 }
 declare const locales: {
     [lang: string]: Locale;
 };
+export function build(): Locale;
 export default locales;

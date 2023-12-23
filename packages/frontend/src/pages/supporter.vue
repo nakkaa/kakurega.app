@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import FormSection from '@/components/form/section.vue';
 import { i18n } from '@/i18n.js';
 import { host } from '@/config.js';
@@ -47,19 +47,19 @@ import { definePageMetadata } from '@/scripts/page-metadata.js';
 	withIcon: boolean,
 }
 
-let supporterName = $ref<SupporterUser[]>([]);
-let supporterNameWithIcon = $ref<SupporterUser[]>([]);
+const supporterName = ref<SupporterUser[]>([]);
+const supporterNameWithIcon = ref<SupporterUser[]>([]);
 
-const headerActions = $computed(() => []);
-const headerTabs = $computed(() => []);
+const headerActions = computed(() => []);
+const headerTabs = computed(() => []);
 
 onMounted(async () => {
 	const supporters = (await os.api('supporter-list')) as SupporterUser[];
 	supporters.forEach(supporter => {
 		if (supporter.withIcon) {
-			supporterNameWithIcon.push(supporter);
+			supporterNameWithIcon.value.push(supporter);
 		} else {
-			supporterName.push(supporter);
+			supporterName.value.push(supporter);
 		}
 	});
 });

@@ -49,7 +49,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { } from 'vue';
+import { ref, computed } from 'vue';
 import XHeader from './_header_.vue';
 import MkInput from '@/components/MkInput.vue';
 import MkButton from '@/components/MkButton.vue';
@@ -61,33 +61,31 @@ import { fetchInstance } from '@/instance.js';
 import { i18n } from '@/i18n.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
 
-let deeplAuthKey: string = $ref('');
-let deeplIsPro: boolean = $ref(false);
-let enableSentryLogging: boolean = $ref(false);
-let sentryDsn: string = $ref('');
+const deeplAuthKey = ref('');
+const deeplIsPro = ref(false);
+const enableSentryLogging = ref(false);
+const sentryDsn = ref('');
 
 async function init() {
 	const meta = await os.api('admin/meta');
-	deeplAuthKey = meta.deeplAuthKey;
-	deeplIsPro = meta.deeplIsPro;
-	enableSentryLogging = meta.enableSentryLogging;
-	sentryDsn = meta.sentryDsn;
+	deeplAuthKey.value = meta.deeplAuthKey;
+	deeplIsPro.value = meta.deeplIsPro;
+	enableSentryLogging.value = meta.enableSentryLogging;
+	sentryDsn.value = meta.sentryDsn;
 }
 
 function save() {
 	os.apiWithDialog('admin/update-meta', {
-		deeplAuthKey,
-		deeplIsPro,
-		enableSentryLogging,
-		sentryDsn,
+		deeplAuthKey: deeplAuthKey.value,
+		deeplIsPro: deeplIsPro.value,
+		enableSentryLogging: enableSentryLogging.value,
+		sentryDsn: sentryDsn.value,
 	}).then(() => {
-		fetchInstance();
 	});
 }
 
-const headerActions = $computed(() => []);
-
-const headerTabs = $computed(() => []);
+const headerActions = computed(() => []);
+const headerTabs = computed(() => []);
 
 definePageMetadata({
 	title: i18n.ts.externalServices,

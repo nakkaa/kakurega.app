@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 <template>
 <MkStickyContainer>
 	<template #header><MkPageHeader v-model:tab="tab" :actions="headerActions" :tabs="headerTabs"/></template>
-	<MkSpacer :content-max="700">
+	<MkSpacer :contentMax="700">
 		<div v-if="tab === 'list'">
 			<MkFoldableSection :expanded="false">
 				<template #header>{{ i18n.ts.search }}</template>
@@ -57,7 +57,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import MkChannelPreview from '@/components/MkChannelPreview.vue';
 import MkPagination from '@/components/MkPagination.vue';
 import MkButton from '@/components/MkButton.vue';
@@ -71,11 +71,21 @@ import { i18n } from '@/i18n.js';
 
 const router = useRouter();
 
-let tab = $ref('featured');
-let sortType = ref('+notesCount');
-let searchQuery = ref('');
-let excludeNonActiveChannels = ref(false);
-let includeDescription = ref(false);
+const props = defineProps<{
+	query: string;
+	type?: string;
+}>();
+
+const tab = ref('featured');
+const sortType = ref('+notesCount');
+const searchQuery = ref('');
+const excludeNonActiveChannels = ref(false);
+const includeDescription = ref(false);
+const channelPagination = ref();
+
+onMounted(() => {
+	searchQuery.value = props.query ?? '';
+});
 
 const featuredPagination = {
 	endpoint: 'channels/featured' as const,
@@ -121,13 +131,13 @@ function create() {
 	router.push('/channels/new');
 }
 
-const headerActions = $computed(() => [{
+const headerActions = computed(() => [{
 	icon: 'ti ti-plus',
 	text: i18n.ts.create,
 	handler: create,
 }]);
 
-const headerTabs = $computed(() => [{
+const headerTabs = computed(() => [{
 	key: 'list',
 	title: i18n.ts._channel.listAndSearch,
 	icon: 'ti ti-search',
