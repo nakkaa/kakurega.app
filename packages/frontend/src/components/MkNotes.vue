@@ -68,7 +68,6 @@ if (defaultStore.state.enableOverrideTLDisplayLimit) {
 }
 
 const isNeedHide = (note: Misskey.entities.Note) => {
-	if (defaultStore.state.showMutedInfo) return false;
 	return $i ? checkWordMute(note, $i, $i.mutedWords) : false;
 };
 

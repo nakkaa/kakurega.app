@@ -46,7 +46,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 import { computed, ComputedRef, isRef, nextTick, onActivated, onBeforeMount, onBeforeUnmount, onDeactivated, ref, shallowRef, watch } from 'vue';
 import * as Misskey from 'misskey-js';
 import * as os from '@/os.js';
-import { $i } from '@/account.js';
 import { onScrollTop, isTopVisible, getBodyScrollHeight, getScrollContainer, onScrollBottom, scrollToBottom, scroll, isBottomVisible } from '@/scripts/scroll.js';
 import { useDocumentVisibility } from '@/scripts/use-document-visibility.js';
 import { defaultStore } from '@/store.js';
@@ -362,19 +361,7 @@ const fetchMoreAppearTimeout = (): void => {
 	preventAppearFetchMoreTimer.value = window.setTimeout(fetchMoreApperTimeoutFn, APPEAR_MINIMUM_INTERVAL);
 };
 
-const appearFetchMore = async (): Promise<void> => {
-	if (preventAppearFetchMore.value) return;
-	await fetchMore();
-	fetchMoreAppearTimeout();
-};
-
-const appearFetchMoreAhead = async (): Promise<void> => {
-	if (preventAppearFetchMore.value) return;
-	await fetchMoreAhead();
-	fetchMoreAppearTimeout();
-};
-
-const isTop = (): boolean => isBackTop.value || (props.pagination.reversed ? isBottomVisible : isTopVisible)(contentEl!, TOLERANCE);
+const isTop = (): boolean => isBackTop.value || (props.pagination.reversed ? isBottomVisible : isTopVisible)(contentEl.value!, TOLERANCE);
 
 watch(visibility, () => {
 	if (visibility.value === 'hidden') {
