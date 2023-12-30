@@ -35,6 +35,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts" setup>
 import { i18n } from '@/i18n.js';
+import { instance } from '@/instance.js';
 import MkFolder from '@/components/MkFolder.vue';
 import XUser from '@/components/MkUserSetupDialog.User.vue';
 import MkPagination from '@/components/MkPagination.vue';
