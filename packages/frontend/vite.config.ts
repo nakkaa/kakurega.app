@@ -2,7 +2,7 @@ import path from 'path';
 import pluginReplace from '@rollup/plugin-replace';
 import pluginVue from '@vitejs/plugin-vue';
 import { type UserConfig, defineConfig } from 'vite';
-import viteSentry from 'vite-plugin-sentry';
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 import dotenv from 'dotenv';
 
 import locales from '../../locales/index.js';
@@ -54,20 +54,21 @@ export function getConfig(): UserConfig {
 
 		plugins: [
 			pluginVue(),
-			pluginUnwindCssModuleClassName(),
-			process.env.SENTRY_AUTH_TOKEN ? null : pluginUnwindCssModuleClassName(),
 			pluginJson5(),
+			process.env.ENABLE_SENTRY ? null : pluginUnwindCssModuleClassName(),
 			...process.env.NODE_ENV === 'production'
 				? [
-					process.env.SENTRY_AUTH_TOKEN ? viteSentry({
-						url: 'https://sentry.yukineko.dev',
-						org: 'sentry',
-						project: 'misskey-kakurega',
+					process.env.ENABLE_SENTRY ? sentryVitePlugin({
+						url: process.env.SENTRY_URL,
+						org: process.env.SENTRY_ORG,
+						project: process.env.SENTRY_PROJECT,
 						authToken: process.env.SENTRY_AUTH_TOKEN,
-						release: meta.version,
-						sourceMaps: {
-							urlPrefix: '~/vite',
-							include: ['../../built/_vite_'],
+						release: {
+							name: meta.version,
+							uploadLegacySourcemaps: {
+								paths: ['../../built/_vite_'],
+								urlPrefix: '~/vite',
+							},
 						},
 					}) : null,
 					pluginReplace({
@@ -147,7 +148,7 @@ export function getConfig(): UserConfig {
 			outDir: __dirname + '/../../built/_vite_',
 			assetsDir: '.',
 			emptyOutDir: false,
-			sourcemap: process.env.NODE_ENV === 'development' ? true : 'hidden',
+			sourcemap: process.env.NODE_ENV === 'development' ? true : process.env.ENABLE_SENTRY ? 'hidden' : false,
 			reportCompressedSize: false,
 
 			// https://vitejs.dev/guide/dep-pre-bundling.html#monorepos-and-linked-dependencies
