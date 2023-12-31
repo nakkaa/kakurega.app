@@ -2,7 +2,7 @@ import path from 'path';
 import pluginReplace from '@rollup/plugin-replace';
 import pluginVue from '@vitejs/plugin-vue';
 import { type UserConfig, defineConfig } from 'vite';
-import { sentryVitePlugin } from '@sentry/vite-plugin';
+import viteSentry from 'vite-plugin-sentry';
 import dotenv from 'dotenv';
 
 import locales from '../../locales/index.js';
@@ -58,17 +58,15 @@ export function getConfig(): UserConfig {
 			process.env.ENABLE_SENTRY ? null : pluginUnwindCssModuleClassName(),
 			...process.env.NODE_ENV === 'production'
 				? [
-					process.env.ENABLE_SENTRY ? sentryVitePlugin({
+					process.env.ENABLE_SENTRY ? viteSentry({
 						url: process.env.SENTRY_URL,
 						org: process.env.SENTRY_ORG,
 						project: process.env.SENTRY_PROJECT,
 						authToken: process.env.SENTRY_AUTH_TOKEN,
-						release: {
-							name: meta.version,
-							uploadLegacySourcemaps: {
-								paths: ['../../built/_vite_'],
-								urlPrefix: '~/vite',
-							},
+						release: meta.version,
+						sourceMaps: {
+							urlPrefix: '~/vite',
+							include: ['../../built/_vite_'],
 						},
 					}) : null,
 					pluginReplace({
