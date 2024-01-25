@@ -7,25 +7,27 @@ SPDX-License-Identifier: AGPL-3.0-only
 <MkModalWindow ref="dialog" :width="400" :height="450" :withOkButton="false" :okButtonDisabled="true" @close="dialog?.close()">
 	<template #header>{{ i18n.ts.memo }}</template>
 
-	<MkSpacer :class="$style.root" :marginMin="20" :marginMax="28">
+	<MkSpacer :marginMin="20" :marginMax="28">
 		<div class="_gaps">
-			<div v-for="(value, key) of memoList" :key="key" :class="$style.item">
-				<div :class="$style.contents">
+			<MkFolder v-for="(value, key) of memoList" :key="key">
+				<template #label>{{ value }}</template>
+				<div :class="$style.text">{{ value }}</div>
+				<div :class="$style.buttons">
 					<MkButton danger small :class="$style.button" @click="deleteMemo(key)"><i class="ti ti-trash"></i></MkButton>
-					<div :class="$style.text">{{ value }}</div>
+					<MkButton small :disabled="key === props.widgetId" :class="$style.button" @click="selectMemo(key)">{{ key === props.widgetId ? i18n.ts.selected : i18n.ts.select }}</MkButton>
 				</div>
-				<MkButton small :disabled="key === props.widgetId" :class="$style.button" @click="selectMemo(key)">{{ key === props.widgetId ? i18n.ts.selected : i18n.ts.select }}</MkButton>
-			</div>
+			</MkFolder>
 		</div>
 	</MkSpacer>
 </MkModalWindow>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, shallowRef } from 'vue';
 import { v4 as uuid } from 'uuid';
 import MkModalWindow from '@/components/MkModalWindow.vue';
 import MkButton from '@/components/MkButton.vue';
+import MkFolder from '@/components/MkFolder.vue';
 import { i18n } from '@/i18n.js';
 import { defaultStore } from '@/store.js';
 import * as os from '@/os.js';
@@ -45,14 +47,14 @@ const props = defineProps<{
 	widgetId: string;
 }>();
 
-const dialog = $shallowRef<InstanceType<typeof MkModalWindow>>();
+const dialog = shallowRef<InstanceType<typeof MkModalWindow>>();
 
 const selectMemo = (key: string) => {
 	memoList.value[uuid()] = memoList.value[props.widgetId];
 	memoList.value[props.widgetId] = memoList.value[key];
 	delete memoList.value[key];
 	defaultStore.set('memo', memoList.value);
-	dialog?.close();
+	dialog.value?.close();
 };
 
 const deleteMemo = async (key: string) => {
@@ -69,25 +71,10 @@ const deleteMemo = async (key: string) => {
 </script>
 
 <style lang="scss" module>
-.root {
-	background: var(--bg);
-	height: 100%;
-}
-
-.item {
+.buttons {
 	display: flex;
+	flex-direction: row;
 	justify-content: space-between;
-	align-items: center;
-	background: var(--panel);
-	padding: 14px;
-	border-radius: 12px;
-	gap: 6px;
-}
-
-.contents {
-	display: flex;
-	align-items: center;
-	gap: 12px;
 }
 
 .button {
@@ -97,5 +84,6 @@ const deleteMemo = async (key: string) => {
 
 .text {
 	word-break: break-all;
+	margin-bottom: 8px;
 }
 </style>
