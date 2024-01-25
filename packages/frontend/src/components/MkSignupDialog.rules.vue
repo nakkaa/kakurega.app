@@ -57,9 +57,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<template #label>{{ i18n.ts.ageCheck }}</template>
 				<template #suffix><i v-if="ageLimitAgreement" class="ti ti-check" style="color: var(--success)"></i></template>
 
-				<span>{{ i18n.t('ageCheckDescription', { age: instance.ageRestrictionThreshold }) }}</span>
+				<span>{{ i18n.tsx.ageCheckDescription({ age: instance.ageRestrictionThreshold }) }}</span>
 
-				<MkSwitch v-model="ageLimitAgreement" style="margin-top: 16px;">{{ i18n.t('ageCheckYes', { age: instance.ageRestrictionThreshold }) }}</MkSwitch>
+				<MkSwitch v-model="ageLimitAgreement" style="margin-top: 16px;">{{ i18n.tsx.ageCheckYes({ age: instance.ageRestrictionThreshold }) }}</MkSwitch>
 			</MkFolder>
 
 			<div v-if="!agreed" style="text-align: center;">{{ i18n.ts.pleaseAgreeAllToContinue }}</div>

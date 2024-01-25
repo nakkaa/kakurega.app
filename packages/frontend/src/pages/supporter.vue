@@ -6,7 +6,7 @@
 	<div style="overflow: clip;">
 		<MkSpacer :contentMax="600" :marginMin="20">
 			<div class="_gaps_m">
-				<p>{{ i18n.t('supporterDescription', { name: instance.name ?? host }) }}</p>
+				<p>{{ i18n.tsx.supporterDescription({ name: instance.name ?? host }) }}</p>
 				<FormSection :first="true">
 					<template #label>
 						<Mfm text="$[jelly ❤]" :nyaize="false"/> {{ i18n.ts.supporterListTitle }}

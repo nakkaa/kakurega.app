@@ -231,7 +231,7 @@ const birthday = computed(() => {
 	const parsedBirthday = props.user.birthday.split('-');
 	const isHideAge = parsedBirthday[0] === '9999' || parsedBirthday[0] === '0001';
 
-	return isHideAge ? `${parsedBirthday[1]}/${parsedBirthday[2]}` : `${props.user.birthday.replaceAll('-', '/')} (${i18n.t('yearsOld', { age: calcAge(props.user.birthday) })})`;
+	return isHideAge ? `${parsedBirthday[1]}/${parsedBirthday[2]}` : `${props.user.birthday.replaceAll('-', '/')} (${i18n.tsx.yearsOld({ age: calcAge(props.user.birthday) })})`;
 });
 
 function menu(ev: MouseEvent) {

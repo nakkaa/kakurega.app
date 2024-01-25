@@ -50,7 +50,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 					<MkInput v-if="enableAgeRestriction" v-model="ageRestrictionThreshold" type="number" :min="0">
 						<template #label>{{ i18n.ts.ageRestrictionThreshold }}</template>
-						<template #suffix>{{ i18n.t('yearsOld', { age: '' }) }}</template>
+						<template #suffix>{{ i18n.tsx.yearsOld({ age: '' }) }}</template>
 						<template #caption>{{ i18n.ts.ageRestrictionThresholdDescription }}</template>
 					</MkInput>
 
