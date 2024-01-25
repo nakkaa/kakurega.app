@@ -164,19 +164,41 @@ export const navbarItemDef = reactive({
 		action: (ev) => {
 			os.popupMenu([{
 				type: 'parent',
-				text: i18n.ts.hideNsfwNote,
+				text: i18n.ts.withSensitive,
 				children: [{
 					text: i18n.ts.on,
-					active: defaultStore.state.hideNsfwNote,
+					active: defaultStore.state.tl.filter.withSensitive,
 					action: () => {
-						defaultStore.set('hideNsfwNote', true);
+						const out = { ...defaultStore.state.tl };
+						// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+						if (!out.filter) {
+							out.filter = {
+								withRenotes: true,
+								withReplies: true,
+								withSensitive: true,
+								onlyFiles: false,
+							};
+						}
+						out.filter.withSensitive = true;
+						defaultStore.set('tl', out);
 						unisonReload();
 					},
 				}, {
 					text: i18n.ts.off,
-					active: !defaultStore.state.hideNsfwNote,
+					active: !defaultStore.state.tl.filter.withSensitive,
 					action: () => {
-						defaultStore.set('hideNsfwNote', false);
+						const out = { ...defaultStore.state.tl };
+						// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+						if (!out.filter) {
+							out.filter = {
+								withRenotes: true,
+								withReplies: true,
+								withSensitive: true,
+								onlyFiles: false,
+							};
+						}
+						out.filter.withSensitive = false;
+						defaultStore.set('tl', out);
 						unisonReload();
 					},
 				}],

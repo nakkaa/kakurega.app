@@ -96,8 +96,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<option value="force">{{ i18n.ts._displayOfSensitiveMedia.force }}</option>
 			</MkSelect>
 
-			<MkSwitch v-model="hideNsfwNote">{{ i18n.ts.hideNsfwNote }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></MkSwitch>
-
 			<MkRadios v-model="mediaListWithOneImageAppearance">
 				<template #label>{{ i18n.ts.mediaListWithOneImageAppearance }}</template>
 				<option value="expand">{{ i18n.ts.default }}</option>
@@ -333,7 +331,6 @@ const loadRawImages = computed(defaultStore.makeGetterSetter('loadRawImages'));
 const highlightSensitiveMedia = computed(defaultStore.makeGetterSetter('highlightSensitiveMedia'));
 const imageNewTab = computed(defaultStore.makeGetterSetter('imageNewTab'));
 const nsfw = computed(defaultStore.makeGetterSetter('nsfw'));
-const hideNsfwNote = computed(defaultStore.makeGetterSetter('hideNsfwNote'));
 const showFixedPostForm = computed(defaultStore.makeGetterSetter('showFixedPostForm'));
 const showFixedPostFormInChannel = computed(defaultStore.makeGetterSetter('showFixedPostFormInChannel'));
 const numberOfPageCache = computed(defaultStore.makeGetterSetter('numberOfPageCache'));
@@ -388,7 +385,6 @@ watch([
 	instanceTicker,
 	instanceTickerStyle,
 	overridedDeviceKind,
-	hideNsfwNote,
 	mediaListWithOneImageAppearance,
 	reactionsDisplaySize,
 	limitWidthOfReaction,

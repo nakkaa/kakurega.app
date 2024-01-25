@@ -4009,10 +4009,6 @@ export interface Locale extends ILocale {
      */
     "activeEmailValidationDescription": string;
     /**
-     * 閲覧注意のメディアを含むノートを折りたたむ
-     */
-    "hideNsfwNote": string;
-    /**
      * クイック設定
      */
     "quickSettings": string;
