@@ -32,7 +32,7 @@ import { i18n } from '@/i18n.js';
 import { defaultStore } from '@/store.js';
 import * as os from '@/os.js';
 
-const memoList = ref({});
+const memoList = ref<Record<string, string>>({});
 
 const getMemoList = () => {
 	const memo = defaultStore.state.memo;
@@ -85,5 +85,6 @@ const deleteMemo = async (key: string) => {
 .text {
 	word-break: break-all;
 	margin-bottom: 8px;
+	white-space: pre-line;
 }
 </style>
