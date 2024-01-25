@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	<template #header>{{ widgetProps.name || i18n.ts._widgets.memo }}</template>
 
 	<div>
-		<textarea v-model="text" :style="`height: ${widgetProps.height}px;`" :class="$style.textarea" :placeholder="i18n.ts.placeholder" @input="onChange"></textarea>
+		<textarea v-model="text" :style="`height: ${widgetProps.height}px;`" :class="$style.textarea" :placeholder="i18n.ts.addMemo" @input="onChange"></textarea>
 		<div :class="$style.buttons">
 			<MkButton small @click="showMemoList"><i class="ti ti-list"></i></MkButton>
 			<MkButton small primary :disabled="!changed" @click="saveMemo">{{ i18n.ts.save }}</MkButton>
