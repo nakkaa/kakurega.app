@@ -41,12 +41,12 @@ function close() {
 	emit('closed');
 }
 
-const whatIsNew = () => {
+function whatIsNew() {
 	emit('closed');
 	window.open(`https://misskey-hub.net/docs/releases/#_${version.split('-')[0].replace(/\./g, '-')}`, '_blank');
 };
 
-const whatIsNewKakurega = () => {
+function whatIsNewKakurega() {
 	emit('closed');
 	window.open('https://github.com/hideki0403/misskey.yukineko.me/blob/master-kakurega/CHANGELOG_KAKUREGA.md', '_blank');
 };

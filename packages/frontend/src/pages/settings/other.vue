@@ -95,8 +95,9 @@ import MkKeyValue from '@/components/MkKeyValue.vue';
 import MkButton from '@/components/MkButton.vue';
 import MkInput from '@/components/MkInput.vue';
 import * as os from '@/os.js';
+import { misskeyApi } from '@/scripts/misskey-api.js';
 import { defaultStore } from '@/store.js';
-import { signout, $i } from '@/account.js';
+import { signout, signinRequired } from '@/account.js';
 import { i18n } from '@/i18n.js';
 import { instance } from '@/instance.js';
 import { host } from '@/config.js';
@@ -105,6 +106,8 @@ import { definePageMetadata } from '@/scripts/page-metadata.js';
 import { unisonReload } from '@/scripts/unison-reload.js';
 import { cacheClear } from '@/scripts/cache-clear.js';
 import FormSection from '@/components/form/section.vue';
+
+const $i = signinRequired();
 
 const reportError = computed(defaultStore.makeGetterSetter('optoutStatistics'));
 const enableCondensedLineForAcct = computed(defaultStore.makeGetterSetter('enableCondensedLineForAcct'));
@@ -117,14 +120,6 @@ watch(overrideAddress, async () => {
 	miLocalStorage.setItem('overrideAddress', overrideAddress.value);
 	cacheClear();
 });
-
-function onChangeInjectFeaturedNote(v) {
-	os.api('i/update', {
-		injectFeaturedNote: v,
-	}).then((i) => {
-		$i!.injectFeaturedNote = i.injectFeaturedNote;
-	});
-}
 
 async function deleteAccount() {
 	{
@@ -167,7 +162,7 @@ async function updateRepliesAll(withReplies: boolean) {
 	});
 	if (canceled) return;
 
-	os.api('following/update-all', { withReplies });
+	misskeyApi('following/update-all', { withReplies });
 }
 
 watch([

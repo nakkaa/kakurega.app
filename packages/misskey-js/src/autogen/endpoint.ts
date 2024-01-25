@@ -1,6 +1,6 @@
 /*
- * version: 2023.12.0
- * generatedAt: 2023-12-26T23:35:09.491Z
+ * version: 2024.2.0-kakurega.1.28.5
+ * generatedAt: 2024-01-25T08:14:07.440Z
  */
 
 import type {
@@ -140,6 +140,8 @@ import type {
 	ChannelsCreateRequest,
 	ChannelsCreateResponse,
 	ChannelsFeaturedResponse,
+	ChannelsListRequest,
+	ChannelsListResponse,
 	ChannelsFollowRequest,
 	ChannelsFollowedRequest,
 	ChannelsFollowedResponse,
@@ -359,6 +361,8 @@ import type {
 	IWebhooksShowResponse,
 	IWebhooksUpdateRequest,
 	IWebhooksDeleteRequest,
+	IntegrationsFanboxConnectRequest,
+	IntegrationsFanboxConnectResponse,
 	InviteCreateResponse,
 	InviteDeleteRequest,
 	InviteListRequest,
@@ -379,6 +383,10 @@ import type {
 	RenoteMuteDeleteRequest,
 	RenoteMuteListRequest,
 	RenoteMuteListResponse,
+	NoteNotificationCreateRequest,
+	NoteNotificationDeleteRequest,
+	NoteNotificationListRequest,
+	NoteNotificationListResponse,
 	MyAppsRequest,
 	MyAppsResponse,
 	NotesRequest,
@@ -469,7 +477,9 @@ import type {
 	RequestResetPasswordRequest,
 	ResetPasswordRequest,
 	ServerInfoResponse,
+	SignupAvailableResponse,
 	StatsResponse,
+	SupporterListResponse,
 	SwShowRegistrationRequest,
 	SwShowRegistrationResponse,
 	SwUpdateRegistrationRequest,
@@ -540,6 +550,22 @@ import type {
 	FetchExternalResourcesRequest,
 	FetchExternalResourcesResponse,
 	RetentionResponse,
+	BubbleGameRegisterRequest,
+	BubbleGameRegisterResponse,
+	BubbleGameRankingRequest,
+	BubbleGameRankingResponse,
+	ReversiCancelMatchRequest,
+	ReversiCancelMatchResponse,
+	ReversiGamesRequest,
+	ReversiGamesResponse,
+	ReversiMatchRequest,
+	ReversiMatchResponse,
+	ReversiInvitationsResponse,
+	ReversiShowGameRequest,
+	ReversiShowGameResponse,
+	ReversiSurrenderRequest,
+	ReversiVerifyRequest,
+	ReversiVerifyResponse,
 } from './entities.js';
 
 export type Endpoints = {
@@ -639,6 +665,7 @@ export type Endpoints = {
 	'blocking/list': { req: BlockingListRequest; res: BlockingListResponse };
 	'channels/create': { req: ChannelsCreateRequest; res: ChannelsCreateResponse };
 	'channels/featured': { req: EmptyRequest; res: ChannelsFeaturedResponse };
+	'channels/list': { req: ChannelsListRequest; res: ChannelsListResponse };
 	'channels/follow': { req: ChannelsFollowRequest; res: EmptyResponse };
 	'channels/followed': { req: ChannelsFollowedRequest; res: ChannelsFollowedResponse };
 	'channels/owned': { req: ChannelsOwnedRequest; res: ChannelsOwnedResponse };
@@ -745,6 +772,7 @@ export type Endpoints = {
 	'i/export-following': { req: IExportFollowingRequest; res: EmptyResponse };
 	'i/export-mute': { req: EmptyRequest; res: EmptyResponse };
 	'i/export-notes': { req: EmptyRequest; res: EmptyResponse };
+	'i/export-clips': { req: EmptyRequest; res: EmptyResponse };
 	'i/export-favorites': { req: EmptyRequest; res: EmptyResponse };
 	'i/export-user-lists': { req: EmptyRequest; res: EmptyResponse };
 	'i/export-antennas': { req: EmptyRequest; res: EmptyResponse };
@@ -783,6 +811,10 @@ export type Endpoints = {
 	'i/webhooks/show': { req: IWebhooksShowRequest; res: IWebhooksShowResponse };
 	'i/webhooks/update': { req: IWebhooksUpdateRequest; res: EmptyResponse };
 	'i/webhooks/delete': { req: IWebhooksDeleteRequest; res: EmptyResponse };
+	'integrations/fanbox/connect': { req: IntegrationsFanboxConnectRequest; res: IntegrationsFanboxConnectResponse };
+	'integrations/fanbox/disconnect': { req: EmptyRequest; res: EmptyResponse };
+	'integrations/fanbox/request-refresh': { req: EmptyRequest; res: EmptyResponse };
+	'integrations/patreon/request-refresh': { req: EmptyRequest; res: EmptyResponse };
 	'invite/create': { req: EmptyRequest; res: InviteCreateResponse };
 	'invite/delete': { req: InviteDeleteRequest; res: EmptyResponse };
 	'invite/list': { req: InviteListRequest; res: InviteListResponse };
@@ -797,6 +829,9 @@ export type Endpoints = {
 	'renote-mute/create': { req: RenoteMuteCreateRequest; res: EmptyResponse };
 	'renote-mute/delete': { req: RenoteMuteDeleteRequest; res: EmptyResponse };
 	'renote-mute/list': { req: RenoteMuteListRequest; res: RenoteMuteListResponse };
+	'note-notification/create': { req: NoteNotificationCreateRequest; res: EmptyResponse };
+	'note-notification/delete': { req: NoteNotificationDeleteRequest; res: EmptyResponse };
+	'note-notification/list': { req: NoteNotificationListRequest; res: NoteNotificationListResponse };
 	'my/apps': { req: MyAppsRequest; res: MyAppsResponse };
 	'notes': { req: NotesRequest; res: NotesResponse };
 	'notes/children': { req: NotesChildrenRequest; res: NotesChildrenResponse };
@@ -859,7 +894,9 @@ export type Endpoints = {
 	'reset-db': { req: EmptyRequest; res: EmptyResponse };
 	'reset-password': { req: ResetPasswordRequest; res: EmptyResponse };
 	'server-info': { req: EmptyRequest; res: ServerInfoResponse };
+	'signup-available': { req: EmptyRequest; res: SignupAvailableResponse };
 	'stats': { req: EmptyRequest; res: StatsResponse };
+	'supporter-list': { req: EmptyRequest; res: SupporterListResponse };
 	'sw/show-registration': { req: SwShowRegistrationRequest; res: SwShowRegistrationResponse };
 	'sw/update-registration': { req: SwUpdateRegistrationRequest; res: SwUpdateRegistrationResponse };
 	'sw/register': { req: SwRegisterRequest; res: SwRegisterResponse };
@@ -900,4 +937,13 @@ export type Endpoints = {
 	'fetch-rss': { req: FetchRssRequest; res: FetchRssResponse };
 	'fetch-external-resources': { req: FetchExternalResourcesRequest; res: FetchExternalResourcesResponse };
 	'retention': { req: EmptyRequest; res: RetentionResponse };
+	'bubble-game/register': { req: BubbleGameRegisterRequest; res: BubbleGameRegisterResponse };
+	'bubble-game/ranking': { req: BubbleGameRankingRequest; res: BubbleGameRankingResponse };
+	'reversi/cancel-match': { req: ReversiCancelMatchRequest; res: ReversiCancelMatchResponse };
+	'reversi/games': { req: ReversiGamesRequest; res: ReversiGamesResponse };
+	'reversi/match': { req: ReversiMatchRequest; res: ReversiMatchResponse };
+	'reversi/invitations': { req: EmptyRequest; res: ReversiInvitationsResponse };
+	'reversi/show-game': { req: ReversiShowGameRequest; res: ReversiShowGameResponse };
+	'reversi/surrender': { req: ReversiSurrenderRequest; res: EmptyResponse };
+	'reversi/verify': { req: ReversiVerifyRequest; res: ReversiVerifyResponse };
 }

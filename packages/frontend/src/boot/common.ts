@@ -26,6 +26,7 @@ import { getAccountFromId } from '@/scripts/get-account-from-id.js';
 import { deckStore } from '@/ui/deck/deck-store.js';
 import { miLocalStorage } from '@/local-storage.js';
 import { fetchCustomEmojis } from '@/custom-emojis.js';
+import { setupRouter } from '@/global/router/definition.js';
 
 export async function common(createVue: () => App<Element>) {
 	console.info(`Misskey v${version}`);
@@ -274,6 +275,8 @@ export async function common(createVue: () => App<Element>) {
 			release: version,
 		});
 	}
+
+	setupRouter(app);
 
 	if (_DEV_) {
 		app.config.performance = true;

@@ -12,13 +12,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 		:noGap="!defaultStore.state.showGapBetweenNotesInTimeline"
 		:filter="props.filter"
 		@queue="emit('queue', $event)"
-		@status="prComponent.setDisabled($event)"
+		@status="prComponent?.setDisabled($event)"
 	/>
 </MkPullToRefresh>
 </template>
 
 <script lang="ts" setup>
-import { computed, watch, onUnmounted, provide, ref } from 'vue';
+import { computed, watch, onUnmounted, provide, ref, shallowRef } from 'vue';
+import * as Misskey from 'misskey-js';
 import { Connection } from 'misskey-js/built/streaming.js';
 import MkNotes, { type Filter as NoteFilter } from '@/components/MkNotes.vue';
 import MkPullToRefresh from '@/components/MkPullToRefresh.vue';
@@ -28,6 +29,7 @@ import { $i } from '@/account.js';
 import { instance } from '@/instance.js';
 import { defaultStore } from '@/store.js';
 import { Paging } from '@/components/MkPagination.vue';
+import { MisskeyEntity } from '@/types/date-separated-list.js';
 
 const props = withDefaults(defineProps<{
 	src: string;
@@ -51,6 +53,7 @@ const emit = defineEmits<{
 	(ev: 'queue', count: number): void;
 }>();
 
+provide('inTimeline', true);
 provide('inChannel', computed(() => props.src === 'channel'));
 
 type TimelineQueryType = {
@@ -64,12 +67,13 @@ type TimelineQueryType = {
   roleId?: string
 }
 
-const prComponent = ref<InstanceType<typeof MkPullToRefresh>>();
-const tlComponent = ref<InstanceType<typeof MkNotes>>();
+const prComponent = shallowRef<InstanceType<typeof MkPullToRefresh>>();
+const tlComponent = shallowRef<InstanceType<typeof MkNotes>>();
 
 let tlNotesCount = 0;
 
-const prepend = (note: MisskeyEntities.Note) => {
+function prepend(note: Misskey.entities.Note & MisskeyEntity) {
+	if (tlComponent.value == null) return;
 	if (props.src === 'global') {
 		const mutedInstancesGtl = defaultStore.state.mutedInstancesGtl;
 		if (note.user.host && mutedInstancesGtl.includes(note.user.host)) return;
@@ -87,9 +91,9 @@ const prepend = (note: MisskeyEntities.Note) => {
 	emit('note');
 
 	if (props.sound) {
-		sound.play($i && (note.userId === $i.id) ? 'noteMy' : 'note');
+		sound.playMisskeySfx($i && (note.userId === $i.id) ? 'noteMy' : 'note');
 	}
-};
+}
 
 let connection: Connection;
 let connection2: Connection;
@@ -138,6 +142,7 @@ function connectChannel() {
 		connection.on('mention', onNote);
 	} else if (props.src === 'list') {
 		connection = stream.useChannel('userList', {
+			withRenotes: props.withRenotes,
 			withFiles: props.onlyFiles ? true : undefined,
 			listId: props.list,
 		});
@@ -204,6 +209,7 @@ function updatePaginationQuery() {
 	} else if (props.src === 'list') {
 		endpoint = 'notes/user-list-timeline';
 		query = {
+			withRenotes: props.withRenotes,
 			withFiles: props.onlyFiles ? true : undefined,
 			listId: props.list,
 		};
@@ -242,8 +248,9 @@ function refreshEndpointAndChannel() {
 	updatePaginationQuery();
 }
 
+// デッキのリストカラムでwithRenotesを変更した場合に自動的に更新されるようにさせる
 // IDが切り替わったら切り替え先のTLを表示させたい
-watch(() => [props.list, props.antenna, props.channel, props.role], refreshEndpointAndChannel);
+watch(() => [props.list, props.antenna, props.channel, props.role, props.withRenotes], refreshEndpointAndChannel);
 
 // 初回表示用
 refreshEndpointAndChannel();
@@ -254,6 +261,8 @@ onUnmounted(() => {
 
 function reloadTimeline() {
 	return new Promise<void>((res) => {
+		if (tlComponent.value == null) return;
+
 		tlNotesCount = 0;
 
 		tlComponent.value.pagingComponent?.reload().then(() => {
