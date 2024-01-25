@@ -35,7 +35,7 @@ import { onMounted, ref, computed } from 'vue';
 import FormSection from '@/components/form/section.vue';
 import { i18n } from '@/i18n.js';
 import { host } from '@/config.js';
-import * as os from '@/os.js';
+import { misskeyApi } from '@/scripts/misskey-api.js';
 import { instance } from '@/instance.js';
 import { userPage } from '@/filters/user.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
@@ -54,7 +54,7 @@ const headerActions = computed(() => []);
 const headerTabs = computed(() => []);
 
 onMounted(async () => {
-	const supporters = (await os.api('supporter-list')) as SupporterUser[];
+	const supporters = (await misskeyApi('supporter-list')) as SupporterUser[];
 	supporters.forEach(supporter => {
 		if (supporter.withIcon) {
 			supporterNameWithIcon.value.push(supporter);

@@ -34,12 +34,13 @@ import MkFolder from '@/components/MkFolder.vue';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
+import { misskeyApi } from '@/scripts/misskey-api.js';
 
 const enablePatreonIntegration = ref(false);
 const enableFanboxIntegration = ref(false);
 
 async function init() {
-	const meta = await os.api('admin/meta');
+	const meta = await misskeyApi('admin/meta');
 	enablePatreonIntegration.value = meta.enablePatreonIntegration;
 	enableFanboxIntegration.value = meta.enableFanboxIntegration;
 }

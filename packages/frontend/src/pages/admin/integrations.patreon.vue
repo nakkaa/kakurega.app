@@ -44,6 +44,7 @@ import FormSuspense from '@/components/form/suspense.vue';
 import * as os from '@/os.js';
 import { fetchInstance } from '@/instance.js';
 import { i18n } from '@/i18n.js';
+import { misskeyApi } from '@/scripts/misskey-api.js';
 
 const uri = ref('');
 const enablePatreonIntegration = ref(false);
@@ -53,13 +54,13 @@ const patreonAccessToken = ref<string | null>(null);
 const patreonRefreshToken = ref<string | null>(null);
 
 async function init() {
-	const meta = await os.api('admin/meta');
+	const meta = await misskeyApi('admin/meta');
 	uri.value = meta.uri;
 	enablePatreonIntegration.value = meta.enablePatreonIntegration;
-	patreonClientId.value = meta.patreonClientId;
-	patreonClientSecret.value = meta.patreonClientSecret;
-	patreonAccessToken.value = meta.patreonAccessToken;
-	patreonRefreshToken.value = meta.patreonRefreshToken;
+	patreonClientId.value = meta.patreonClientId ?? '';
+	patreonClientSecret.value = meta.patreonClientSecret ?? '';
+	patreonAccessToken.value = meta.patreonAccessToken ?? '';
+	patreonRefreshToken.value = meta.patreonRefreshToken ?? '';
 }
 
 function save() {
