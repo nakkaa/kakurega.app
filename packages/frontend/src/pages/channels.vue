@@ -9,8 +9,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 	<MkSpacer :contentMax="700">
 		<MkHorizontalSwipe v-model:tab="tab" :tabs="headerTabs">
 			<div v-if="tab === 'list'">
-				<MkFoldableSection :expanded="false">
-					<template #header>{{ i18n.ts.search }}</template>
+				<MkFolder :expanded="false">
+					<template #label>{{ i18n.ts.search }}</template>
 					<div class="_gaps_m search-form">
 						<MkInput v-model="searchQuery" :large="true" type="search">
 							<template #label>{{ i18n.ts.channelSearch }}</template>
@@ -27,7 +27,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 							<template #label>{{ i18n.ts.excludeNonActiveChannels }}</template>
 						</MkSwitch>
 					</div>
-				</MkFoldableSection>
+				</MkFolder>
 				<MkPagination v-slot="{ items }" :pagination="listPagination">
 					<MkChannelPreview v-for="channel in items" :key="channel.id" class="_margin" :channel="channel"/>
 				</MkPagination>
@@ -66,7 +66,7 @@ import MkButton from '@/components/MkButton.vue';
 import MkSelect from '@/components/MkSelect.vue';
 import MkInput from '@/components/MkInput.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
-import MkFoldableSection from '@/components/MkFoldableSection.vue';
+import MkFolder from '@/components/MkFolder.vue';
 import MkHorizontalSwipe from '@/components/MkHorizontalSwipe.vue';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
 import { i18n } from '@/i18n.js';
