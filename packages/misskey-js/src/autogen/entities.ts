@@ -1,6 +1,6 @@
 /*
- * version: 2024.2.0-kakurega.1.28.5
- * generatedAt: 2024-01-25T08:14:07.437Z
+ * version: 2024.2.0-beta.8
+ * generatedAt: 2024-01-31T10:57:23.742Z
  */
 
 import { operations } from './types.js';

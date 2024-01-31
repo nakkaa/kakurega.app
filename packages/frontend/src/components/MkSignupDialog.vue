@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	ref="dialog"
 	:width="500"
 	:height="600"
-	@close="dialog.close()"
+	@close="dialog?.close()"
 	@closed="$emit('closed')"
 >
 	<template #header>{{ i18n.ts.signup }}</template>
@@ -22,7 +22,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			:leaveToClass="$style.transition_x_leaveTo"
 		>
 			<template v-if="!isAcceptedServerRule">
-				<XServerRules @done="isAcceptedServerRule = true" @cancel="dialog.close()"/>
+				<XServerRules @done="isAcceptedServerRule = true" @cancel="dialog?.close()"/>
 			</template>
 			<template v-else-if="!isChoosed && instance.enableRegistrationLimit">
 				<XChoice @done="doneChoice" @cancel="dialog?.close()"/>
@@ -37,6 +37,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts" setup>
 import { shallowRef, ref } from 'vue';
+import * as Misskey from 'misskey-js';
 import XSignup from '@/components/MkSignupDialog.form.vue';
 import XServerRules from '@/components/MkSignupDialog.rules.vue';
 import XChoice from '@/components/MkSignupDialog.choice.vue';
@@ -51,7 +52,7 @@ const props = withDefaults(defineProps<{
 });
 
 const emit = defineEmits<{
-	(ev: 'done'): void;
+	(ev: 'done', res: Misskey.entities.SigninResponse): void;
 	(ev: 'closed'): void;
 }>();
 
@@ -74,13 +75,13 @@ function onBack() {
 	}
 }
 
-function onSignup(res) {
+function onSignup(res: Misskey.entities.SigninResponse) {
 	emit('done', res);
-	dialog.value.close();
+	dialog.value?.close();
 }
 
 function onSignupEmailPending() {
-	dialog.value.close();
+	dialog.value?.close();
 }
 </script>
 

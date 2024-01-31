@@ -1,6 +1,6 @@
 /*
- * version: 2024.2.0-kakurega.1.28.5
- * generatedAt: 2024-01-25T08:14:07.436Z
+ * version: 2024.2.0-beta.8
+ * generatedAt: 2024-01-31T10:57:23.741Z
  */
 
 import { components } from './types.js';
@@ -30,6 +30,7 @@ export type Blocking = components['schemas']['Blocking'];
 export type Hashtag = components['schemas']['Hashtag'];
 export type InviteCode = components['schemas']['InviteCode'];
 export type Page = components['schemas']['Page'];
+export type PageBlock = components['schemas']['PageBlock'];
 export type Channel = components['schemas']['Channel'];
 export type QueueCount = components['schemas']['QueueCount'];
 export type Antenna = components['schemas']['Antenna'];
@@ -42,5 +43,6 @@ export type Flash = components['schemas']['Flash'];
 export type Signin = components['schemas']['Signin'];
 export type RoleLite = components['schemas']['RoleLite'];
 export type Role = components['schemas']['Role'];
+export type RolePolicies = components['schemas']['RolePolicies'];
 export type ReversiGameLite = components['schemas']['ReversiGameLite'];
 export type ReversiGameDetailed = components['schemas']['ReversiGameDetailed'];

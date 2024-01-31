@@ -206,7 +206,7 @@ async function init(): Promise<void> {
 	queue.value = new Map();
 	fetching.value = true;
 	const params = props.pagination.params ? isRef(props.pagination.params) ? props.pagination.params.value : props.pagination.params : {};
-	await misskeyApi(props.pagination.endpoint, {
+	await misskeyApi<MisskeyEntity[]>(props.pagination.endpoint, {
 		...params,
 		limit: props.pagination.limit ?? 10,
 		allowPartial: true,
@@ -262,7 +262,7 @@ const fetchMoreBehind = async (): Promise<void> => {
 	if (!more.value || fetching.value || moreFetching.value || items.value.size === 0) return;
 	moreFetching.value = true;
 	const params = props.pagination.params ? isRef(props.pagination.params) ? props.pagination.params.value : props.pagination.params : {};
-	await misskeyApi(props.pagination.endpoint, {
+	await misskeyApi<MisskeyEntity[]>(props.pagination.endpoint, {
 		...params,
 		limit: SECOND_FETCH_LIMIT,
 		...(props.pagination.offsetMode ? {
@@ -326,7 +326,7 @@ const fetchMoreAhead = async (): Promise<void> => {
 	if (!more.value || fetching.value || moreFetching.value || items.value.size === 0) return;
 	moreFetching.value = true;
 	const params = props.pagination.params ? isRef(props.pagination.params) ? props.pagination.params.value : props.pagination.params : {};
-	await misskeyApi(props.pagination.endpoint, {
+	await misskeyApi<MisskeyEntity[]>(props.pagination.endpoint, {
 		...params,
 		limit: SECOND_FETCH_LIMIT,
 		...(props.pagination.offsetMode ? {
