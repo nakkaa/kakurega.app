@@ -5,6 +5,8 @@ import { PatreonManagementService } from '@/core/integrations/PatreonManagementS
 
 export const meta = {
 	requireCredential: true,
+	kind: 'read:integrations',
+	secure: true,
 	limit: {
 		duration: ms('1hour'),
 		max: 12,

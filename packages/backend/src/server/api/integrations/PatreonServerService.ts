@@ -64,7 +64,7 @@ export class PatreonServerService {
 
 			// Publish i updated event
 			this.globalEventService.publishMainStream(user.id, 'meUpdated', await this.userEntityService.pack(user, user, {
-				detail: true,
+				schema: 'MeDetailed',
 				includeSecrets: true,
 			}));
 
@@ -189,7 +189,7 @@ export class PatreonServerService {
 
 				// Publish i updated event
 				this.globalEventService.publishMainStream(user.id, 'meUpdated', await this.userEntityService.pack(user, user, {
-					detail: true,
+					schema: 'MeDetailed',
 					includeSecrets: true,
 				}));
 

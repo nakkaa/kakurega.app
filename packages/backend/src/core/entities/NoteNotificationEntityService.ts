@@ -33,7 +33,7 @@ export class NoteNotificationEntityService {
 			createdAt: this.idService.parse(target.id).date.toISOString(),
 			userId: target.targetUserId,
 			user: this.userEntityService.pack(target.targetUserId, me, {
-				detail: true,
+				schema: 'UserDetailedNotMe',
 			}),
 		});
 	}

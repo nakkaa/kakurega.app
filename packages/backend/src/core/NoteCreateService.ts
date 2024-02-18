@@ -238,7 +238,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 		host: MiUser['host'];
 		isBot: MiUser['isBot'];
 		isCat: MiUser['isCat'];
-	}, data: Option, silent = false): Promise<MiNote> {
+	}, data: Option, silent = false): Promise<MiNote | null> {
 		// チャンネル外にリプライしたら対象のスコープに合わせる
 		// (クライアントサイドでやっても良い処理だと思うけどとりあえずサーバーサイドで)
 		if (data.reply && data.channel && data.reply.channelId !== data.channel.id) {
@@ -374,8 +374,8 @@ export class NoteCreateService implements OnApplicationShutdown {
 		if (meta.blockMentionsFromUnfamiliarRemoteUsers && user.host !== null && willCauseNotification) {
 			const userEntity = await this.usersRepository.findOneBy({ id: user.id });
 			if ((userEntity?.followersCount ?? 0) === 0) {
-				this.logger.error('Request rejected because user has no local followers', { user: user.id, note: data });
-				throw new IdentifiableError('e11b3a16-f543-4885-8eb1-66cad131dbfd', 'Notes including mentions, replies, or renotes from remote users are not allowed until user has at least one local follower.');
+				this.logger.info('Request rejected because user has no local followers', { user: user.id, note: data });
+				return null;
 			}
 		}
 

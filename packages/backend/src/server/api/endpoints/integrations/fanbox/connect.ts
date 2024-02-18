@@ -7,6 +7,10 @@ import { UserEntityService } from '@/core/entities/UserEntityService.js';
 
 export const meta = {
 	requireCredential: true,
+	kind: 'write:integrations',
+
+	secure: true,
+
 	res: {
 		type: 'object',
 		optional: false, nullable: false,
@@ -55,7 +59,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 			// Publish i updated event
 			this.globalEventService.publishMainStream(me.id, 'meUpdated', await this.userEntityService.pack(me, me, {
-				detail: true,
+				schema: 'MeDetailed',
 				includeSecrets: true,
 			}));
 
