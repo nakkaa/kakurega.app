@@ -5,6 +5,8 @@ import { FanboxManagementService } from '@/core/integrations/FanboxManagementSer
 
 export const meta = {
 	requireCredential: true,
+	kind: 'read:integrations',
+	secure: true,
 	limit: {
 		duration: ms('1hour'),
 		max: 12,

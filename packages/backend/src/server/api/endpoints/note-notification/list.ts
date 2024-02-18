@@ -9,6 +9,8 @@ export const meta = {
 	tags: ['users'],
 
 	requireCredential: true,
+	kind: 'read:users',
+	secure: true,
 
 	res: {
 		type: 'array',

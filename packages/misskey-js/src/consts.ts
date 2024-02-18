@@ -93,6 +93,8 @@ export const permissions = [
 	'read:clip-favorite',
 	'read:federation',
 	'write:report-abuse',
+	'read:integrations',
+	'write:integrations',
 ] as const;
 
 export const moderationLogTypes = [

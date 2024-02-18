@@ -218,12 +218,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				throw new Error('cannot show info of admin');
 			}
 
-			if (!await this.roleService.isAdministrator(_me)) {
-				return {
-					isSuspended: user.isSuspended,
-				};
-			}
-
 			const maskedKeys = ['accessToken', 'accessTokenSecret', 'refreshToken'];
 			Object.keys(profile.integrations).forEach(integration => {
 				maskedKeys.forEach(key => profile.integrations[integration][key] = '<MASKED>');

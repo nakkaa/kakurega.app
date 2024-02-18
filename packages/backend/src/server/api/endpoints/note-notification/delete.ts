@@ -16,6 +16,8 @@ export const meta = {
 	},
 
 	requireCredential: true,
+	kind: 'write:users',
+	secure: true,
 
 	errors: {
 		noSuchUser: {
