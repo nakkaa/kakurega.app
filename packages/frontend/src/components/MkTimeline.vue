@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: syuilo and other misskey contributors
+SPDX-FileCopyrightText: syuilo and misskey-project
 SPDX-License-Identifier: AGPL-3.0-only
 -->
 
@@ -94,8 +94,8 @@ function prepend(note: Misskey.entities.Note & MisskeyEntity) {
 	}
 }
 
-let connection: Misskey.ChannelConnection;
-let connection2: Misskey.ChannelConnection;
+let connection: Misskey.ChannelConnection | null = null;
+let connection2: Misskey.ChannelConnection | null = null;
 let paginationQuery: Paging | null = null;
 
 const stream = useStream();
@@ -158,7 +158,7 @@ function connectChannel() {
 			roleId: props.role,
 		});
 	}
-	if (props.src !== 'directs' && props.src !== 'mentions') connection.on('note', prepend);
+	if (props.src !== 'directs' && props.src !== 'mentions') connection?.on('note', prepend);
 }
 
 function disconnectChannel() {

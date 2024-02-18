@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: syuilo and other misskey contributors
+SPDX-FileCopyrightText: syuilo and misskey-project
 SPDX-License-Identifier: AGPL-3.0-only
 -->
 
@@ -142,6 +142,7 @@ const lightThemeId = computed({
 		}
 	},
 });
+
 const darkMode = computed(defaultStore.makeGetterSetter('darkMode'));
 const syncDeviceDarkMode = computed(ColdDeviceStorage.makeGetterSetter('syncDeviceDarkMode'));
 const syncTimeDarkMode = computed(ColdDeviceStorage.makeGetterSetter('syncTimeDarkMode'));
@@ -168,7 +169,7 @@ watch(wallpaper, () => {
 	} else {
 		miLocalStorage.setItem('wallpaper', wallpaper.value);
 	}
-	location.reload();
+	reloadAsk();
 });
 
 onActivated(() => {
@@ -191,10 +192,10 @@ const headerActions = computed(() => []);
 
 const headerTabs = computed(() => []);
 
-definePageMetadata({
+definePageMetadata(() => ({
 	title: i18n.ts.theme,
 	icon: 'ti ti-palette',
-});
+}));
 </script>
 
 <style lang="scss" scoped>

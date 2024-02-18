@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: syuilo and other misskey contributors
+SPDX-FileCopyrightText: syuilo and misskey-project
 SPDX-License-Identifier: AGPL-3.0-only
 -->
 
@@ -76,6 +76,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<template #caption>{{ i18n.ts.sensitiveWordsDescription }}<br>{{ i18n.ts.sensitiveWordsDescription2 }}</template>
 					</MkTextarea>
 
+					<MkTextarea v-model="prohibitedWords">
+						<template #label>{{ i18n.ts.prohibitedWords }}</template>
+						<template #caption>{{ i18n.ts.prohibitedWordsDescription }}<br>{{ i18n.ts.prohibitedWordsDescription2 }}</template>
+					</MkTextarea>
+
 					<MkTextarea v-model="hiddenTags">
 						<template #label>{{ i18n.ts.hiddenTags }}</template>
 						<template #caption>{{ i18n.ts.hiddenTagsDescription }}</template>
@@ -120,6 +125,8 @@ const enableAgeRestriction = ref(false);
 const ageRestrictionThreshold = ref(0);
 const sensitiveWords = ref('');
 const preservedUsernames = ref('');
+const prohibitedWords = ref('');
+const hiddenTags = ref('');
 const tosUrl = ref<string | null>(null);
 const privacyPolicyUrl = ref<string | null>(null);
 
@@ -135,6 +142,8 @@ async function init() {
 	enableAgeRestriction.value = meta.enableAgeRestriction;
 	ageRestrictionThreshold.value = meta.ageRestrictionThreshold;
 	sensitiveWords.value = meta.sensitiveWords.join('\n');
+	prohibitedWords.value = meta.prohibitedWords.join('\n');
+	hiddenTags.value = meta.hiddenTags.join('\n');
 	preservedUsernames.value = meta.preservedUsernames.join('\n');
 	tosUrl.value = meta.tosUrl;
 	privacyPolicyUrl.value = meta.privacyPolicyUrl;
@@ -154,6 +163,8 @@ function save() {
 		tosUrl: tosUrl.value,
 		privacyPolicyUrl: privacyPolicyUrl.value,
 		sensitiveWords: sensitiveWords.value.split('\n'),
+		prohibitedWords: prohibitedWords.value.split('\n'),
+		hiddenTags: hiddenTags.value.split('\n'),
 		preservedUsernames: preservedUsernames.value.split('\n'),
 	}).then(() => {
 		fetchInstance();
@@ -162,10 +173,10 @@ function save() {
 
 const headerTabs = computed(() => []);
 
-definePageMetadata({
+definePageMetadata(() => ({
 	title: i18n.ts.moderation,
 	icon: 'ti ti-shield',
-});
+}));
 </script>
 
 <style lang="scss" module>
