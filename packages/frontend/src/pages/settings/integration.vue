@@ -39,10 +39,11 @@ import { $i } from '@/account.js';
 import { instance } from '@/instance.js';
 import { i18n } from '@/i18n.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
+import { misskeyApi } from '@/scripts/misskey-api.js';
 
 const patreonForm = ref<Window | null>(null);
 
-const integrations = computed(() => $i!.integrations);
+const integrations = computed(() => $i!.integrations ?? {} as Record<string, any>);
 
 function openWindow(service: string, type: string) {
 	return window.open(`${apiUrl}/${type}/${service}`,
@@ -60,7 +61,7 @@ function disconnectPatreon() {
 }
 
 async function requestPatreonRefresh() {
-	await os.api('integrations/patreon/request-refresh');
+	await misskeyApi('integrations/patreon/request-refresh');
 
 	os.alert({
 		type: 'success',
@@ -96,12 +97,12 @@ async function connectFanbox() {
 		});
 	}
 
-	const res = await os.api('integrations/fanbox/connect', { id });
+	const res = await misskeyApi('integrations/fanbox/connect', { id });
 	if (res.error) {
 		return os.alert({
 			type: 'error',
 			title: i18n.ts.error,
-			text: res.failedToSetPixivId,
+			text: i18n.ts.failedToSetPixivId,
 		});
 	}
 
@@ -116,7 +117,7 @@ async function disconnectFanbox() {
 }
 
 async function requestFanboxRefresh() {
-	await os.api('integrations/fanbox/request-refresh');
+	await misskeyApi('integrations/fanbox/request-refresh');
 
 	os.alert({
 		type: 'success',
@@ -131,7 +132,7 @@ onMounted(() => {
 		(document.location.protocol.startsWith('https') ? ' secure' : '');
 
 	watch(integrations, () => {
-		if (integrations.value.patreon) {
+		if (integrations.value?.patreon) {
 			if (patreonForm.value) patreonForm.value.close();
 		}
 	});

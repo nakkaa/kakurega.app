@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
+ * SPDX-FileCopyrightText: syuilo and misskey-project
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
@@ -91,6 +91,11 @@ export class MiMeta {
 		length: 1024, array: true, default: '{}',
 	})
 	public sensitiveWords: string[];
+
+	@Column('varchar', {
+		length: 1024, array: true, default: '{}',
+	})
+	public prohibitedWords: string[];
 
 	@Column('varchar', {
 		length: 1024, array: true, default: '{}',
@@ -206,6 +211,29 @@ export class MiMeta {
 		nullable: true,
 	})
 	public hcaptchaSecretKey: string | null;
+
+	@Column('boolean', {
+		default: false,
+	})
+	public enableMcaptcha: boolean;
+
+	@Column('varchar', {
+		length: 1024,
+		nullable: true,
+	})
+	public mcaptchaSitekey: string | null;
+
+	@Column('varchar', {
+		length: 1024,
+		nullable: true,
+	})
+	public mcaptchaSecretKey: string | null;
+
+	@Column('varchar', {
+		length: 1024,
+		nullable: true,
+	})
+	public mcaptchaInstanceUrl: string | null;
 
 	@Column('boolean', {
 		default: false,
@@ -395,14 +423,14 @@ export class MiMeta {
 
 	@Column('varchar', {
 		length: 1024,
-		default: 'https://github.com/misskey-dev/misskey',
-		nullable: false,
+		default: 'https://github.com/hideki0403/misskey.yukineko.me',
+		nullable: true,
 	})
-	public repositoryUrl: string;
+	public repositoryUrl: string | null;
 
 	@Column('varchar', {
 		length: 1024,
-		default: 'https://github.com/misskey-dev/misskey/issues/new',
+		default: 'https://github.com/hideki0403/misskey.yukineko.me/issues/new',
 		nullable: true,
 	})
 	public feedbackUrl: string | null;
@@ -523,6 +551,23 @@ export class MiMeta {
 		nullable: true,
 	})
 	public verifymailAuthKey: string | null;
+
+	@Column('boolean', {
+		default: false,
+	})
+	public enableTruemailApi: boolean;
+
+	@Column('varchar', {
+		length: 1024,
+		nullable: true,
+	})
+	public truemailInstance: string | null;
+
+	@Column('varchar', {
+		length: 1024,
+		nullable: true,
+	})
+	public truemailAuthKey: string | null;
 
 	@Column('boolean', {
 		default: true,

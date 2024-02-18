@@ -21,7 +21,8 @@
 	<div v-if="isMobile" ref="navFooter" :class="$style.nav">
 		<button :class="$style.navButton" class="_button" @click="drawerMenuShowing = true">
 			<i :class="$style.navButtonIcon" class="ti ti-menu-2"></i>
-			<span v-if="menuIndicated" :class="$style.navButtonIndicator"><i class="_indicatorCircle"></i></span></button>
+			<span v-if="menuIndicated" :class="$style.navButtonIndicator"><i class="_indicatorCircle"></i></span>
+		</button>
 		<button :class="$style.navButton" class="_button" @click="mainRouter.currentRoute.value.name === 'index' ? top() : mainRouter.push('/')">
 			<i :class="$style.navButtonIcon" class="ti ti-home"></i>
 		</button>
@@ -64,7 +65,7 @@ import { defaultStore } from '@/store.js';
 import { navbarItemDef } from '@/navbar.js';
 import { i18n } from '@/i18n.js';
 import { $i } from '@/account.js';
-import { mainRouter } from '@/router.js';
+import { mainRouter } from '@/router/main.js';
 import { definePageMetadata, PageMetadata, provideMetadataReceiver } from '@/scripts/page-metadata.js';
 import { deviceKind } from '@/scripts/device-kind.js';
 import { miLocalStorage } from '@/local-storage.js';

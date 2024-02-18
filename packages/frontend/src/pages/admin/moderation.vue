@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: syuilo and other misskey contributors
+SPDX-FileCopyrightText: syuilo and misskey-project
 SPDX-License-Identifier: AGPL-3.0-only
 -->
 
@@ -50,7 +50,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 					<MkInput v-if="enableAgeRestriction" v-model="ageRestrictionThreshold" type="number" :min="0">
 						<template #label>{{ i18n.ts.ageRestrictionThreshold }}</template>
-						<template #suffix>{{ i18n.t('yearsOld', { age: '' }) }}</template>
+						<template #suffix>{{ i18n.tsx.yearsOld({ age: '' }) }}</template>
 						<template #caption>{{ i18n.ts.ageRestrictionThresholdDescription }}</template>
 					</MkInput>
 
@@ -74,6 +74,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<MkTextarea v-model="sensitiveWords">
 						<template #label>{{ i18n.ts.sensitiveWords }}</template>
 						<template #caption>{{ i18n.ts.sensitiveWordsDescription }}<br>{{ i18n.ts.sensitiveWordsDescription2 }}</template>
+					</MkTextarea>
+
+					<MkTextarea v-model="prohibitedWords">
+						<template #label>{{ i18n.ts.prohibitedWords }}</template>
+						<template #caption>{{ i18n.ts.prohibitedWordsDescription }}<br>{{ i18n.ts.prohibitedWordsDescription2 }}</template>
 					</MkTextarea>
 
 					<MkTextarea v-model="hiddenTags">
@@ -102,6 +107,7 @@ import MkInput from '@/components/MkInput.vue';
 import MkTextarea from '@/components/MkTextarea.vue';
 import FormSuspense from '@/components/form/suspense.vue';
 import * as os from '@/os.js';
+import { misskeyApi } from '@/scripts/misskey-api.js';
 import { fetchInstance } from '@/instance.js';
 import { i18n } from '@/i18n.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
@@ -119,11 +125,13 @@ const enableAgeRestriction = ref(false);
 const ageRestrictionThreshold = ref(0);
 const sensitiveWords = ref('');
 const preservedUsernames = ref('');
+const prohibitedWords = ref('');
+const hiddenTags = ref('');
 const tosUrl = ref<string | null>(null);
 const privacyPolicyUrl = ref<string | null>(null);
 
 async function init() {
-	const meta = await os.api('admin/meta');
+	const meta = await misskeyApi('admin/meta');
 	enableRegistration.value = !meta.disableRegistration;
 	enableRegistrationLimit.value = meta.enableRegistrationLimit;
 	registrationLimit.value = meta.registrationLimit;
@@ -134,6 +142,8 @@ async function init() {
 	enableAgeRestriction.value = meta.enableAgeRestriction;
 	ageRestrictionThreshold.value = meta.ageRestrictionThreshold;
 	sensitiveWords.value = meta.sensitiveWords.join('\n');
+	prohibitedWords.value = meta.prohibitedWords.join('\n');
+	hiddenTags.value = meta.hiddenTags.join('\n');
 	preservedUsernames.value = meta.preservedUsernames.join('\n');
 	tosUrl.value = meta.tosUrl;
 	privacyPolicyUrl.value = meta.privacyPolicyUrl;
@@ -153,6 +163,8 @@ function save() {
 		tosUrl: tosUrl.value,
 		privacyPolicyUrl: privacyPolicyUrl.value,
 		sensitiveWords: sensitiveWords.value.split('\n'),
+		prohibitedWords: prohibitedWords.value.split('\n'),
+		hiddenTags: hiddenTags.value.split('\n'),
 		preservedUsernames: preservedUsernames.value.split('\n'),
 	}).then(() => {
 		fetchInstance();
@@ -161,10 +173,10 @@ function save() {
 
 const headerTabs = computed(() => []);
 
-definePageMetadata({
+definePageMetadata(() => ({
 	title: i18n.ts.moderation,
 	icon: 'ti ti-shield',
-});
+}));
 </script>
 
 <style lang="scss" module>

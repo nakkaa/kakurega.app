@@ -10,7 +10,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	</div>
 	<MkSpacer :marginMin="20" :marginMax="28">
 		<div class="_gaps_m" :class="$style.root">
-			<MkInfo info>{{ i18n.t('registrationLimitDetails', { limit: instance.registrationLimitCooldown, count: instance.registrationLimit }) }}</MkInfo>
+			<MkInfo info>{{ i18n.tsx.registrationLimitDetails({ limit: instance.registrationLimitCooldown, count: instance.registrationLimit }) }}</MkInfo>
 			<div>{{ i18n.ts.doYouHaveInviteCode }}</div>
 			<div class="_buttonsCenter">
 				<MkButton :class="$style.choiceButton" inline large style="color: var(--success);" @click="doneWithCode"><i class="ti ti-circle-check-filled"></i> {{ i18n.ts.hasInviteCode }}</MkButton>
@@ -44,7 +44,7 @@ async function doneWithoutCode() {
 		return await os.alert({
 			type: 'error',
 			title: i18n.ts.error,
-			text: i18n.t('hitRegistrationLimit', { time: instance.registrationLimitCooldown }),
+			text: i18n.tsx.hitRegistrationLimit({ time: instance.registrationLimitCooldown }),
 		});
 	}
 

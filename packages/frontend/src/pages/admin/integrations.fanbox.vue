@@ -26,16 +26,17 @@ import FormSuspense from '@/components/form/suspense.vue';
 import * as os from '@/os.js';
 import { fetchInstance } from '@/instance.js';
 import { i18n } from '@/i18n.js';
+import { misskeyApi } from '@/scripts/misskey-api.js';
 
 const uri = ref('');
 const enableFanboxIntegration = ref(false);
 const fanboxApiBackendUrl = ref('');
 
 async function init() {
-	const meta = await os.api('admin/meta');
+	const meta = await misskeyApi('admin/meta');
 	uri.value = meta.uri;
 	enableFanboxIntegration.value = meta.enableFanboxIntegration;
-	fanboxApiBackendUrl.value = meta.fanboxApiBackendUrl;
+	fanboxApiBackendUrl.value = meta.fanboxApiBackendUrl ?? '';
 }
 
 function save() {

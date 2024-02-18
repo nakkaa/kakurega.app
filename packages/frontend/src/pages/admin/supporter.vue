@@ -49,6 +49,7 @@ import * as os from '@/os.js';
 import { fetchInstance } from '@/instance.js';
 import { i18n } from '@/i18n.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
+import { misskeyApi } from '@/scripts/misskey-api.js';
 
 const enableSupporterPage = ref(false);
 const supporterRoles = ref('');
@@ -56,11 +57,11 @@ const supporterNameThreshold = ref<number | null>(null);
 const supporterNameWithIconThreshold = ref<number | null>(null);
 
 async function init() {
-	const meta = await os.api('admin/meta');
-	enableSupporterPage.value = meta.enableSupporterPage;
-	supporterRoles.value = meta.supporterRoles.join('\n');
-	supporterNameThreshold.value = meta.supporterNameThreshold;
-	supporterNameWithIconThreshold.value = meta.supporterNameWithIconThreshold;
+	const meta = await misskeyApi('admin/meta');
+	enableSupporterPage.value = meta.enableSupporterPage ?? false;
+	supporterRoles.value = meta.supporterRoles?.join('\n') ?? '';
+	supporterNameThreshold.value = meta.supporterNameThreshold ?? null;
+	supporterNameWithIconThreshold.value = meta.supporterNameWithIconThreshold ?? null;
 }
 
 function save() {

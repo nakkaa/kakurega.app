@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: syuilo and other misskey contributors
+SPDX-FileCopyrightText: syuilo and misskey-project
 SPDX-License-Identifier: AGPL-3.0-only
 -->
 
@@ -166,13 +166,13 @@ import { getUserMenu } from '@/scripts/get-user-menu.js';
 import number from '@/filters/number.js';
 import { userPage } from '@/filters/user.js';
 import * as os from '@/os.js';
-import { useRouter } from '@/router.js';
 import { i18n } from '@/i18n.js';
 import { $i, iAmModerator } from '@/account.js';
 import { dateString } from '@/filters/date.js';
 import { confetti } from '@/scripts/confetti.js';
-import { api } from '@/os.js';
+import { misskeyApi } from '@/scripts/misskey-api.js';
 import { isFollowingVisibleForMe, isFollowersVisibleForMe } from '@/scripts/isFfVisibleForMe.js';
+import { useRouter } from '@/router/supplier.js';
 
 function calcAge(birthdate: string): number {
 	const date = new Date(birthdate);
@@ -215,7 +215,7 @@ const moderationNote = ref(props.user.moderationNote);
 const editModerationNote = ref(false);
 
 watch(moderationNote, async () => {
-	await os.api('admin/update-user-note', { userId: props.user.id, text: moderationNote.value });
+	await misskeyApi('admin/update-user-note', { userId: props.user.id, text: moderationNote.value });
 });
 
 const style = computed(() => {
@@ -231,7 +231,7 @@ const birthday = computed(() => {
 	const parsedBirthday = props.user.birthday.split('-');
 	const isHideAge = parsedBirthday[0] === '9999' || parsedBirthday[0] === '0001';
 
-	return isHideAge ? `${parsedBirthday[1]}/${parsedBirthday[2]}` : `${props.user.birthday.replaceAll('-', '/')} (${i18n.t('yearsOld', { age: calcAge(props.user.birthday) })})`;
+	return isHideAge ? `${parsedBirthday[1]}/${parsedBirthday[2]}` : `${props.user.birthday.replaceAll('-', '/')} (${i18n.tsx.yearsOld({ age: calcAge(props.user.birthday) })})`;
 });
 
 function menu(ev: MouseEvent) {
@@ -271,7 +271,7 @@ function adjustMemoTextarea() {
 }
 
 async function updateMemo() {
-	await api('users/update-memo', {
+	await misskeyApi('users/update-memo', {
 		memo: memoDraft.value,
 		userId: props.user.id,
 	});

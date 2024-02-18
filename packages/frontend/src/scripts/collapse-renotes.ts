@@ -8,7 +8,7 @@ export function checkCollapseRenote(appearNote: Record<string, any> | null, note
 
 	switch (defaultStore.state.collapseRenotesTrigger) {
 		case 'action': {
-			return (me && (me.id === note.userId || me.id === appearNote.userId)) ?? (appearNote.myReaction != null);
+			return (me && (me.id === note.userId || me.id === appearNote.userId)) || (appearNote.myReaction != null);
 		}
 
 		case 'all': {

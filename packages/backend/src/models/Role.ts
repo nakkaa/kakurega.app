@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
+ * SPDX-FileCopyrightText: syuilo and misskey-project
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
@@ -78,7 +78,7 @@ type CondFormulaValueNotesMoreThanOrEq = {
 	value: number;
 };
 
-export type RoleCondFormulaValue =
+export type RoleCondFormulaValue = { id: string } & (
 	CondFormulaValueAnd |
 	CondFormulaValueOr |
 	CondFormulaValueNot |
@@ -93,7 +93,8 @@ export type RoleCondFormulaValue =
 	CondFormulaValuePatreonAmountsLessThanOrEq |
 	CondFormulaValuePatreonAmountsMoreThanOrEq |
 	CondFormulaValueNotesLessThanOrEq |
-	CondFormulaValueNotesMoreThanOrEq;
+	CondFormulaValueNotesMoreThanOrEq
+);
 
 @Entity('role')
 export class MiRole {
