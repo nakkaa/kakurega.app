@@ -539,6 +539,10 @@ export const meta = {
 				type: 'string',
 				optional: false, nullable: false,
 			},
+			blockMentionsFromUnfamiliarRemoteUsers: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
 		},
 	},
 } as const;
@@ -685,6 +689,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				disableEntranceFeatureTimeline: instance.disableEntranceFeatureTimeline,
 				enableAgeRestriction: instance.enableAgeRestriction,
 				ageRestrictionThreshold: instance.ageRestrictionThreshold,
+				blockMentionsFromUnfamiliarRemoteUsers: instance.blockMentionsFromUnfamiliarRemoteUsers,
 			};
 		});
 	}

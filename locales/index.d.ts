@@ -5216,6 +5216,14 @@ export interface Locale extends ILocale {
      * スワイプしてタブを切り替える
      */
     "enableHorizontalSwipe": string;
+    /**
+     * 荒らしの可能性があるユーザーからのメンションをブロックする
+     */
+    "blockMentionsFromUnfamiliarRemoteUsers": string;
+    /**
+     * このサーバーからのフォロワーがいないリモートユーザーの、メンションを含むノートをブロックするようにします。
+     */
+    "blockMentionsFromUnfamiliarRemoteUsersDescription": string;
     "_bubbleGame": {
         /**
          * 遊び方
