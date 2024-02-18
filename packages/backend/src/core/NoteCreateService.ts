@@ -374,7 +374,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 		if (meta.blockMentionsFromUnfamiliarRemoteUsers && user.host !== null && willCauseNotification) {
 			const userEntity = await this.usersRepository.findOneBy({ id: user.id });
 			if ((userEntity?.followersCount ?? 0) === 0) {
-				this.logger.error('Request rejected because user has no local followers', { user: user.id, note: data });
+				this.logger.info('Request rejected because user has no local followers', { user: user.id, note: data });
 				return null;
 			}
 		}
