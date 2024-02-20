@@ -7,10 +7,10 @@
 			<div>
 				<XAnnouncements v-if="$i" :class="$style.announcements"/>
 				<XStatusBars :class="$style.statusbars"/>
-				<MkPageHeader v-if="isRootPage" :actions="headerActions"/>
+				<MkPageHeader v-if="isRoot" :actions="headerActions"/>
 			</div>
 		</template>
-		<MkSpacer v-if="isRootPage" :contentMax="800">
+		<MkSpacer v-if="isRoot" :contentMax="800">
 			<MkPostForm :class="$style.postForm" class="post-form _panel" fixed style="margin-bottom: var(--margin);"/>
 			<XWidgets v-if="showWidgets"/>
 		</MkSpacer>
@@ -23,9 +23,8 @@
 			<i :class="$style.navButtonIcon" class="ti ti-menu-2"></i>
 			<span v-if="menuIndicated" :class="$style.navButtonIndicator"><i class="_indicatorCircle"></i></span>
 		</button>
-		<button :class="$style.navButton" class="_button" @click="mainRouter.currentRoute.value.name === 'index' ? top() : mainRouter.push('/')">
-			<i :class="$style.navButtonIcon" class="ti ti-home"></i>
-		</button>
+		<button :class="$style.navButton" class="_button" @click="isRoot ? top() : mainRouter.push('/')"><i :class="$style.navButtonIcon" class="ti ti-home"></i></button>
+		<i :class="$style.navButtonIcon" class="ti ti-home"></i>
 		<button :class="$style.postButton" class="_button" @click="os.post()"><i :class="$style.navButtonIcon" class="ti ti-pencil"></i></button>
 	</div>
 
@@ -66,7 +65,7 @@ import { navbarItemDef } from '@/navbar.js';
 import { i18n } from '@/i18n.js';
 import { $i } from '@/account.js';
 import { mainRouter } from '@/router/main.js';
-import { definePageMetadata, PageMetadata, provideMetadataReceiver } from '@/scripts/page-metadata.js';
+import { PageMetadata, provideMetadataReceiver, provideReactiveMetadata } from '@/scripts/page-metadata.js';
 import { deviceKind } from '@/scripts/device-kind.js';
 import { miLocalStorage } from '@/local-storage.js';
 import { CURRENT_STICKY_BOTTOM } from '@/const.js';
@@ -78,6 +77,8 @@ const XSidebar = defineAsyncComponent(() => import('@/ui/_common_/navbar.vue'));
 const XStatusBars = defineAsyncComponent(() => import('@/ui/_common_/statusbars.vue'));
 const XAnnouncements = defineAsyncComponent(() => import('@/ui/_common_/announcements.vue'));
 
+const isRoot = ref(mainRouter.currentRoute.value.name === 'index');
+
 const DESKTOP_THRESHOLD = 1100;
 const MOBILE_THRESHOLD = 500;
 
@@ -88,28 +89,43 @@ window.addEventListener('resize', () => {
 	isMobile.value = deviceKind === 'smartphone' || window.innerWidth <= MOBILE_THRESHOLD;
 });
 
-const pageMetadata = ref<null | PageMetadata>();
+const defaultPageMetadata: PageMetadata = {
+	title: i18n.ts.zenMode,
+	icon: 'ti ti-seeding',
+};
+
+const pageMetadata = ref<null | PageMetadata>(isRoot.value ? defaultPageMetadata : null);
 const navFooter = shallowRef<HTMLElement>();
 const contents = shallowRef<InstanceType<typeof MkStickyContainer>>();
-
-const isRootPage = ref(mainRouter.currentRoute.value.path === '/');
 
 const showWidgets = ref(zenStore.state.showWidgets);
 watch(zenStore.reactiveState.showWidgets, (value) => {
 	showWidgets.value = value;
 });
 
-watch(mainRouter.currentRoute, (route) => {
-	isRootPage.value = route.path === '/';
+watch(mainRouter.currentRoute, () => {
+	const isRootPage = mainRouter.currentRoute.value.name === 'index';
+	isRoot.value = isRootPage;
+
+	if (isRootPage) {
+		pageMetadata.value = defaultPageMetadata;
+	}
 });
 
 provide('router', mainRouter);
-provideMetadataReceiver((info) => {
-	pageMetadata.value = info.value;
+provideMetadataReceiver((metadataGetter) => {
+	const info = metadataGetter();
+	pageMetadata.value = info;
+
 	if (pageMetadata.value) {
-		document.title = `${pageMetadata.value.title} | ${instanceName}`;
+		if (isRoot.value && pageMetadata.value.title === instanceName) {
+			document.title = pageMetadata.value.title;
+		} else {
+			document.title = `${pageMetadata.value.title} | ${instanceName}`;
+		}
 	}
 });
+provideReactiveMetadata(pageMetadata);
 
 const menuIndicated = computed(() => {
 	for (const def in navbarItemDef) {
@@ -181,7 +197,7 @@ const onContextmenu = (ev) => {
 };
 
 function top() {
-	contents.value.rootEl.scrollTo({
+	contents.value?.rootEl?.scrollTo({
 		top: 0,
 		behavior: 'smooth',
 	});
@@ -204,7 +220,7 @@ watch(navFooter, () => {
 	immediate: true,
 });
 
-useScrollPositionManager(() => contents.value.rootEl, mainRouter);
+useScrollPositionManager(() => contents.value?.rootEl ?? null, mainRouter);
 
 const headerActions = computed(() => [{
 	icon: 'ti ti-settings',
@@ -213,11 +229,6 @@ const headerActions = computed(() => [{
 		mainRouter.push('/settings/zen');
 	},
 }]);
-
-definePageMetadata(computed(() => ({
-	title: i18n.ts.zenMode,
-	icon: 'ti ti-seeding',
-})));
 </script>
 
 <style>
