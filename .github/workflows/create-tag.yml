@@ -29,11 +29,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: create tag
-        uses: pkgdeps/git-tag-action@v2
         if: steps.check-tag.outputs.exists == 'false'
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          github_repo: ${{ github.repository }}
-          version: ${{ steps.package-version.outputs.current-version }}
-          git_commit_sha: ${{ github.sha }}
-          git_tag_prefix: "v"
+        run: |
+          git tag -a v${{ steps.package-version.outputs.current-version }} -m "release: v${{ steps.package-version.outputs.current-version }}"
+          git push origin v${{ steps.package-version.outputs.current-version }}

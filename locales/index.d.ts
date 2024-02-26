@@ -4245,6 +4245,22 @@ export interface Locale extends ILocale {
      */
     "collapseRenotesTrigger": string;
     /**
+     * セルフリノートを省略する
+     */
+    "collapseSelfRenotes": string;
+    /**
+     * ノートを投稿した人が自分自身でリノートした場合に、そのリノートを省略します
+     */
+    "collapseSelfRenotesDescription": string;
+    /**
+     * ノートの下書きの復元を無効化
+     */
+    "disableNoteDrafting": string;
+    /**
+     * ノートの投稿フォームを開き直した際に、下書きを復元しないようにします。
+     */
+    "disableNoteDraftingDescription": string;
+    /**
      * サーバー内部エラー
      */
     "internalServerError": string;

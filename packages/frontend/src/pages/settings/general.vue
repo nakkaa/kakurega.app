@@ -36,6 +36,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<div class="_gaps_s">
 			<MkSwitch v-model="showFixedPostForm">{{ i18n.ts.showFixedPostForm }}</MkSwitch>
 			<MkSwitch v-model="showFixedPostFormInChannel">{{ i18n.ts.showFixedPostFormInChannel }}</MkSwitch>
+			<MkSwitch v-model="disableNoteDrafting">
+				<template #caption>{{ i18n.ts.disableNoteDraftingDescription }}</template>
+				{{ i18n.ts.disableNoteDrafting }}
+				<span class="_beta">{{ i18n.ts.originalFeature }}</span>
+			</MkSwitch>
 			<MkFolder>
 				<template #label>{{ i18n.ts.pinnedList }}</template>
 				<!-- 複数ピン止め管理できるようにしたいけどめんどいので一旦ひとつのみ -->
@@ -60,6 +65,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<option value="see">{{ i18n.ts._collapseRenotesTrigger.see }}</option>
 					<option value="all">{{ i18n.ts._collapseRenotesTrigger.all }}</option>
 				</MkSelect>
+
+				<MkSwitch v-if="collapseRenotes" v-model="collapseSelfRenotes">
+					<template #caption>{{ i18n.ts.collapseSelfRenotesDescription }}</template>
+					{{ i18n.ts.collapseSelfRenotes }}
+					<span class="_beta">{{ i18n.ts.originalFeature }}</span>
+				</MkSwitch>
 
 				<MkSwitch v-model="advancedMfm">{{ i18n.ts.enableAdvancedMfm }}</MkSwitch>
 				<MkSwitch v-if="advancedMfm" v-model="animatedMfm">{{ i18n.ts.enableAnimatedMfm }}</MkSwitch>
@@ -313,6 +324,8 @@ const reactionsDisplaySize = computed(defaultStore.makeGetterSetter('reactionsDi
 const limitWidthOfReaction = computed(defaultStore.makeGetterSetter('limitWidthOfReaction'));
 const collapseRenotes = computed(defaultStore.makeGetterSetter('collapseRenotes'));
 const collapseRenotesTrigger = computed(defaultStore.makeGetterSetter('collapseRenotesTrigger'));
+const collapseSelfRenotes = computed(defaultStore.makeGetterSetter('collapseSelfRenotes'));
+const disableNoteDrafting = computed(defaultStore.makeGetterSetter('disableNoteDrafting'));
 const reduceAnimation = computed(defaultStore.makeGetterSetter('animation', v => !v, v => !v));
 const useBlurEffectForModal = computed(defaultStore.makeGetterSetter('useBlurEffectForModal'));
 const useBlurEffect = computed(defaultStore.makeGetterSetter('useBlurEffect'));

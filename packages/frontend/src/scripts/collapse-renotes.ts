@@ -6,6 +6,10 @@ export function checkCollapseRenote(appearNote: Record<string, any> | null, note
 	if (!defaultStore.state.collapseRenotes) return false;
 	if (appearNote == null) return false;
 
+	if (defaultStore.state.collapseSelfRenotes) {
+		if (note.userId === appearNote.userId) return true;
+	}
+
 	switch (defaultStore.state.collapseRenotesTrigger) {
 		case 'action': {
 			return (me && (me.id === note.userId || me.id === appearNote.userId)) || (appearNote.myReaction != null);
