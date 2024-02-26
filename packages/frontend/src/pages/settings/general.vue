@@ -61,6 +61,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<option value="all">{{ i18n.ts._collapseRenotesTrigger.all }}</option>
 				</MkSelect>
 
+				<MkSwitch v-if="collapseRenotes" v-model="collapseSelfRenotes">
+					<template #caption>{{ i18n.ts.collapseSelfRenotesDescription }}</template>
+					{{ i18n.ts.collapseSelfRenotes }}
+					<span class="_beta">{{ i18n.ts.originalFeature }}</span>
+				</MkSwitch>
+
 				<MkSwitch v-model="advancedMfm">{{ i18n.ts.enableAdvancedMfm }}</MkSwitch>
 				<MkSwitch v-if="advancedMfm" v-model="animatedMfm">{{ i18n.ts.enableAnimatedMfm }}</MkSwitch>
 				<MkSwitch v-if="advancedMfm" v-model="enableQuickAddMfmFunction">{{ i18n.ts.enableQuickAddMfmFunction }}</MkSwitch>
@@ -313,6 +319,7 @@ const reactionsDisplaySize = computed(defaultStore.makeGetterSetter('reactionsDi
 const limitWidthOfReaction = computed(defaultStore.makeGetterSetter('limitWidthOfReaction'));
 const collapseRenotes = computed(defaultStore.makeGetterSetter('collapseRenotes'));
 const collapseRenotesTrigger = computed(defaultStore.makeGetterSetter('collapseRenotesTrigger'));
+const collapseSelfRenotes = computed(defaultStore.makeGetterSetter('collapseSelfRenotes'));
 const reduceAnimation = computed(defaultStore.makeGetterSetter('animation', v => !v, v => !v));
 const useBlurEffectForModal = computed(defaultStore.makeGetterSetter('useBlurEffectForModal'));
 const useBlurEffect = computed(defaultStore.makeGetterSetter('useBlurEffect'));

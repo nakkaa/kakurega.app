@@ -93,6 +93,10 @@ export const defaultStore = markRaw(new Storage('base', {
 		where: 'account',
 		default: 'action' as 'action' | 'see' | 'all',
 	},
+	collapseSelfRenotes: {
+		where: 'account',
+		default: false,
+	},
 	rememberNoteVisibility: {
 		where: 'account',
 		default: false,
@@ -482,10 +486,10 @@ export const defaultStore = markRaw(new Storage('base', {
 			sfxVolume: 1,
 		},
 	},
-  hemisphere: {
+	hemisphere: {
 		where: 'device',
 		default: hemisphere as 'N' | 'S',
-  },
+	},
 	enableHorizontalSwipe: {
 		where: 'device',
 		default: true,
