@@ -16,6 +16,7 @@ on:
 
 env:
   REGISTRY_IMAGE: ghcr.io/${{ github.repository_owner }}/kakurega.app
+  DEVELOP_BRANCH_NAME: dev
 
 jobs:
   create-tag:
@@ -134,8 +135,8 @@ jobs:
         with:
           images: ${{ env.REGISTRY_IMAGE }}
           tags: |
-            type=raw,value=edge,enable=${{ contains(github.ref_name, 'develop') }}
-            type=raw,value=latest,enable=${{ !contains(github.ref_name, 'develop') && (github.event_name == 'push' || github.event.inputs.is_latest) }}
+            type=raw,value=edge,enable=${{ contains(github.ref_name, env.DEVELOP_BRANCH_NAME) }}
+            type=raw,value=latest,enable=${{ !contains(github.ref_name, env.DEVELOP_BRANCH_NAME) && (github.event_name == 'push' || github.event.inputs.is_latest) }}
             type=raw,value=v${{ needs.create-tag.outputs.version }}
 
       - name: Log in to GitHub Container Registry
