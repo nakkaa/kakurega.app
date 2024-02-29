@@ -5240,6 +5240,14 @@ export interface Locale extends ILocale {
      * このサーバーからのフォロワーがいないリモートユーザーの、メンションを含むノートをブロックするようにします。
      */
     "blockMentionsFromUnfamiliarRemoteUsersDescription": string;
+    /**
+     * ノートの自己消滅
+     */
+    "scheduledNoteDelete": string;
+    /**
+     * このノートは{time}に消滅します
+     */
+    "noteDeletationAt": ParameterizedString<"time">;
     "_bubbleGame": {
         /**
          * 遊び方
