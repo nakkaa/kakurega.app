@@ -5,6 +5,7 @@ on:
 
 jobs:
   check-latest-version:
+    name: Check latest version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
