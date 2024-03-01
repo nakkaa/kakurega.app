@@ -695,4 +695,9 @@ export class MiMeta {
 		default: 20,
 	})
 	public ageRestrictionThreshold: number;
+
+	@Column('boolean', {
+		default: true,
+	})
+	public blockMentionsFromUnfamiliarRemoteUsers: boolean;
 }
