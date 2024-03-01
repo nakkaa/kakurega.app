@@ -165,7 +165,6 @@ export const paramDef = {
 		disableEntranceFeatureTimeline: { type: 'boolean' },
 		enableAgeRestriction: { type: 'boolean' },
 		ageRestrictionThreshold: { type: 'integer' },
-		blockMentionsFromUnfamiliarRemoteUsers: { type: 'boolean' },
 		silencedHosts: {
 			type: 'array',
 			nullable: true,
@@ -682,10 +681,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 			if (ps.bannedEmailDomains !== undefined) {
 				set.bannedEmailDomains = ps.bannedEmailDomains;
-			}
-
-			if (ps.blockMentionsFromUnfamiliarRemoteUsers !== undefined) {
-				set.blockMentionsFromUnfamiliarRemoteUsers = ps.blockMentionsFromUnfamiliarRemoteUsers;
 			}
 
 			const before = await this.metaService.fetch(true);
