@@ -133,12 +133,6 @@ export const meta = {
 			id: 'aa6e01d3-a85c-669d-758a-76aab43af334',
 		},
 
-		unknownError: {
-			message: 'Unknown error.',
-			code: 'UNKNOWN_ERROR',
-			id: 'ebb7b13d-1dd0-4f0b-b7c6-496230f0046b',
-		},
-
 		containsTooManyMentions: {
 			message: 'Cannot post because it exceeds the allowed number of mentions.',
 			code: 'CONTAINS_TOO_MANY_MENTIONS',
@@ -416,10 +410,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 					apEmojis: ps.noExtractEmojis ? [] : undefined,
 					deleteAt: ps.scheduledDelete?.deleteAt ? new Date(ps.scheduledDelete.deleteAt) : null,
 				});
-
-				if (note == null) {
-					throw new ApiError(meta.errors.unknownError);
-				}
 
 				return {
 					createdNote: await this.noteEntityService.pack(note, me),
