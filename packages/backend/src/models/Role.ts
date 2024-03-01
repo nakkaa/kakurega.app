@@ -29,6 +29,11 @@ type CondFormulaValueIsRemote = {
 	type: 'isRemote';
 };
 
+type CondFormulaValueRoleAssignedTo = {
+	type: 'roleAssignedTo';
+	roleId: string;
+};
+
 type CondFormulaValueCreatedLessThan = {
 	type: 'createdLessThan';
 	sec: number;
@@ -84,6 +89,7 @@ export type RoleCondFormulaValue = { id: string } & (
 	CondFormulaValueNot |
 	CondFormulaValueIsLocal |
 	CondFormulaValueIsRemote |
+	CondFormulaValueRoleAssignedTo |
 	CondFormulaValueCreatedLessThan |
 	CondFormulaValueCreatedMoreThan |
 	CondFormulaValueFollowersLessThanOrEq |

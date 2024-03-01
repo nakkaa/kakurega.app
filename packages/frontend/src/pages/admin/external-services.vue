@@ -82,6 +82,7 @@ function save() {
 		enableSentryLogging: enableSentryLogging.value,
 		sentryDsn: sentryDsn.value,
 	}).then(() => {
+		fetchInstance(true);
 	});
 }
 

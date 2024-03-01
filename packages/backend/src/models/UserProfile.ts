@@ -270,6 +270,8 @@ export class MiUserProfile {
 		} | {
 			type: 'mutualFollow';
 		} | {
+			type: 'followingOrFollower';
+		} | {
 			type: 'list';
 			userListId: MiUserList['id'];
 		};

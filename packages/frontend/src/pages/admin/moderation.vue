@@ -175,7 +175,7 @@ function save() {
 		preservedUsernames: preservedUsernames.value.split('\n'),
 		blockMentionsFromUnfamiliarRemoteUsers: blockMentionsFromUnfamiliarRemoteUsers.value,
 	}).then(() => {
-		fetchInstance();
+		fetchInstance(true);
 	});
 }
 
