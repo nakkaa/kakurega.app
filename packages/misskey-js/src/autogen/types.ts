@@ -2341,7 +2341,8 @@ export type paths = {
      * integrations/fanbox/connect
      * @description No description provided.
      *
-     * **Credential required**: *Yes*
+     * **Internal Endpoint**: This endpoint is an API for the misskey mainframe and is not intended for use by third parties.
+     * **Credential required**: *Yes* / **Permission**: *write:integrations*
      */
     post: operations['integrations/fanbox/connect'];
   };
@@ -2350,7 +2351,8 @@ export type paths = {
      * integrations/fanbox/disconnect
      * @description No description provided.
      *
-     * **Credential required**: *Yes*
+     * **Internal Endpoint**: This endpoint is an API for the misskey mainframe and is not intended for use by third parties.
+     * **Credential required**: *Yes* / **Permission**: *write:integrations*
      */
     post: operations['integrations/fanbox/disconnect'];
   };
@@ -2359,7 +2361,8 @@ export type paths = {
      * integrations/fanbox/request-refresh
      * @description No description provided.
      *
-     * **Credential required**: *Yes*
+     * **Internal Endpoint**: This endpoint is an API for the misskey mainframe and is not intended for use by third parties.
+     * **Credential required**: *Yes* / **Permission**: *read:integrations*
      */
     post: operations['integrations/fanbox/request-refresh'];
   };
@@ -2368,7 +2371,8 @@ export type paths = {
      * integrations/patreon/request-refresh
      * @description No description provided.
      *
-     * **Credential required**: *Yes*
+     * **Internal Endpoint**: This endpoint is an API for the misskey mainframe and is not intended for use by third parties.
+     * **Credential required**: *Yes* / **Permission**: *read:integrations*
      */
     post: operations['integrations/patreon/request-refresh'];
   };
@@ -2518,7 +2522,8 @@ export type paths = {
      * note-notification/create
      * @description No description provided.
      *
-     * **Credential required**: *Yes*
+     * **Internal Endpoint**: This endpoint is an API for the misskey mainframe and is not intended for use by third parties.
+     * **Credential required**: *Yes* / **Permission**: *write:users*
      */
     post: operations['note-notification/create'];
   };
@@ -2527,7 +2532,8 @@ export type paths = {
      * note-notification/delete
      * @description No description provided.
      *
-     * **Credential required**: *Yes*
+     * **Internal Endpoint**: This endpoint is an API for the misskey mainframe and is not intended for use by third parties.
+     * **Credential required**: *Yes* / **Permission**: *write:users*
      */
     post: operations['note-notification/delete'];
   };
@@ -2536,7 +2542,8 @@ export type paths = {
      * note-notification/list
      * @description No description provided.
      *
-     * **Credential required**: *Yes*
+     * **Internal Endpoint**: This endpoint is an API for the misskey mainframe and is not intended for use by third parties.
+     * **Credential required**: *Yes* / **Permission**: *read:users*
      */
     post: operations['note-notification/list'];
   };
@@ -4055,6 +4062,8 @@ export type components = {
             votes: number;
           }[];
       }) | null;
+      /** Format: date-time */
+      deleteAt?: string | null;
       emojis?: {
         [key: string]: string;
       };
@@ -5089,6 +5098,7 @@ export type operations = {
             tosUrl: string | null;
             uri: string;
             version: string;
+            blockMentionsFromUnfamiliarRemoteUsers: boolean;
           };
         };
       };
@@ -9057,6 +9067,7 @@ export type operations = {
           disableEntranceFeatureTimeline?: boolean;
           enableAgeRestriction?: boolean;
           ageRestrictionThreshold?: number;
+          blockMentionsFromUnfamiliarRemoteUsers?: boolean;
           silencedHosts?: string[] | null;
         };
       };
@@ -19553,7 +19564,8 @@ export type operations = {
    * integrations/fanbox/connect
    * @description No description provided.
    *
-   * **Credential required**: *Yes*
+   * **Internal Endpoint**: This endpoint is an API for the misskey mainframe and is not intended for use by third parties.
+   * **Credential required**: *Yes* / **Permission**: *write:integrations*
    */
   'integrations/fanbox/connect': {
     requestBody: {
@@ -19608,7 +19620,8 @@ export type operations = {
    * integrations/fanbox/disconnect
    * @description No description provided.
    *
-   * **Credential required**: *Yes*
+   * **Internal Endpoint**: This endpoint is an API for the misskey mainframe and is not intended for use by third parties.
+   * **Credential required**: *Yes* / **Permission**: *write:integrations*
    */
   'integrations/fanbox/disconnect': {
     responses: {
@@ -19652,7 +19665,8 @@ export type operations = {
    * integrations/fanbox/request-refresh
    * @description No description provided.
    *
-   * **Credential required**: *Yes*
+   * **Internal Endpoint**: This endpoint is an API for the misskey mainframe and is not intended for use by third parties.
+   * **Credential required**: *Yes* / **Permission**: *read:integrations*
    */
   'integrations/fanbox/request-refresh': {
     responses: {
@@ -19702,7 +19716,8 @@ export type operations = {
    * integrations/patreon/request-refresh
    * @description No description provided.
    *
-   * **Credential required**: *Yes*
+   * **Internal Endpoint**: This endpoint is an API for the misskey mainframe and is not intended for use by third parties.
+   * **Credential required**: *Yes* / **Permission**: *read:integrations*
    */
   'integrations/patreon/request-refresh': {
     responses: {
@@ -20509,7 +20524,8 @@ export type operations = {
    * note-notification/create
    * @description No description provided.
    *
-   * **Credential required**: *Yes*
+   * **Internal Endpoint**: This endpoint is an API for the misskey mainframe and is not intended for use by third parties.
+   * **Credential required**: *Yes* / **Permission**: *write:users*
    */
   'note-notification/create': {
     requestBody: {
@@ -20567,7 +20583,8 @@ export type operations = {
    * note-notification/delete
    * @description No description provided.
    *
-   * **Credential required**: *Yes*
+   * **Internal Endpoint**: This endpoint is an API for the misskey mainframe and is not intended for use by third parties.
+   * **Credential required**: *Yes* / **Permission**: *write:users*
    */
   'note-notification/delete': {
     requestBody: {
@@ -20625,7 +20642,8 @@ export type operations = {
    * note-notification/list
    * @description No description provided.
    *
-   * **Credential required**: *Yes*
+   * **Internal Endpoint**: This endpoint is an API for the misskey mainframe and is not intended for use by third parties.
+   * **Credential required**: *Yes* / **Permission**: *read:users*
    */
   'note-notification/list': {
     requestBody: {
@@ -21015,6 +21033,10 @@ export type operations = {
             multiple?: boolean;
             expiresAt?: number | null;
             expiredAfter?: number | null;
+          }) | null;
+          scheduledDelete?: ({
+            deleteAt?: number | null;
+            deleteAfter?: number | null;
           }) | null;
         };
       };

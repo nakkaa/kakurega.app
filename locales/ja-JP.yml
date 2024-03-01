@@ -1312,6 +1312,8 @@ blockMentionsFromUnfamiliarRemoteUsersDescription: "このサーバーからの�
 loading: "読み込み中"
 surrender: "やめる"
 gameRetry: "リトライ"
+scheduledNoteDelete: "ノートの自己消滅"
+noteDeletationAt: "このノートは{time}に消滅します"
 
 _bubbleGame:
   howToPlay: "遊び方"
