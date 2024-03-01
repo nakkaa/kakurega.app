@@ -4881,6 +4881,9 @@ export type components = {
       defaultDarkTheme: string | null;
       defaultLightTheme: string | null;
       disableRegistration: boolean;
+      enableRegistrationLimit: boolean;
+      registrationLimit: number;
+      registrationLimitCooldown: number;
       emailRequiredForSignup: boolean;
       enableHcaptcha: boolean;
       hcaptchaSiteKey: string | null;
@@ -4917,9 +4920,18 @@ export type components = {
       /** @default 0 */
       notesPerOneAd: number;
       enableEmail: boolean;
+      enablePatreonIntegration: boolean;
+      enableFanboxIntegration: boolean;
+      enableSentryLogging: boolean;
+      sentryDsn: string | null;
+      enableSupporterPage: boolean;
       enableServiceWorker: boolean;
       translatorAvailable: boolean;
       mediaProxy: string;
+      disableExploreLocalUsers: boolean;
+      disableEntranceFeatureTimeline: boolean;
+      enableAgeRestriction: boolean;
+      ageRestrictionThreshold: number;
       backgroundImageUrl: string | null;
       impressumUrl: string | null;
       logoImageUrl: string | null;
@@ -4938,6 +4950,9 @@ export type components = {
         turnstile: boolean;
         recaptcha: boolean;
         objectStorage: boolean;
+        patreon: boolean;
+        fanbox: boolean;
+        sentryLogging: boolean;
         serviceWorker: boolean;
         /** @default true */
         miauth?: boolean;
@@ -5098,7 +5113,6 @@ export type operations = {
             tosUrl: string | null;
             uri: string;
             version: string;
-            blockMentionsFromUnfamiliarRemoteUsers: boolean;
           };
         };
       };
@@ -9067,7 +9081,6 @@ export type operations = {
           disableEntranceFeatureTimeline?: boolean;
           enableAgeRestriction?: boolean;
           ageRestrictionThreshold?: number;
-          blockMentionsFromUnfamiliarRemoteUsers?: boolean;
           silencedHosts?: string[] | null;
         };
       };

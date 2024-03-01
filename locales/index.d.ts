@@ -5244,7 +5244,7 @@ export interface Locale extends ILocale {
      * スワイプしてタブを切り替える
      */
     "enableHorizontalSwipe": string;
-		/**
+    /**
      * 読み込み中
      */
     "loading": string;
