@@ -60,8 +60,8 @@ import { UtilityService } from '@/core/UtilityService.js';
 import { UserBlockingService } from '@/core/UserBlockingService.js';
 import { isReply } from '@/misc/is-reply.js';
 import { trackPromise } from '@/misc/promise-tracker.js';
-import { IdentifiableError } from '@/misc/identifiable-error.js';
 import { isNotNull } from '@/misc/is-not-null.js';
+import { IdentifiableError } from '@/misc/identifiable-error.js';
 
 type NotificationType = 'reply' | 'renote' | 'note' | 'quote' | 'mention';
 
@@ -154,8 +154,6 @@ type Option = {
 @Injectable()
 export class NoteCreateService implements OnApplicationShutdown {
 	#shutdownController = new AbortController();
-
-	public static ContainsProhibitedWordsError = class extends Error {};
 
 	constructor(
 		@Inject(DI.config)
