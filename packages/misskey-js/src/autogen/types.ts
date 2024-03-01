@@ -5113,7 +5113,6 @@ export type operations = {
             tosUrl: string | null;
             uri: string;
             version: string;
-            blockMentionsFromUnfamiliarRemoteUsers: boolean;
           };
         };
       };
@@ -9082,7 +9081,6 @@ export type operations = {
           disableEntranceFeatureTimeline?: boolean;
           enableAgeRestriction?: boolean;
           ageRestrictionThreshold?: number;
-          blockMentionsFromUnfamiliarRemoteUsers?: boolean;
           silencedHosts?: string[] | null;
         };
       };
