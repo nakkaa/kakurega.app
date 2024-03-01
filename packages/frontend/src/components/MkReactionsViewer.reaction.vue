@@ -34,7 +34,6 @@ import { defaultStore } from '@/store.js';
 import { i18n } from '@/i18n.js';
 import * as sound from '@/scripts/sound.js';
 import { checkReactionPermissions } from '@/scripts/check-reaction-permissions.js';
-import { customEmojisMap } from '@/custom-emojis.js';
 import { getUnicodeEmoji } from '@/scripts/emojilist.js';
 
 const props = defineProps<{
