@@ -234,6 +234,10 @@ export const defaultStore = markRaw(new Storage('base', {
 		where: 'device',
 		default: 'quiet' as 'none' | 'quiet' | 'reload' | 'dialog',
 	},
+	showConnectionStatus: {
+		where: 'device',
+		default: false,
+	},
 	nsfw: {
 		where: 'device',
 		default: 'respect' as 'respect' | 'force' | 'ignore',
