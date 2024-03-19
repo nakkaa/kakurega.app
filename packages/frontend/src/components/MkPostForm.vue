@@ -298,6 +298,9 @@ const bottomItemActionDef: Record<keyof typeof bottomItemDef, {
 		hide: computed(() => !showAddMfmFunction.value),
 		action: insertMfmFunction,
 	},
+	clearPost: {
+		action: clear,
+	},
 });
 
 watch(text, () => {
