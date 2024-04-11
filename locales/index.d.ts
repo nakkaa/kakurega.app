@@ -5273,6 +5273,10 @@ export interface Locale extends ILocale {
      */
     "noteDeletationAt": ParameterizedString<"time">;
     /**
+     * 1年以上先の日時を指定することはできません
+     */
+    "cannotScheduleLaterThanOneYear": string;
+    /**
      * アクティビティを非公開にする
      */
     "hideActivity": string;
