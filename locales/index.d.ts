@@ -5300,6 +5300,10 @@ export interface Locale extends ILocale {
      * 投稿フォームをリセット
      */
     "clearPost": string;
+    /**
+     * 絵文字ピッカーに追加
+     */
+    "addToEmojiPicker": string;
     "_bubbleGame": {
         /**
          * 遊び方
