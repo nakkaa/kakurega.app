@@ -67,6 +67,8 @@ const canToggle = computed(() => {
 });
 const canGetInfo = computed(() => !props.reaction.match(/@\w/) && props.reaction.includes(':'));
 
+const plainReaction = computed(() => customEmojisMap.has(emojiName.value) ? getReactionName(props.reaction, true) : props.reaction);
+
 async function toggleReaction() {
 	if (!canToggle.value) return;
 
@@ -118,9 +120,7 @@ async function toggleReaction() {
 }
 
 async function menu(ev) {
-	if (!canGetInfo.value) return;
-
-	os.popupMenu([{
+	os.popupMenu([...(canGetInfo.value ? [{
 		text: i18n.ts.info,
 		icon: 'ti ti-info-circle',
 		action: async () => {
@@ -130,7 +130,13 @@ async function menu(ev) {
 				}),
 			});
 		},
-	}], ev.currentTarget ?? ev.target);
+	}] : []), ...(emoji.value && !defaultStore.state.reactions.includes(plainReaction.value) ? [{
+		text: i18n.ts.addToEmojiPicker,
+		icon: 'ti ti-plus',
+		action: async () => {
+			defaultStore.set('reactions', [...defaultStore.state.reactions, plainReaction.value]);
+		},
+	}] : [])], ev.currentTarget ?? ev.target);
 }
 
 function anime() {
