@@ -1322,6 +1322,7 @@ postForm: "投稿フォーム"
 postFormBottomSettingsDescription: "投稿フォームの下部に表示される項目の並び替えが出来ます。項目をクリックすると削除できます。"
 clearPost: "投稿フォームをリセット"
 addToEmojiPicker: "絵文字ピッカーに追加"
+hideReactionCount: "リアクション数の非表示"
 
 _bubbleGame:
   howToPlay: "遊び方"
@@ -2739,3 +2740,8 @@ _offlineScreen:
   title: "オフライン - サーバーに接続できません"
   header: "サーバーに接続できません"
 
+_hideReactionCount:
+  none: "非表示にしない"
+  self: "自分のノートのみ"
+  others: "自分以外のノートのみ"
+  all: "全てのノート"

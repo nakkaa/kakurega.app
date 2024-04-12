@@ -5304,6 +5304,10 @@ export interface Locale extends ILocale {
      * 絵文字ピッカーに追加
      */
     "addToEmojiPicker": string;
+    /**
+     * リアクション数の非表示
+     */
+    "hideReactionCount": string;
     "_bubbleGame": {
         /**
          * 遊び方
@@ -10279,6 +10283,24 @@ export interface Locale extends ILocale {
          * サーバーに接続できません
          */
         "header": string;
+    };
+    "_hideReactionCount": {
+        /**
+         * 非表示にしない
+         */
+        "none": string;
+        /**
+         * 自分のノートのみ
+         */
+        "self": string;
+        /**
+         * 自分以外のノートのみ
+         */
+        "others": string;
+        /**
+         * 全てのノート
+         */
+        "all": string;
     };
 }
 declare const locales: {

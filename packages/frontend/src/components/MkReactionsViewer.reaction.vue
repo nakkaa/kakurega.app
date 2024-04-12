@@ -13,7 +13,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	@contextmenu.prevent.stop="menu"
 >
 	<MkReactionIcon :class="defaultStore.state.limitWidthOfReaction ? $style.limitWidth : ''" :reaction="reaction" :emojiUrl="note.reactionEmojis[reaction.substring(1, reaction.length - 1)]"/>
-	<span :class="$style.count">{{ count }}</span>
+	<span v-if="!hideReactionCount" :class="$style.count">{{ count }}</span>
 </button>
 </template>
 
@@ -68,6 +68,16 @@ const canToggle = computed(() => {
 const canGetInfo = computed(() => !props.reaction.match(/@\w/) && props.reaction.includes(':'));
 
 const plainReaction = computed(() => customEmojisMap.has(emojiName.value) ? getReactionName(props.reaction, true) : props.reaction);
+
+const hideReactionCount = computed(() => {
+	switch (defaultStore.state.hideReactionCount) {
+		case 'none': return false;
+		case 'all': return true;
+		case 'self': return props.note.userId === $i?.id;
+		case 'others': return props.note.userId !== $i?.id;
+		default: return false;
+	}
+});
 
 async function toggleReaction() {
 	if (!canToggle.value) return;
