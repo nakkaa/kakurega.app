@@ -87,6 +87,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<option value="others">{{ i18n.ts._hideReactionCount.others }}</option>
 					<option value="all">{{ i18n.ts._hideReactionCount.all }}</option>
 				</MkSelect>
+				<MkSwitch v-model="hideReactionUsers">
+					<template #caption>{{ i18n.ts.hideReactionUsersDescription }}</template>
+					{{ i18n.ts.hideReactionUsers }}
+					<span class="_beta">{{ i18n.ts.originalFeature }}</span>
+				</MkSwitch>
 			</div>
 
 			<MkSelect v-model="instanceTicker">
@@ -327,6 +332,7 @@ const showClipButtonInNoteFooter = computed(defaultStore.makeGetterSetter('showC
 const reactionsDisplaySize = computed(defaultStore.makeGetterSetter('reactionsDisplaySize'));
 const limitWidthOfReaction = computed(defaultStore.makeGetterSetter('limitWidthOfReaction'));
 const hideReactionCount = computed(defaultStore.makeGetterSetter('hideReactionCount'));
+const hideReactionUsers = computed(defaultStore.makeGetterSetter('hideReactionUsers'));
 const collapseRenotes = computed(defaultStore.makeGetterSetter('collapseRenotes'));
 const collapseRenotesTrigger = computed(defaultStore.makeGetterSetter('collapseRenotesTrigger'));
 const collapseSelfRenotes = computed(defaultStore.makeGetterSetter('collapseSelfRenotes'));

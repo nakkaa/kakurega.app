@@ -168,12 +168,12 @@ onMounted(() => {
 
 if (!mock) {
 	useTooltip(buttonEl, async (showing) => {
-		const reactions = await misskeyApiGet('notes/reactions', {
+		const reactions = !defaultStore.state.hideReactionUsers ? await misskeyApiGet('notes/reactions', {
 			noteId: props.note.id,
 			type: props.reaction,
 			limit: 10,
 			_cacheKey_: props.count,
-		});
+		}) : [];
 
 		const users = reactions.map(x => x.user);
 
