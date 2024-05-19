@@ -1,3 +1,10 @@
+## 1.36.3
+Release: 2024/05/19  
+Base: 2024.3.1  
+
+### 変更
+- API `/api/meta` `/api/ping` をGET Methodでも叩けるように変更
+
 ## 1.36.2
 Release: 2024/05/01  
 Base: 2024.3.1  
