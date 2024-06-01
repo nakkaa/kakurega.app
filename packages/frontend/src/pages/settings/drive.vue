@@ -51,10 +51,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<template #label>{{ i18n.ts.enableAutoSensitive }}<span class="_beta">{{ i18n.ts.beta }}</span></template>
 				<template #caption>{{ i18n.ts.enableAutoSensitiveDescription }}</template>
 			</MkSwitch>
-			<MkSwitch v-model="filenameRandomize">
-				<template #label>{{ i18n.ts.filenameRandomize }}<span class="_beta">{{ i18n.ts.originalFeature }}</span></template>
-				<template #caption>{{ i18n.ts.filenameRandomizeDescription }}</template>
-			</MkSwitch>
 		</div>
 	</FormSection>
 </div>
@@ -100,7 +96,6 @@ const meterStyle = computed(() => {
 });
 
 const keepOriginalUploading = computed(defaultStore.makeGetterSetter('keepOriginalUploading'));
-const filenameRandomize = computed(defaultStore.makeGetterSetter('filenameRandomize'));
 
 misskeyApi('drive').then(info => {
 	capacity.value = info.capacity;
