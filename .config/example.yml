@@ -216,10 +216,6 @@ id: 'aidx'
 #  options:
 #    dsn: 'https://examplePublicKey@o0.ingest.sentry.io/0'
 
-#sentryForFrontend:
-#  options:
-#    dsn: 'https://examplePublicKey@o0.ingest.sentry.io/0'
-
 #   ┌─────────────────────┐
 #───┘ Other configuration └─────────────────────────────────────
 
