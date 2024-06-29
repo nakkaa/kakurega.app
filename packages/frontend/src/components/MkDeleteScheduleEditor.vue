@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <template>
 <div :class="[$style.root, { [$style.padding]: !afterOnly }]">
-	<div v-if="!afterOnly" :class="[$style.label, { [$style.withAccent]: !showDetail }]" @click="showDetail = !showDetail"><i class="ti" :class="showDetail ? 'ti-chevron-up' : 'ti-chevron-down'"></i> {{ showDetail ? i18n.ts.scheduledNoteDelete : i18n.ts.scheduledNoteDeleteEnabled }}</div>
+	<div v-if="!afterOnly" :class="[$style.label, { [$style.withAccent]: !showDetail }]" @click="showDetail = !showDetail"><i class="ti" :class="showDetail ? 'ti-chevron-up' : 'ti-chevron-down'"></i> {{ summaryText }}</div>
 	<MkInfo v-if="!isValid" warn>{{ i18n.ts.cannotScheduleLaterThanOneYear }}</MkInfo>
 	<section v-if="afterOnly || showDetail">
 		<div>
@@ -39,7 +39,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import MkInput from './MkInput.vue';
 import MkSelect from './MkSelect.vue';
 import MkInfo from './MkInfo.vue';
@@ -70,6 +70,22 @@ const unit = ref<'second' | 'minute' | 'hour' | 'day'>('second');
 const isValid = ref(true);
 
 const showDetail = ref(!defaultStore.state.defaultScheduledNoteDelete);
+const summaryText = computed(() => {
+	if (showDetail.value) {
+		return i18n.ts.scheduledNoteDelete;
+	}
+
+	if (expiration.value === 'at') {
+		return `${i18n.ts.scheduledNoteDeleteEnabled} (${formatDateTimeString(new Date(calcAt()), 'yyyy/MM/dd HH:mm')})`;
+	} else {
+		const time = unit.value === 'second' ? i18n.tsx._timeIn.seconds({ n: (after.value).toString() })
+			: unit.value === 'minute' ? i18n.tsx._timeIn.minutes({ n: (after.value).toString() })
+			: unit.value === 'hour' ? i18n.tsx._timeIn.hours({ n: (after.value).toString() })
+			: i18n.tsx._timeIn.days({ n: (after.value).toString() });
+
+		return `${i18n.ts.scheduledNoteDeleteEnabled} (${time})`;
+	}
+});
 
 const beautifyAfter = (base: number) => {
 	let time = base;
